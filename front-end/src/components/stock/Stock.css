@@ -1,0 +1,15 @@
+.stock {
+    background-color: grey;
+    margin-top: 1em;
+}
+
+div > span {
+    padding: 8px;
+}
+.Ticker {
+    background-color: #61dafb;
+    max-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+}

@@ -1,0 +1,15 @@
+# BACK-END GITIGNORE
+
+# environment/ dependencies
+venv/*
+venv/
+__pycache__/
+/.idea
+
+# misc
+.DS_Store
+
+# security
+secrets/
+secrets/*
+
