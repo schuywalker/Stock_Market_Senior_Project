@@ -12,4 +12,7 @@ __pycache__/
 # security
 secrets/
 secrets/*
+finnhub_api_key
+*_api_key.*
+
 
