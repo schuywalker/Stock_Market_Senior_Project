@@ -1,10 +1,22 @@
-import Button from '@mui/material/Button'
-import React from 'react'
+import { Box, useTheme } from "@mui/material";
+import Button from "@mui/material/Button";
+import React, { useContext } from "react";
+import { ColorModeContext, tokens } from "../../theme";
 
 const AnalystCalls = () => {
-    
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+    const colorMode = useContext(ColorModeContext);
+    return (
+        <>
+            <div></div>
+            <Box display="flex" color={colors.green[100]} borderRadius="3px">
+                <Button variant="outlined" sx={{ m: 5, color: colors.primary[400] }}>
+                    BUY TESLA!!!
+                </Button>
+            </Box>
+        </>
+    );
+};
 
-    return (<Button>BUY TESLA!!!</Button>)
-}
-
-export default AnalystCalls
+export default AnalystCalls;
