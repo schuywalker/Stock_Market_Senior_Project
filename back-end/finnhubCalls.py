@@ -15,10 +15,16 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
 #Convert to Pandas Dataframe
-
 print(pd.DataFrame(res))
 print("--------------------------------------------------------------------------------")
 
 # Basic financials
 basic = finnhub_client.company_basic_financials('AAPL', 'all')
 pd.DataFrame(basic)
+
+def getQuote(ticker: str):
+    quote = finnhub_client.quote(ticker)
+    print("QUOTE: ",quote)
+    return quote
+
+getQuote('AAPL')

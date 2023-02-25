@@ -5,6 +5,7 @@ from flask_restful import Resource, Api, reqparse
 import pandas as pd
 from yfinCalls import *
 from flask_cors import CORS
+import finnhubCalls as fh
 
 '''
 CORS only enforced by browser. (curl gets around).
@@ -26,6 +27,15 @@ class ReturnString(Resource):
     def get(self):
         data = "howdy Gamers"
         return data, 200
+
+
+
+@app.route('/quote')
+class getQuote(Resource):
+    def get(self):
+        data = getQuote()
+        return (jsonify(data), 200)
+        
 
 
 # class ReturnJSON(Resource):
