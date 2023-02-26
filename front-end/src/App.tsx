@@ -6,6 +6,7 @@ import Watchlist from "./scenes/watchlist/Watchlist";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { useState } from "react";
+import Stock from "./components/stock/Stock"
 
 
 
@@ -25,9 +26,10 @@ function App() {
             <div className="App">  
                     <div className="content">
                         <ResponsiveAppBar />
+                        
                         <Routes>
                             {/* <Route path="/" element={<Home />}/> */}
-                            <Route path="/" element={<Watchlist />}/>
+                            <Route path="/Watchlist" element={<Watchlist />}/>
                             <Route path="/analystCalls" element={<AnalystCalls />}/>
                             {/* <Route path="*" element={<NotFound />} /> */}
                         </Routes>

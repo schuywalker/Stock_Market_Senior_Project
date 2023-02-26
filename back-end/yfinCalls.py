@@ -4,7 +4,7 @@ import yfinance as yf
 # https://medium.com/nerd-for-tech/all-you-need-to-know-about-yfinance-yahoo-finance-library-fa4c6e48f08e
 
 
-class API_Calls:
+class yfin_API_Requester:
 
     def __init__(self):
         print('api instantiated')
