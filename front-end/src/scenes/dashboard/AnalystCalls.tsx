@@ -11,7 +11,7 @@ const AnalystCalls = () => {
         <>
             <div></div>
             <Box display="flex" color={colors.green[100]} borderRadius="3px">
-                <Button variant="outlined" sx={{ m: 5, color: colors.primary[400] }}>
+                <Button variant="outlined" sx={{ m: 5, color: colors.primary[400] } }href="http://127.0.0.1:8080/returnString">
                     BUY TESLA!!!
                 </Button>
             </Box>
