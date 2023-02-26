@@ -1,6 +1,6 @@
 import json
 import yfinance as yf
-from flask import Flask, jsonify
+from flask import Flask, jsonify, json
 from flask_restful import Resource, Api, reqparse
 import pandas as pd
 from yfinCalls import *
@@ -15,58 +15,34 @@ cant use other peoples endpoints specifically from Javascript in the browser (if
 '''
 
 app = Flask(__name__)
-# CORS(app)
 CORS(app, origins=["*"])
 api = Api(app)
 
 
-calls = API_Calls()
-
+yfin_calls = yfin_API_Requester()
+fh_calls = fh.finh_API_Requester()
 
 class ReturnString(Resource):
     def get(self):
         data = "howdy Gamers"
         return data, 200
 
-
-
-@app.route('/quote')
 class getQuote(Resource):
     def get(self):
-        data = getQuote()
-        return (jsonify(data), 200)
-        
-
-
-# class ReturnJSON(Resource):
-#     def get(self):
-#         data = calls.downloadTicker()
-#         data = 'AMZN',  data.to_json()
-#         return jsonify(data)
-
+        data = fh_calls.getQuote('AAPL')
+        return (jsonify(data))
+                
 class AnalystRec(Resource):
     def get(self):
-        analystRecs = calls.analystRecommendations('MSFT')
+        analystRecs = yfin_calls.analystRecommendations('MSFT')
         analystRecs.reset_index(inplace=True)
         analystRecs.set_index('Firm', inplace=True)
         analystRecs["Date"] = pd.to_datetime(analystRecs['Date'])
         analystRecs["Date"] = analystRecs["Date"].dt.strftime("%d-%m-%Y")
         
         recs_json_str = analystRecs.to_json(orient='table', indent=2, date_format='iso')
-        # recs_json_str = recs_json_str.strip()
-        # print("to json type", type(recs_json_str))
-        # print(recs_json_str)
         ret = json.loads(recs_json_str)
-        # print("ret type", type(ret))
-        
-        # #print(ret)
-        
-        return { "analystRecs": ret },200
-        # # data = data.to_json()
-        # recs_json_str= recs_json_str.loads(analystRecs) # NO LOADS. 
-        # return {'json':recs_json_str},200
-        # return jsonify(recs_json_str)
-
+        return { "analystRecs": ret }, 200
 
     # how to add arguments to path (restful API)
 class User(Resource):
@@ -81,11 +57,12 @@ class User(Resource):
         }, 200
 
 
+api.add_resource(getQuote, '/quote')
 api.add_resource(User, '/user')
-# api.add_resource(ReturnJSON, '/returnJson')
 api.add_resource(ReturnString, '/returnString')
 api.add_resource(AnalystRec, '/analystRec')
-# api.add_resource(ReturnJSON,'/')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
+
+    
