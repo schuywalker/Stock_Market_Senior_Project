@@ -116,17 +116,56 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Link to='/analystCalls'>
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page}
-                </Button>
-              </Link>
-            ))}
+            
+            <Link to='/watchlist'>
+              <Button
+                key={pages[0]}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {pages[0]}
+              </Button>
+            </Link>
+            
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            
+            <Link to='/insider-trades'>
+              <Button
+                key={pages[1]}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {pages[1]}
+              </Button>
+            </Link>
+            
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            
+            <Link to='/analyst-calls'>
+              <Button
+                key={pages[2]}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {pages[2]}
+              </Button>
+            </Link>
+            
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            
+            <Link to='/research'>
+              <Button
+                key={pages[3]}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {pages[3]}
+              </Button>
+            </Link>
+            
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
