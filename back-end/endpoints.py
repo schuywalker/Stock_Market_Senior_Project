@@ -1,6 +1,6 @@
 import json
 import yfinance as yf
-from flask import Flask, jsonify, json
+from flask import Flask, jsonify, json, request
 from flask_restful import Resource, Api, reqparse
 import pandas as pd
 from yfinCalls import *
@@ -29,7 +29,8 @@ class ReturnString(Resource):
 
 class getQuote(Resource):
     def get(self):
-        data = fh_calls.getQuote('AAPL')
+        ticker = request.args.get('ticker')
+        data = fh_calls.getQuote(ticker)
         return (jsonify(data))
                 
 class AnalystRec(Resource):
