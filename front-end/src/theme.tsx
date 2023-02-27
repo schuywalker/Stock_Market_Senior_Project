@@ -169,7 +169,7 @@ export function themeSettings(mode: PaletteMode) : ThemeOptions {
         },
         typography: {
             fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-            fontSize: 12,
+            fontSize: 10,
             h1: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
                 fontsize: 40,
