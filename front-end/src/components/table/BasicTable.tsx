@@ -8,15 +8,15 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 function createData(
-  stock_name: string,
+  symbol: string,
   buy: number,
   hold: number,
   period: string,
   sell: number,
-  strong_buy: number,
-  strong_sell: number,
+  strongBuy: number,
+  strongSell: number,
 ) {
-  return { stock_name, buy, hold, period, sell,strong_buy,strong_sell };
+  return { symbol, buy, hold, period, sell, strongBuy,strongSell};
 }
 
 const rows = [
@@ -41,18 +41,18 @@ export default function BasicTable() {
         <TableBody>
           {rows.map((row) => (
             <TableRow
-              key={row.stock_name}
+              key={row.symbol}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.stock_name}
+                {row.symbol}
               </TableCell>
               <TableCell align="right">{row.buy}</TableCell>
               <TableCell align="right">{row.hold}</TableCell>
               <TableCell align="right">{row.period}</TableCell>
               <TableCell align="right">{row.sell}</TableCell>
-              <TableCell align="right">{row.strong_buy}</TableCell>
-              <TableCell align="right">{row.strong_sell}</TableCell>
+              <TableCell align="right">{row.strongBuy}</TableCell>
+              <TableCell align="right">{row.strongSell}</TableCell>
             </TableRow>
           ))}
         </TableBody>

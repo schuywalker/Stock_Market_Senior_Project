@@ -6,7 +6,8 @@ import pandas as pd
 from yfinCalls import *
 from flask_cors import CORS
 import finnhubCalls as fh
-
+from finnhubCalls import *
+from threading import Thread
 '''
 CORS only enforced by browser. (curl gets around).
 prefetch: what origins (urls) are allowed to access this asset.
@@ -31,7 +32,28 @@ class getQuote(Resource):
     def get(self):
         data = fh_calls.getQuote('AAPL')
         return (jsonify(data))
-                
+    
+class getAnalystCalls(Resource):
+    def get(self):
+        #default data to display the latest month of analystcalls for the specifc stocks
+        #this data will be moved to another list called newList
+        data = fh_calls.getAnalystCalls('AAPL')
+        data2 = fh_calls.getAnalystCalls('AMZN')
+        data3 = fh_calls.getAnalystCalls('MSFT')
+        data4 = fh_calls.getAnalystCalls('GOOG')
+        data5 = fh_calls.getAnalystCalls('CVX')
+        #aggregate the multiple calls
+        newList = [data[0], data2[0], data3[0], data4[0], data5[0]]
+        #setAnalystList(newList)
+        return (jsonify(newList))
+"""#returning analystCall
+def getAnalystList(self):
+    return self.newList
+
+#set the analystCall
+def setAnalystList(self, newList):
+    self.newList = newList;"""
+
 class AnalystRec(Resource):
     def get(self):
         analystRecs = yfin_calls.analystRecommendations('MSFT')
@@ -61,8 +83,14 @@ api.add_resource(getQuote, '/quote')
 api.add_resource(User, '/user')
 api.add_resource(ReturnString, '/returnString')
 api.add_resource(AnalystRec, '/analystRec')
+api.add_resource(getAnalystCalls, '/analystCalls')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
-
-    
+    # Ommit below for right now
+    """
+    # create a thread
+    thread = Thread(target=fh.finh_API_Requester.getAnalystCalls)
+    # run the thread
+    thread.start()
+    """
