@@ -7,7 +7,6 @@ from yfinCalls import *
 from flask_cors import CORS
 import finnhubCalls as fh
 from finnhubCalls import *
-from threading import Thread
 '''
 CORS only enforced by browser. (curl gets around).
 prefetch: what origins (urls) are allowed to access this asset.
@@ -42,17 +41,8 @@ class getAnalystCalls(Resource):
         data3 = fh_calls.getAnalystCalls('MSFT')
         data4 = fh_calls.getAnalystCalls('GOOG')
         data5 = fh_calls.getAnalystCalls('CVX')
-        #aggregate the multiple calls
         newList = [data[0], data2[0], data3[0], data4[0], data5[0]]
-        #setAnalystList(newList)
         return (jsonify(newList))
-"""#returning analystCall
-def getAnalystList(self):
-    return self.newList
-
-#set the analystCall
-def setAnalystList(self, newList):
-    self.newList = newList;"""
 
 class AnalystRec(Resource):
     def get(self):
@@ -66,7 +56,6 @@ class AnalystRec(Resource):
         ret = json.loads(recs_json_str)
         return { "analystRecs": ret }, 200
 
-    # how to add arguments to path (restful API)
 class User(Resource):
     def post(self):
         parser = reqparse.RequestParser()
@@ -87,10 +76,3 @@ api.add_resource(getAnalystCalls, '/analystCalls')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
-    # Ommit below for right now
-    """
-    # create a thread
-    thread = Thread(target=fh.finh_API_Requester.getAnalystCalls)
-    # run the thread
-    thread.start()
-    """
