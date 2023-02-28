@@ -19,7 +19,7 @@ function createData(
   return { symbol, buy, hold, period, sell, strongBuy,strongSell};
 }
 
-export default function BasicTable() {
+export default function AnalystCallTable() {
 
   const [ret, setRet] = useState([]);
    useEffect(() => {

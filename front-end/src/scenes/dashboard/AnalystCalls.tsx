@@ -2,7 +2,7 @@ import { Box, useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useContext } from "react";
 import { ColorModeContext, tokens } from "../../theme";
-import BasicTable from "../../components/table/BasicTable";
+import AnalystCallTable from "../../components/table/AnalystCallTable";
 
 
 const AnalystCalls = () => {
@@ -11,7 +11,7 @@ const AnalystCalls = () => {
     const colorMode = useContext(ColorModeContext);
     return (
         <>
-            <div><BasicTable/></div>
+            <div><AnalystCallTable/></div>
         </>
     );
 };
