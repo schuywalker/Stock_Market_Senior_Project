@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useState,useEffect } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -19,11 +19,20 @@ function createData(
   return { symbol, buy, hold, period, sell, strongBuy,strongSell};
 }
 
-const rows = [
-  createData('MSFT', 159, 6.0, "2023-02-01", 4.0,1,2)
-];
-
 export default function BasicTable() {
+
+  const [ret, setRet] = useState([]);
+   useEffect(() => {
+      fetch('http://127.0.0.1:8080/analystCalls')
+        .then((response) => response.json())
+         .then((data) => {
+            console.log(data);
+            setRet(data);
+         })
+         .catch((err) => {
+            console.log(err.message);
+         });
+   }, []);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -31,30 +40,33 @@ export default function BasicTable() {
           <TableRow>
             <TableCell>Stock</TableCell>
             <TableCell align="right">Buy</TableCell>
-            <TableCell align="right">Hold&nbsp;(g)</TableCell>
-            <TableCell align="right">Period&nbsp;(g)</TableCell>
-            <TableCell align="right">Sell&nbsp;(g)</TableCell>
-            <TableCell align="right">Strong Buy&nbsp;(g)</TableCell>
-            <TableCell align="right">Strong Sell&nbsp;(g)</TableCell>
+            <TableCell align="right">Hold</TableCell>
+            <TableCell align="right">Period</TableCell>
+            <TableCell align="right">Sell</TableCell>
+            <TableCell align="right">Strong Buy</TableCell>
+            <TableCell align="right">Strong Sell</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.symbol}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.symbol}
+          {ret.map((row)=>(
+             <TableRow
+             key={row['symbol']}
+             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+           >
+            <TableCell component="th" scope="row">
+                {row['symbol']}
               </TableCell>
-              <TableCell align="right">{row.buy}</TableCell>
-              <TableCell align="right">{row.hold}</TableCell>
-              <TableCell align="right">{row.period}</TableCell>
-              <TableCell align="right">{row.sell}</TableCell>
-              <TableCell align="right">{row.strongBuy}</TableCell>
-              <TableCell align="right">{row.strongSell}</TableCell>
+              <TableCell align="right">{row['buy']}</TableCell>
+              <TableCell align="right">{row['hold']}</TableCell>
+              <TableCell align="right">{row['period']}</TableCell>
+              <TableCell align="right">{row['sell']}</TableCell>
+              <TableCell align="right">{row['strongBuy']}</TableCell>
+              <TableCell align="right">{row['strongSell']}</TableCell>
             </TableRow>
-          ))}
+            
+            ))}
+          
+          
         </TableBody>
       </Table>
     </TableContainer>
