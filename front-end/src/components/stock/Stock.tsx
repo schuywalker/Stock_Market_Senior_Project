@@ -1,11 +1,10 @@
-import { Pagination, useTheme } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { useContext, useState } from "react";
 import { ColorModeContext, tokens } from "../../theme";
-import { spacing } from "@mui/system";
 
 const Stock = (props: any) => {
     const theme = useTheme();
@@ -14,7 +13,7 @@ const Stock = (props: any) => {
 
     const stockName: string = props.name;
     const stockTicker: string = props.ticker;
-    const stockLast: number = props.last;
+    const stockprice: number = props.price;
     const stockPerChg: number = props.perChg;
     const stockPerChgStatus: string =
         stockPerChg > 0
@@ -29,15 +28,13 @@ const Stock = (props: any) => {
         <>
             <Card
                 sx={{
-                    minWidth: 140,
-                    maxWidth: 250,
-                    m: "2em",
+                    width: "100%",
+                    m: "1em",
                     bgcolor: colors.grey[500],
-                    display: "flex",
                 }}
             >
                 <CardContent>
-                    <Box display="flex">
+                    <Box display="flex" alignItems={"center"}>
                         <Typography
                             sx={{ flexGrow: 3, fontSize: 14 }}
                             color={stockPerChgStatus}
@@ -51,8 +48,9 @@ const Stock = (props: any) => {
                         {stockName} - {stockTicker}
                     </Typography>
                     <Typography sx={{ fontSize: theme.typography.h6 }}>
-                        Last: {stockLast}
+                        price: {stockprice}
                     </Typography>
+                    <Button sx={{ bgcolor: colors.green[500] }}>Refresh Price</Button>
                 </CardContent>
             </Card>
         </>

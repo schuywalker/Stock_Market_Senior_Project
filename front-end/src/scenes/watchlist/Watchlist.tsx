@@ -1,51 +1,48 @@
-import { Box, Card, CardContent, Pagination, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import React, { useState } from "react";
-import Stock from "../../components/stock/Stock";
-import Carousel from "react-material-ui-carousel";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import { Box, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import { useState } from "react";
+import Carousel from "react-material-ui-carousel";
 import StockGrouping from "./StockGrouping";
 
 const Watchlist = () => {
     const stocks = [
-        { name: "Apple", ticker: "AAPL", last: 32416.92, perChg: -1.02 },
-        { name: "Microsoft", ticker: "MSFT", last: 11394.94, perChg: 1.29 },
-        { name: "Amazon", ticker: "AMZN", last: 16753.4, perChg: 0.23 },
-        { name: "Facebook", ticker: "FB", last: 2400.16, perChg: -1.53 },
-        { name: "Google", ticker: "GOOG", last: 42064.97, perChg: 0.0 },
-        { name: "Apple", ticker: "AAPL", last: 32416.92, perChg: -1.02 },
-        { name: "TSLA", ticker: "TSLA", last: 11394.94, perChg: 1.29 },
-        { name: "TSLA", ticker: "TSLA", last: 16753.4, perChg: 0.23 },
-        { name: "TSLA", ticker: "TSLA", last: 2400.16, perChg: -1.53 },
-        { name: "GME", ticker: "yolo", last: 42064.97, perChg: 0.0 },
-        { name: "AMC", ticker: "obv", last: 32416.92, perChg: -1.02 },
-        { name: "Wework", ticker: "very hard", last: 11394.94, perChg: 1.29 },
-        { name: "Meta", ticker: "might go up", last: 16753.4, perChg: 0.23 },
+        { name: "1Apple", ticker: "AAPL", price: 32416.92, perChg: -1.02 },
+        { name: "2Microsoft", ticker: "MSFT", price: 11394.94, perChg: 1.29 },
+        { name: "3Amazon", ticker: "AMZN", price: 16753.4, perChg: 0.23 },
+        { name: "4Facebook", ticker: "FB", price: 2400.16, perChg: -1.53 },
+        { name: "5Google", ticker: "GOOG", price: 42064.97, perChg: 0.0 },
+        { name: "6Apple", ticker: "AAPL", price: 32416.92, perChg: -1.02 },
+        { name: "7TSLA", ticker: "TSLA", price: 11394.94, perChg: 1.29 },
+        { name: "8TSLA", ticker: "TSLA", price: 16753.4, perChg: 0.23 },
+        { name: "9TSLA", ticker: "TSLA", price: 2400.16, perChg: -1.53 },
+        { name: "10GME", ticker: "yolo", price: 42064.97, perChg: 0.0 },
+        { name: "11AMC", ticker: "obv", price: 32416.92, perChg: -1.02 },
+        { name: "12Wework", ticker: "very hard", price: 11394.94, perChg: 1.29 },
+        { name: "13Meta", ticker: "might go up", price: 16753.4, perChg: 0.23 },
     ];
 
     const [watchlistPosition, setWatchlistPosition] = useState(0);
     interface displayGroup {
         name: string;
         ticker: string;
-        last: number;
+        price: number;
         perChg: number;
     }
     const stockSubset = (start: number): displayGroup[] => {
         if (start < stocks.length - 5) {
             return stocks.slice(start, start + 5);
         } else {
-            const remainder = stocks.length - start;
-            console.log(start, " at  remainder to end"); // need to fix something here
-            return stocks.slice(remainder, stocks.length); // just make list shorter when they're at end, instead of wrapping around
+            return start === stocks.length
+                ? stocks.slice(0, 5)
+                : stocks.slice(start, stocks.length); // just make list shorter when they're at end, instead of wrapping around
         }
     };
     function watchListPositionHandler(change: number) {
-        if (change == 5) {
+        if (change === 5) {
             if (watchlistPosition < stocks.length - 5) {
                 setWatchlistPosition(watchlistPosition + 5);
-            } else if (watchlistPosition > stocks.length - 5 && watchlistPosition < stocks.length) {
-                setWatchlistPosition(stocks.length);
             } else {
                 setWatchlistPosition(0); // loop around to beginning
             }
@@ -59,7 +56,6 @@ const Watchlist = () => {
             }
         }
     }
-    // const [watchlistSubset, setWatchlistSubset] = useState(stocks.slice(0, 5));
 
     const [quote, setQuote] = useState("");
     const [analystCalls, setAnalystCalls] = useState();
@@ -90,19 +86,18 @@ const Watchlist = () => {
         <>
             <Carousel
                 next={(_next, _active) => {
-                    console.log(watchlistPosition);
                     watchListPositionHandler(5);
                 }}
                 prev={(prev, active) => {
-                    console.log(watchlistPosition);
                     watchListPositionHandler(-5);
                 }}
                 autoPlay={false}
                 NextIcon={<ArrowForwardIosOutlinedIcon />}
                 PrevIcon={<ArrowBackIosNewOutlinedIcon />}
                 animation="slide"
+                // interval={14000}
                 navButtonsAlwaysVisible={true}
-                sx={{ justifyContent: "space-between" }}
+                sx={{ width: "100%", height: "100%" }}
             >
                 <StockGrouping displayGroup={stockSubset(watchlistPosition)} />
             </Carousel>
