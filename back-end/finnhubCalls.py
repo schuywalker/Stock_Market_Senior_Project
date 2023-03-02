@@ -16,7 +16,6 @@ class finh_API_Requester():
         f.close()
         
         finh_API_Requester.finnhub_client = fn.Client(api_key=key)
-        print(f"\n\n\n in init: {self.finnhub_client.quote('AAPL')}\n\n")
 
     def getCandles(self, ticker):
         #connect with the client
