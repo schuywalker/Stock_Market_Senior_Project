@@ -49,7 +49,7 @@ const Stock = (props: any) => {
                         {stockName} - {stockTicker}
                     </Typography>
 
-                    <Button sx={{ bgcolor: colors.green[400] }}>Refresh Price</Button>
+                    <Button sx={{ bgcolor: colors.green[500] }}>Refresh Price</Button>
                     <FinancialsModalButton ticker={props.ticker} />
                 </CardContent>
             </Card>
