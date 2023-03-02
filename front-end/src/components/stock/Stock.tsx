@@ -1,11 +1,11 @@
-import { Button, Modal, useTheme } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { useContext, useEffect, useState } from "react";
-import { ColorModeContext, tokens } from "../../theme";
+import { useContext } from "react";
 import FinancialsModalButton from "../../scenes/watchlist/FinancialsModalButton";
+import { ColorModeContext, tokens } from "../../theme";
 
 const Stock = (props: any) => {
     const theme = useTheme();
@@ -22,10 +22,6 @@ const Stock = (props: any) => {
             : stockPerChg === 0
             ? colors.grey[100]
             : colors.red[500];
-
-    // financialInfo === null
-    //             ? getDetailedFinancialInfo()
-    //             : console.log("already have financial info");
 
     return (
         <>
@@ -45,14 +41,14 @@ const Stock = (props: any) => {
                         >
                             {stockPerChg}%
                         </Typography>
-                        <Typography>Price$$</Typography>
+                        <Typography sx={{ fontSize: theme.typography.h6 }}>
+                            price: {stockprice}
+                        </Typography>
                     </Box>
                     <Typography sx={{ fontSize: theme.typography.h5 }} component="div">
                         {stockName} - {stockTicker}
                     </Typography>
-                    <Typography sx={{ fontSize: theme.typography.h6 }}>
-                        price: {stockprice}
-                    </Typography>
+
                     <Button sx={{ bgcolor: colors.green[400] }}>Refresh Price</Button>
                     <FinancialsModalButton ticker={props.ticker} />
                 </CardContent>

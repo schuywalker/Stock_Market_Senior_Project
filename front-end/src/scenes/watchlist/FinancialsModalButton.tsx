@@ -19,7 +19,8 @@ const FinancialsModalButton = (props: { ticker: string }) => {
         display: "flex",
     };
 
-    const [financialInfo, setFinancialInfo] = useState([]);
+    // const [financialInfo, setFinancialInfo] = useState([]);
+    const [financialInfo, setFinancialInfo] = useState("");
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
@@ -44,7 +45,7 @@ const FinancialsModalButton = (props: { ticker: string }) => {
             ).then((response) => response.json());
             // .then((financials) => setFinancialInfo(financials.data));
             console.log(response);
-            setFinancialInfo(await response.json());
+            setFinancialInfo(JSON.stringify(response, null, 2) as unknown as string);
         } catch (err) {
             console.log(err);
         }
@@ -61,23 +62,24 @@ const FinancialsModalButton = (props: { ticker: string }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={{ ...modalStyle, width: 200 }}>
+                <Box sx={{ ...modalStyle }}>
                     <Typography id="modal-modal-title">Financials:</Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         {financialInfo ? (
-                            financialInfo.map((item: any, index: any) => (
-                                <div key={index}>
-                                    {Object.entries(item).map(([key, value]) => (
-                                        <p key={key}>
-                                            {key}:{value as ReactNode}
-                                            {/* {typeof value === "string" || typeof value === "number"
-                                                ? value
-                                                : JSON.stringify(value)} */}
-                                        </p>
-                                    ))}
-                                </div>
-                            ))
+                            financialInfo
                         ) : (
+                            //     financialInfo.map((item: any, index: any) => (
+                            //         <div key={index}>
+                            //             {Object.entries(item).map(([key, value]) => (
+                            //                 <p key={key}>
+                            //                     {key}:{value as ReactNode}
+                            //                     {/* {typeof value === "string" || typeof value === "number"
+                            //                         ? value
+                            //                         : JSON.stringify(value)} */}
+                            //                 </p>
+                            //             ))}
+                            //         </div>
+                            //     ))
                             <p>loading...</p>
                         )}
                     </Typography>
