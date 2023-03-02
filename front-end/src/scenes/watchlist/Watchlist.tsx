@@ -6,6 +6,10 @@ import { useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import StockGrouping from "./StockGrouping";
 
+type financialsResponseProps = {
+    // 5DayPriceReturnDaily
+};
+
 const Watchlist = () => {
     const stocks = [
         { name: "1Apple", ticker: "AAPL", price: 32416.92, perChg: -1.02 },
