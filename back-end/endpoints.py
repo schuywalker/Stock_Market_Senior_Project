@@ -7,12 +7,6 @@ from yfinCalls import *
 from flask_cors import CORS
 import finnhubCalls as fh
 
-'''
-CORS only enforced by browser. (curl gets around).
-prefetch: what origins (urls) are allowed to access this asset.
-cant use other peoples endpoints specifically from Javascript in the browser (if CORS enabled)
-
-'''
 
 app = Flask(__name__)
 CORS(app, origins=["*"])
@@ -30,14 +24,14 @@ class ReturnString(Resource):
 class smallCard(Resource):
     def get(self):
         ticker = request.args.get('ticker')
-        smallBasicFinancials = fh_calls.getBasicFinancials(ticker) # does not work
+        smallBasicFinancials = fh_calls.getBasicFinancials(ticker)
         dataQuote = fh_calls.getQuote(ticker)
         dataNews = fh_calls.getNews(ticker)
-        dataEarnings = fh_calls.getEarningsCalendar(ticker) # does not work
+        dataEarnings = fh_calls.getEarningsCalendar(ticker)
         ret = {
             "price": dataQuote.get('c'),
             "perChange": dataQuote.get('dp'),
-            "earnings": dataEarnings.get("earningsCalendar"), # does not work
+            "earnings": dataEarnings.get("earningsCalendar"),
             "threeArticles": dataNews[:3],
             "marketCap": smallBasicFinancials.get("metric").get("marketCapitalization"),
             "peRatio": smallBasicFinancials.get("metric").get("peExclExtraAnnual"),
