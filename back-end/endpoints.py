@@ -34,21 +34,25 @@ class smallCard(Resource):
         dataQuote = fh_calls.getQuote(ticker)
         dataNews = fh_calls.getNews(ticker)
         dataEarnings = fh_calls.getEarningsCalendar(ticker)
+        print(type(dataEarnings))
+        print(dataEarnings)
         newDict = {
             "price": dataQuote.get('c'),
             "perChange": dataQuote.get('dp'),
-            "lastEarningsDate": ((dataEarnings.get("earningsCalendar"))[0]).get("date"),
+            
             "threeArticles": dataNews[:3]
         }
+        earningsDict = {"earnings": dataEarnings.get("earningsCalendar")}
+        newDict.update(earningsDict)
         return(jsonify(newDict))
+        # return(newDict, 200)
 
-# class getQuote(Resource):
-#     def get(self):
-#         ticker = request.args.get('ticker')
-#         data = fh_calls.getQuote(ticker)
-#         return (jsonify(data))
-#
-# class getNews(Resource):
+class getQuote(Resource):
+    def get(self):
+        ticker = request.args.get('ticker')
+        data = fh_calls.getQuote(ticker)
+        return (jsonify(data), 200)
+'''# class getNews(Resource):
 #     def get(self):
 #         ticker = request.args.get('ticker')
 #         data = fh_calls.getNews(ticker)
@@ -58,13 +62,15 @@ class smallCard(Resource):
 #     def get(self):
 #         ticker = request.args.get('ticker')
 #         data = fh_calls.getBasicFinancials(ticker)
-#         return (jsonify(data))
-#
-# class getEarningsCalendar(Resource):
-#     def get(self):
-#         ticker = request.args.get('ticker')
-#         data = fh_calls.getEarningsCalendar(ticker)
-#         return (jsonify(((data.get("earningsCalendar"))[0]).get("date")))
+#         return (jsonify(data))'''
+class getEarningsCalendar(Resource):
+    def get(self):
+        ticker = request.args.get('ticker')
+        data = fh_calls.getEarningsCalendar(ticker)
+        print(type(data))
+        print(data)
+        return (jsonify(data.get("earningsCalendar")))
+        # return (jsonify(((data.get("earningsCalendar"))[0]).get("date")))
 
 class getCandles(Resource):
     def get(self):
@@ -97,10 +103,10 @@ class User(Resource):
         }, 200
 
 
-# api.add_resource(getQuote, '/quote')
+api.add_resource(getQuote, '/quote')
 # api.add_resource(getBasicFinancials, '/basicFinancials')
 # api.add_resource(getNews, '/news')
-# api.add_resource(getEarningsCalendar, '/earningsDate')
+api.add_resource(getEarningsCalendar, '/earningsDate')
 api.add_resource(getCandles, '/stockCandles')
 api.add_resource(smallCard, '/smallCard')
 api.add_resource(User, '/user')
