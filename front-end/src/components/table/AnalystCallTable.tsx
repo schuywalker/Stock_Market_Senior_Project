@@ -21,13 +21,12 @@ function createData(
 
 export default function AnalystCallTable() {
 
-  const [ret, setRet] = useState([]);
+  const [analystCalls, setAnalystCalls] = useState([]);
    useEffect(() => {
       fetch('http://127.0.0.1:8080/analystCalls')
         .then((response) => response.json())
          .then((data) => {
-            console.log(data);
-            setRet(data);
+          setAnalystCalls(data);
          })
          .catch((err) => {
             console.log(err.message);
@@ -48,7 +47,7 @@ export default function AnalystCallTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {ret.map((row)=>(
+          {analystCalls.map((row)=>(
              <TableRow
              key={row['symbol']}
              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
