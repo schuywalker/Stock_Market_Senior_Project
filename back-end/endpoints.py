@@ -1,6 +1,6 @@
 import json
 import yfinance as yf
-from flask import Flask, jsonify, json
+from flask import Flask, jsonify, json, request
 from flask_restful import Resource, Api, reqparse
 import pandas as pd
 from yfinCalls import *
@@ -32,7 +32,7 @@ class getQuote(Resource):
         data = fh_calls.getQuote('AAPL')
         return (jsonify(data))
     
-class getAnalystCalls(Resource):
+class getAnalystCallsDefaultList(Resource):
     def get(self):
         #default data to display the latest month of analystcalls for the specifc stocks
         #this data will be moved to another list called newList
@@ -43,19 +43,14 @@ class getAnalystCalls(Resource):
         data5 = fh_calls.getAnalystCalls('CVX')
         newList = [data[0], data2[0], data3[0], data4[0], data5[0]]
         return (jsonify(newList))
-
-class AnalystRec(Resource):
+    
+#this is the ticker version of the above method
+class getAnalystCallsTicker(Resource):
     def get(self):
-        analystRecs = yfin_calls.analystRecommendations('MSFT')
-        analystRecs.reset_index(inplace=True)
-        analystRecs.set_index('Firm', inplace=True)
-        analystRecs["Date"] = pd.to_datetime(analystRecs['Date'])
-        analystRecs["Date"] = analystRecs["Date"].dt.strftime("%d-%m-%Y")
-        
-        recs_json_str = analystRecs.to_json(orient='table', indent=2, date_format='iso')
-        ret = json.loads(recs_json_str)
-        return { "analystRecs": ret }, 200
-
+        ticker = request.args.get('ticker')
+        data = fh_calls.getAnalystCalls(ticker)
+        return data, 200
+    
 class User(Resource):
     def post(self):
         parser = reqparse.RequestParser()
@@ -71,8 +66,8 @@ class User(Resource):
 api.add_resource(getQuote, '/quote')
 api.add_resource(User, '/user')
 api.add_resource(ReturnString, '/returnString')
-api.add_resource(AnalystRec, '/analystRec')
-api.add_resource(getAnalystCalls, '/analystCalls')
+api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
+api.add_resource(getAnalystCallsTicker, '/analystCallsTicker')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

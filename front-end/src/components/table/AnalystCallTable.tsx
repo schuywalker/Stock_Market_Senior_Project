@@ -23,7 +23,7 @@ export default function AnalystCallTable() {
 
   const [analystCalls, setAnalystCalls] = useState([]);
    useEffect(() => {
-      fetch('http://127.0.0.1:8080/analystCalls')
+      fetch('http://127.0.0.1:8080/analystCallsTicker')
         .then((response) => response.json())
          .then((data) => {
           setAnalystCalls(data);
