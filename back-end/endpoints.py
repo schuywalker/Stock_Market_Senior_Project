@@ -43,9 +43,9 @@ class getAnalystCallsDefaultList(Resource):
         data5 = fh_calls.getAnalystCalls('CVX')
         newList = [data[0], data2[0], data3[0], data4[0], data5[0]]
         return (jsonify(newList))
-    
+#test    
 #this is the ticker version of the above method
-class getAnalystCallsTicker(Resource):
+class getAnalystCalls(Resource):
     def get(self):
         ticker = request.args.get('ticker')
         data = fh_calls.getAnalystCalls(ticker)
@@ -67,7 +67,7 @@ api.add_resource(getQuote, '/quote')
 api.add_resource(User, '/user')
 api.add_resource(ReturnString, '/returnString')
 api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
-api.add_resource(getAnalystCallsTicker, '/analystCallsTicker')
+api.add_resource(getAnalystCalls, '/analystCalls')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
