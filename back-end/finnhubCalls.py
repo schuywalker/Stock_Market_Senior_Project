@@ -4,11 +4,13 @@ import finnhub as fn
 import requests
 import pandas as pd
 
-
+#generate Dictionary
+analystCallsDictionary = {
+    
+}
 # finnhub_client = None
-
 class finh_API_Requester(): 
-
+    
     def __init__(self):
         key = ''
         with open('./secrets/finnhub_api_key.txt') as f:
@@ -42,4 +44,12 @@ class finh_API_Requester():
         earnings_calendar = self.finnhub_client.earnings_calendar(_from=lastMonth, to=today, symbol=ticker)
         return earnings_calendar
 
-
+   #creating method for Analyst Calls Component
+    def getAnalystCalls(self, ticker):
+        
+        #ideally this will be self updating to whatever the user wants to search for so i believe this will work just need to test
+        analystCall = self.finnhub_client.recommendation_trends(ticker)
+        #using pandas on newly retrieved analyst call for the specifc stock
+        analystCallsDictionary = analystCall
+        pdAnalystCall = pd.DataFrame(analystCall).to_json(orient='index')
+        return analystCall
