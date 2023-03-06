@@ -29,8 +29,8 @@ function App() {
                         
                         <Routes>
                             {/* <Route path="/" element={<Home />}/> */}
-                            <Route path="/Watchlist" element={<Watchlist />}/>
-                            <Route path="/analystCalls" element={<AnalystCalls />}/>
+                            <Route path="/watchlist" element={<Watchlist />}/>
+                            <Route path="/analyst-calls" element={<AnalystCalls />}/>
                             {/* <Route path="*" element={<NotFound />} /> */}
                         </Routes>
                     </div>

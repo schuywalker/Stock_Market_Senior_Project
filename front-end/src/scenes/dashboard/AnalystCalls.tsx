@@ -2,6 +2,8 @@ import { Box, useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
 import React, { useContext } from "react";
 import { ColorModeContext, tokens } from "../../theme";
+import AnalystCallTable from "../../components/table/AnalystCallTable";
+
 
 const AnalystCalls = () => {
     const theme = useTheme();
@@ -9,12 +11,7 @@ const AnalystCalls = () => {
     const colorMode = useContext(ColorModeContext);
     return (
         <>
-            <div></div>
-            <Box display="flex" color={colors.green[100]} borderRadius="3px">
-                <Button variant="outlined" sx={{ m: 5, color: colors.primary[400] }}>
-                    BUY TESLA!!!
-                </Button>
-            </Box>
+            <div><AnalystCallTable/></div>
         </>
     );
 };
