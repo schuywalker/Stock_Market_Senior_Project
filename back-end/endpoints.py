@@ -21,23 +21,30 @@ class ReturnString(Resource):
         data = "howdy Gamers"
         return data, 200
 
-class smallCard(Resource):
+class populateWatchlist(Resource):
     def get(self):
-        ticker = request.args.get('ticker')
-        smallBasicFinancials = fh_calls.getBasicFinancials(ticker)
-        dataQuote = fh_calls.getQuote(ticker)
-        dataNews = fh_calls.getNews(ticker)
-        dataEarnings = fh_calls.getEarningsCalendar(ticker)
-        ret = {
-            "price": dataQuote.get('c'),
-            "perChange": dataQuote.get('dp'),
-            "earnings": dataEarnings.get("earningsCalendar"),
-            "threeArticles": dataNews[:3],
-            "marketCap": smallBasicFinancials.get("metric").get("marketCapitalization"),
-            "peRatio": smallBasicFinancials.get("metric").get("peExclExtraAnnual"),
-            "peRatioTTM": smallBasicFinancials.get("metric").get("peBasicExclExtraTTM"),
-            "dividendYield": smallBasicFinancials.get("metric").get("dividendYieldIndicatedAnnual"),
-        }
+        responseFromDB = ["AAPL", "MSFT", "TSLA", "RBlX", "LYFT", "UBER"]
+        #needs userID and watchlist name
+        #ticker = request.args.get('ticker')
+        ret = []
+        for ticker in responseFromDB:
+            smallBasicFinancials = fh_calls.getBasicFinancials(ticker)
+            dataQuote = fh_calls.getQuote(ticker)
+            # dataNews = fh_calls.getNews(ticker)
+            dataEarnings = fh_calls.getEarningsCalendar(ticker)
+            dataName = fh_calls.getSymbolInfo(ticker)
+            ret.append({
+                "ticker": ticker,
+                "name": dataName.get("result")[0].get("description"),
+                "price": dataQuote.get('c'),
+                "perChange": dataQuote.get('dp'),
+                "earnings": dataEarnings.get("earningsCalendar"),
+                # "threeArticles": dataNews[:3],
+                "marketCap": smallBasicFinancials.get("metric").get("marketCapitalization"),
+                "peRatio": smallBasicFinancials.get("metric").get("peExclExtraAnnual"),
+                "peRatioTTM": smallBasicFinancials.get("metric").get("peBasicExclExtraTTM"),
+                "dividendYield": smallBasicFinancials.get("metric").get("dividendYieldIndicatedAnnual"),
+            })
         return(ret, 200)
 
 
@@ -45,7 +52,7 @@ class getQuote(Resource):
     def get(self):
         ticker = request.args.get('ticker')
         data = fh_calls.getQuote(ticker)
-        return (jsonify(data), 200)
+        return (data, 200)
 
 '''class getNews(Resource):
     def get(self):
@@ -53,6 +60,11 @@ class getQuote(Resource):
         data = fh_calls.getNews(ticker)
         return (jsonify(data))
 '''
+class getSymbolInfo(Resource):
+    def get(self):
+        ticker = request.args.get('ticker')
+        data = fh_calls.getSymbolInfo(ticker)
+        return jsonify((data.get("result"))[0].get("description"))
 
 class getBasicFinancials(Resource):
     def get(self):
@@ -181,9 +193,10 @@ class User(Resource):
 
 api.add_resource(getQuote, '/quote')
 api.add_resource(getBasicFinancials, '/basicFinancials')
+api.add_resource(getSymbolInfo, '/symbolInfo')
 api.add_resource(getEarningsCalendar, '/earningsDate')
 api.add_resource(getCandles, '/stockCandles')
-api.add_resource(smallCard, '/smallCard')
+api.add_resource(populateWatchlist, '/populateWatchlist')
 api.add_resource(ReturnString, '/returnString')
 api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
 api.add_resource(getAnalystCalls, '/analystCalls')

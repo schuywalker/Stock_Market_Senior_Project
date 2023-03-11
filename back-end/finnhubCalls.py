@@ -28,6 +28,10 @@ class finh_API_Requester():
         quote = finh_API_Requester.finnhub_client.quote(ticker)
         return quote
 
+    def getSymbolInfo(self, ticker):
+        info = finh_API_Requester.finnhub_client.symbol_lookup(ticker)
+        return info
+
     def getBasicFinancials(self, ticker):
         basic_fin = self.finnhub_client.company_basic_financials(ticker, 'all')
         return basic_fin
