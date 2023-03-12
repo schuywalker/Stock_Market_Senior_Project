@@ -35,9 +35,20 @@ const Watchlist = () => {
         }
     }
 
+    const [gridView, setGridView] = useState<boolean>(true);
+
     return (
         <>
-            <Box display="flex" sx={{ mx: "5%" }}>
+            <Typography
+                sx={{
+                    m: 2,
+                    fontSize: theme.typography.h2,
+                    color: colors.green[500],
+                }}
+            >
+                Watchlist Name Here
+            </Typography>
+            <Box display="flex" flexWrap="wrap" sx={{ mx: "10%" }}>
                 {stocks.map((_stock: any, i: number) => (
                     <Stock
                         key={i}

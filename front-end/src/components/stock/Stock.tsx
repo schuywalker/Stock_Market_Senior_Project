@@ -31,27 +31,50 @@ const Stock = (props: DisplayGroup) => {
     return (
         <>
             <Card
+                flex-basis="240px"
                 sx={{
-                    width: "100%",
+                    width: "240px",
+                    maxHeight: "240px",
                     m: "1em",
                     bgcolor: colors.grey[500],
                 }}
             >
                 <CardContent>
-                    <div>
-                        {name} - {ticker}
-                    </div>
-                    <Box display="flex" alignItems={"center"}>
-                        <div>{perChange}%</div>
-                        <div>price: {price}</div>
+                    <Box
+                        display="flex"
+                        sx={{
+                            fontSize: theme.typography.h5,
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                fontSize: theme.typography.h5,
+                            }}
+                        >
+                            {name} - {ticker}
+                        </Typography>
                     </Box>
-                    {/* <div>earnings: {earnings}</div> */}
-                    <div>market capitalization: {marketCap}</div>
-                    <div>peRatio: {peRatio}</div>
-                    <div>peRatioTTM: {peRatioTTM}</div>
-                    <div>dividendYield: {dividendYield}</div>
+                    <Box display="flex">
+                        <Typography
+                            color={dailyChangeStatus}
+                            sx={{
+                                fontSize: theme.typography.h5,
+                            }}
+                        >
+                            price: {price} {perChange}%
+                        </Typography>
+                    </Box>
+                    <Typography></Typography>
+                    <Typography></Typography>
+                    {/* <Typography>earnings: {earnings}</Typography> */}
+                    <Typography>market capitalization: {marketCap}</Typography>
+                    <Typography>peRatio: {peRatio}</Typography>
+                    <Typography>peRatioTTM: {peRatioTTM}</Typography>
+                    <Typography>dividendYield: {dividendYield}</Typography>
 
-                    <FinancialsModalButton ticker={ticker} />
+                    <Box sx={{ alignSelf: "bottom", mt: "5px" }}>
+                        <FinancialsModalButton ticker={ticker} />
+                    </Box>
                 </CardContent>
             </Card>
         </>
