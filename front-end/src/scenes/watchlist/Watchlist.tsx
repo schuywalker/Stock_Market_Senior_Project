@@ -1,117 +1,58 @@
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Carousel from "react-material-ui-carousel";
-import StockGrouping from "./StockGrouping";
 import DisplayGroup from "./DisplayGroup";
+import Stock from "../../components/stock/Stock";
+import { ColorModeContext, tokens } from "../../theme";
+import { watch } from "fs";
 
 const Watchlist = () => {
-    const stocks = [
-        {
-            stockName: "Apple",
-            stockTicker: "AAPL",
-            price: 10,
-            perChange: 3,
-            earnings: 30000,
-            threeArticles: "",
-            marketCap: 3000000,
-            peRatio: 16.4,
-            peRatioTTM: 14,
-            dividendYield: 4.7,
-        },
-        {
-            stockName: "222",
-            stockTicker: "",
-            price: 10,
-            perChange: 3,
-            earnings: 30000,
-            threeArticles: "",
-            marketCap: 3000000,
-            peRatio: 16.4,
-            peRatioTTM: 14,
-            dividendYield: 4.7,
-        },
-    ];
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+    const colorMode = useContext(ColorModeContext);
 
-    const [watchlistPosition, setWatchlistPosition] = useState(0);
+    const [stocks, setStocks] = useState<DisplayGroup[]>([]);
 
-    const stockSubset = (start: number): DisplayGroup[] => {
-        if (start < stocks.length - 5) {
-            return stocks.slice(start, start + 5);
-        } else {
-            return start === stocks.length
-                ? stocks.slice(0, 5)
-                : stocks.slice(start, stocks.length); // just make list shorter when they're at end, instead of wrapping around
-        }
-    };
-    function watchListPositionHandler(change: number) {
-        if (change === 5) {
-            if (watchlistPosition < stocks.length - 5) {
-                setWatchlistPosition(watchlistPosition + 5);
-            } else {
-                setWatchlistPosition(0); // loop around to beginning
-            }
-        } else {
-            if (watchlistPosition >= 5) {
-                setWatchlistPosition(watchlistPosition - 5);
-            } else if (watchlistPosition > 0 && watchlistPosition < 5) {
-                setWatchlistPosition(0);
-            } else {
-                setWatchlistPosition(stocks.length - 5);
-            }
+    useEffect(() => {
+        fetchWatchlistAssets();
+    }, []);
+
+    async function fetchWatchlistAssets() {
+        try {
+            // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
+            const response = await fetch(`http://localhost:8080/populateWatchlist`, {}).then(
+                (response) => {
+                    response.json().then((json) => {
+                        setStocks(json);
+                    });
+                }
+            );
+        } catch (err) {
+            console.log(err);
         }
     }
 
-    const [quote, setQuote] = useState("");
-
-    const [smallCard, setSmallCard] = useState();
-
-    const smallCardHandler = async () => {
-        try {
-            const response = await fetch("http://127.0.0.1:8080/smallCard", {});
-            const json = await response.json();
-
-            setSmallCard(json);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    const quoteHandler = async () => {
-        try {
-            const response = await fetch("http://127.0.0.1:8080/quote", {});
-            const json = await response.json();
-
-            setQuote(json);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     return (
         <>
-            <Carousel
-                next={(_next, _active) => {
-                    watchListPositionHandler(5);
-                }}
-                prev={(prev, active) => {
-                    watchListPositionHandler(-5);
-                }}
-                autoPlay={false}
-                NextIcon={<ArrowForwardIosOutlinedIcon />}
-                PrevIcon={<ArrowBackIosNewOutlinedIcon />}
-                animation="slide"
-                // interval={14000}
-                navButtonsAlwaysVisible={true}
-                sx={{ width: "100%", height: "100%" }}
-            >
-                <StockGrouping displayGroup={stockSubset(watchlistPosition)} />
-            </Carousel>
-            <Box display="flex">
-                <Button onClick={quoteHandler}>Get quote</Button>
-                <Typography>{quote}</Typography>
+            <Box display="flex" sx={{ mx: "5%" }}>
+                {stocks.map((_stock: any, i: number) => (
+                    <Stock
+                        key={i}
+                        name={_stock.name}
+                        ticker={_stock.ticker}
+                        price={_stock.price}
+                        perChange={_stock.perChange}
+                        earnings={_stock.earnings}
+                        threeArticles={_stock.threeArticles} // not on the object
+                        marketCap={_stock.marketCap}
+                        peRatio={_stock.peRatio}
+                        peRatioTTM={_stock.peRatioTTM}
+                        dividendYield={_stock.dividendYield}
+                    />
+                ))}
             </Box>
         </>
     );

@@ -1,10 +1,10 @@
 interface DisplayGroup {
-    stockName: string;
-    stockTicker: string;
+    name: string;
+    ticker: string;
     price: number;
     perChange: number;
     earnings: any;
-    threeArticles: string;
+    threeArticles?: string;
     marketCap: number;
     peRatio: number;
     peRatioTTM: number;
