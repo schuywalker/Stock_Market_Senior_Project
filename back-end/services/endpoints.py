@@ -1,12 +1,7 @@
-import json
-import yfinance as yf
-from flask import Flask, jsonify, json, request
-from flask_restful import Resource, Api, reqparse
-import pandas as pd
-from yfinCalls import *
-from flask_cors import CORS
-import finnhubCalls as fh
-from finnhubCalls import *
+from flask import jsonify, request
+from flask_restful import Resource, reqparse
+import utilities.finnhubCalls as fh
+from utilities.finnhubCalls import *
 '''
 CORS only enforced by browser. (curl gets around).
 prefetch: what origins (urls) are allowed to access this asset.
@@ -14,18 +9,8 @@ cant use other peoples endpoints specifically from Javascript in the browser (if
 
 '''
 
-app = Flask(__name__)
-CORS(app, origins=["*"])
-api = Api(app)
 
-
-yfin_calls = yfin_API_Requester()
 fh_calls = fh.finh_API_Requester()
-
-class ReturnString(Resource):
-    def get(self):
-        data = "howdy Gamers"
-        return data, 200
 
 class getQuote(Resource):
     def get(self):
@@ -63,11 +48,4 @@ class User(Resource):
         }, 200
 
 
-api.add_resource(getQuote, '/quote')
-api.add_resource(User, '/user')
-api.add_resource(ReturnString, '/returnString')
-api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
-api.add_resource(getAnalystCalls, '/analystCalls')
 
-if __name__ == '__main__':
-    app.run(debug=True, port=8080)
