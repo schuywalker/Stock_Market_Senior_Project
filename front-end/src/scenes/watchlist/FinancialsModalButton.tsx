@@ -43,9 +43,11 @@ const FinancialsModalButton = (props: { ticker: string }) => {
 
     return (
         <>
-            <Button onClick={handleOpen} sx={{ ml: "3em", bgcolor: colors.blue[400] }}>
-                More Info
-            </Button>
+            <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+                <Button onClick={handleOpen} sx={{ bgcolor: colors.blue[300] }}>
+                    More Info
+                </Button>
+            </Box>
             <Modal
                 open={open}
                 onClose={handleClose}

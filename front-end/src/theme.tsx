@@ -2,6 +2,12 @@ import { createContext, useState, useMemo } from "react";
 import { createTheme, ThemeOptions } from "@mui/material/styles";
 import { PaletteMode, Theme } from "@mui/material";
 
+// TODO:
+// fix font sizes. h1-h3 are way too big
+// light mode
+// related to light mode but font color.. white font is a little too bright
+// pick font weights. we can use bold bolder etc or numbers. 900 honestly looks pretty good on all of them...
+
 // color design tokens aka theme shades
 export const tokens = (mode: string) => ({
     ...(mode === "dark"
@@ -167,27 +173,42 @@ export function themeSettings(mode: PaletteMode): ThemeOptions {
             fontSize: 10,
             h1: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-                fontsize: 40,
+                fontsize: 32,
+                fontWeight: 900,
             },
             h2: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-                fontsize: 32,
+                fontsize: 28,
+                fontWeight: 900,
             },
             h3: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-                fontsize: 24,
+                fontsize: 22,
+                fontWeight: 900,
             },
             h4: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-                fontsize: 20,
+                fontsize: 18,
+                fontWeight: 900,
             },
             h5: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-                fontsize: 16,
+                fontsize: 14,
+                fontWeight: 900,
             },
             h6: {
                 fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
                 fontsize: 12,
+                fontWeight: 900,
+            },
+        },
+        components: {
+            MuiTableCell: {
+                styleOverrides: {
+                    root: {
+                        fontSize: 14,
+                    },
+                },
             },
         },
     };

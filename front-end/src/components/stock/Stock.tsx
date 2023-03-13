@@ -26,26 +26,23 @@ const Stock = (props: DisplayGroup) => {
     const colorMode = useContext(ColorModeContext);
 
     const dailyChangeStatus: string =
-        perChange > 0 ? colors.green[500] : perChange === 0 ? colors.grey[100] : colors.red[500];
+        perChange > 0 ? colors.green[400] : perChange === 0 ? colors.grey[100] : colors.red[400];
 
     return (
         <>
             <Card
-                flex-basis="160px"
+                flex-basis="200px"
                 sx={{
-                    // maxWidth: "200px",
-                    // maxHeight: "200px",
-                    m: "1em",
-                    bgcolor: colors.grey[500],
+                    // size cards based on breakpoints like below
+                    // width: { xs: "100%", sm: "100%", md: "100%", lg: "100%", xl: "100%" },
+                    width: "18%", // this is finally getting closer, but with this, we always have 5 per line. Want them to get smaller/ reduce # per line (which happens without width:"x%")
+                    m: ".5em",
+                    bgcolor: dailyChangeStatus,
+                    color: colors.primary[900],
                 }}
             >
-                <CardContent>
-                    <Box
-                        display="flex"
-                        sx={{
-                            fontSize: theme.typography.h5,
-                        }}
-                    >
+                <CardContent sx={{ p: 1, "&:last-child": { pb: 1 } }}>
+                    <Box display="flex">
                         <Typography
                             sx={{
                                 fontSize: theme.typography.h5,
@@ -56,23 +53,31 @@ const Stock = (props: DisplayGroup) => {
                     </Box>
                     <Box display="flex">
                         <Typography
-                            color={dailyChangeStatus}
+                            sx={{
+                                flexGrow: 1,
+                                fontSize: theme.typography.h5,
+                            }}
+                        >
+                            price: {price}
+                        </Typography>
+                        <Typography
                             sx={{
                                 fontSize: theme.typography.h5,
                             }}
                         >
-                            price: {price} {perChange}%
+                            {perChange}%
                         </Typography>
                     </Box>
-                    <Typography></Typography>
-                    <Typography></Typography>
-                    {/* <Typography>earnings: {earnings}</Typography> */}
-                    <Typography>market capitalization: {marketCap}</Typography>
-                    <Typography>peRatio: {peRatio}</Typography>
-                    <Typography>peRatioTTM: {peRatioTTM}</Typography>
-                    <Typography>dividendYield: {dividendYield}</Typography>
-
-                    <Box sx={{ alignSelf: "bottom", mt: "5px" }}>
+                    <Box>
+                        {/* <Typography>earnings: {earnings}</Typography> */}
+                        <Typography sx={{ fontSize: theme.typography.h5 }}>
+                            market capitalization: {marketCap}
+                        </Typography>
+                        <Typography>peRatio: {peRatio}</Typography>
+                        <Typography>peRatioTTM: {peRatioTTM}</Typography>
+                        <Typography>dividendYield: {dividendYield}</Typography>
+                    </Box>
+                    <Box sx={{ mt: 3 }}>
                         <FinancialsModalButton ticker={ticker} />
                     </Box>
                 </CardContent>

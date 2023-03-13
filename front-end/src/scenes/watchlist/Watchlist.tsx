@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, FormGroup, Stack, Typography, useTheme } from "@mui/material";
+import { Box, FormGroup, Stack, Typography, styled, useTheme } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Switch from "@mui/material/Switch";
 import Table from "@mui/material/Table";
@@ -11,6 +11,15 @@ import { useContext, useEffect, useState } from "react";
 import Stock from "../../components/stock/Stock";
 import { ColorModeContext, tokens } from "../../theme";
 import DisplayGroup from "./DisplayGroup";
+import { ThemeProvider } from "@emotion/react";
+
+// TODO:
+// more info button (noGutter?)
+// collapsable table (with more info data)
+// fontsize on table.. how to get it bigger without manually doing each table cell?
+// gradient in stock card background
+// font color on cards.. probably a theme thing.
+// OH CRAP the space-between makes them go to the sides there are 2 per line.. gotta fix sizing..
 
 const Watchlist = () => {
     const theme = useTheme();
@@ -42,30 +51,44 @@ const Watchlist = () => {
 
     return (
         <>
-            <Box sx={{ mx: "8%" }}>
-                <Typography
-                    sx={{
-                        my: 2,
-                        fontSize: theme.typography.h2,
-                        color: colors.green[500],
-                    }}
-                >
-                    Watchlist Name Here
-                </Typography>
-                <FormGroup>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                        <Typography>Table View</Typography>
-                        <Switch
-                            defaultChecked
-                            color="secondary"
-                            onClick={() => setGridView(!gridView)}
-                        />
-                        {/* sx={{ color: colors.green[300] }} */}
-                        <Typography>Grid View</Typography>
-                    </Stack>
-                </FormGroup>
+            <Box sx={{ mx: "3%" }}>
+                <Box display="flex" sx={{ my: 2, flexWrap: "nowrap" }}>
+                    <Typography
+                        sx={{
+                            flexGrow: 1,
+                            fontSize: theme.typography.h2,
+                            color: colors.green[500],
+                        }}
+                    >
+                        Watchlist Name Here
+                    </Typography>
+                    <FormGroup>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <Typography
+                                sx={{
+                                    fontSize: theme.typography.h5,
+                                }}
+                            >
+                                Table View
+                            </Typography>
+                            <Switch
+                                defaultChecked
+                                color="secondary"
+                                onClick={() => setGridView(!gridView)}
+                            />
+                            {/* sx={{ color: colors.green[300] }} */}
+                            <Typography
+                                sx={{
+                                    fontSize: theme.typography.h5,
+                                }}
+                            >
+                                Grid View
+                            </Typography>
+                        </Stack>
+                    </FormGroup>
+                </Box>
                 {gridView ? (
-                    <Box display="flex" flexWrap="wrap">
+                    <Box display="flex" flexWrap="wrap" sx={{ justifyContent: "space-between" }}>
                         {stocks.map((_stock: any, i: number) => (
                             <Stock
                                 key={i}
@@ -83,43 +106,60 @@ const Watchlist = () => {
                         ))}
                     </Box>
                 ) : (
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell align="right">Ticker</TableCell>
-                                    <TableCell align="right">Price</TableCell>
-                                    <TableCell align="right">Daily Change</TableCell>
-                                    <TableCell align="right">Market Cap</TableCell>
-                                    <TableCell align="right">peRatio</TableCell>
-                                    <TableCell align="right">peRatioTTM</TableCell>
-                                    <TableCell align="right">Dividend Yield</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {stocks.map((_stock) => (
+                    <ThemeProvider theme={theme}>
+                        <TableContainer component={Paper}>
+                            <Table aria-label="collapsible table">
+                                <TableHead>
                                     <TableRow
-                                        key={_stock["ticker"]}
-                                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                                        sx={{
+                                            "&:last-child td, &:last-child th": {
+                                                fontSize: theme.typography.h4,
+                                            },
+                                        }}
                                     >
-                                        <TableCell component="th" scope="row">
-                                            {_stock["name"]}
-                                        </TableCell>
-                                        <TableCell align="right">{_stock["ticker"]}</TableCell>
-                                        <TableCell align="right">{_stock["price"]}</TableCell>
-                                        <TableCell align="right">{_stock["perChange"]}</TableCell>
-                                        <TableCell align="right">{_stock["marketCap"]}</TableCell>
-                                        <TableCell align="right">{_stock["peRatio"]}</TableCell>
-                                        <TableCell align="right">{_stock["peRatioTTM"]}</TableCell>
-                                        <TableCell align="right">
-                                            {_stock["dividendYield"]}
-                                        </TableCell>
+                                        {/* I think we can map the keys of stocks? that way we only have to style one TableCell */}
+                                        <TableCell>Name</TableCell>
+                                        <TableCell align="right">Ticker</TableCell>
+                                        <TableCell align="right">Price</TableCell>
+                                        <TableCell align="right">Daily Change</TableCell>
+                                        <TableCell align="right">Market Cap</TableCell>
+                                        <TableCell align="right">peRatio</TableCell>
+                                        <TableCell align="right">peRatioTTM</TableCell>
+                                        <TableCell align="right">Dividend Yield</TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody>
+                                    {stocks.map((_stock) => (
+                                        <TableRow
+                                            key={_stock["ticker"]}
+                                            sx={{
+                                                "& > *": { borderBottom: "unset" },
+                                            }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {_stock["name"]}
+                                            </TableCell>
+                                            <TableCell align="right">{_stock["ticker"]}</TableCell>
+                                            <TableCell align="right">{_stock["price"]}</TableCell>
+                                            <TableCell align="right">
+                                                {_stock["perChange"]}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock["marketCap"]}
+                                            </TableCell>
+                                            <TableCell align="right">{_stock["peRatio"]}</TableCell>
+                                            <TableCell align="right">
+                                                {_stock["peRatioTTM"]}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock["dividendYield"]}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </ThemeProvider>
                 )}
             </Box>
         </>
