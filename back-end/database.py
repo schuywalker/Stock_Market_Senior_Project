@@ -5,7 +5,23 @@ from mysql.connector import Error
 #needs to be indiviuallized for each user and password
 #host, port, database are the same regardless of user
 try:
+    hst = prt=usr=pswrd=db=''
+    with open('./secrets/db_secrets.txt') as f:
+            hst = f.readline()
+            prt = f.readline()
+            usr = f.readline()
+            pswrd = f.readline()
+            db = f.readline()
+    f.close()
+    print(hst,prt,usr,pswrd,db)
+    prt = int(prt)
+    
     mydb = mysql.connector.connect(
+         #10.219.0.50
+        #3306
+        #mszymanski
+        #Senior*2023
+        #SeniorProject_DB 
         host="10.219.0.50",
         port=3306,
         user="mszymanski",
