@@ -31,10 +31,10 @@ const Stock = (props: DisplayGroup) => {
     return (
         <>
             <Card
-                flex-basis="240px"
+                flex-basis="160px"
                 sx={{
-                    width: "240px",
-                    maxHeight: "240px",
+                    // maxWidth: "200px",
+                    // maxHeight: "200px",
                     m: "1em",
                     bgcolor: colors.grey[500],
                 }}
