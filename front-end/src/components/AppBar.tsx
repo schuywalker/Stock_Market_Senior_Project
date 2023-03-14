@@ -13,14 +13,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import SignUpForm from './SignUpForm';
 
 const pages = ['Watchlist', 'Insider Trades', 'Analyst Calls', 'Research']
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Signup', 'Login'];
+
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [showAccountCreation,setShowAccountCreation] = React.useState(false);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -30,6 +33,7 @@ function ResponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
+    
     setAnchorElNav(null);
   };
 
@@ -191,7 +195,8 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={(setting=='Signup'?()=>setShowAccountCreation(true):handleCloseUserMenu)}>
+                  <SignUpForm open={showAccountCreation} close = {()=>setShowAccountCreation(false)}/>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
