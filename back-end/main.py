@@ -8,7 +8,12 @@ CORS(app, origins=["*"])
 api = Api(app)
 
 api.add_resource(getQuote, '/quote')
-api.add_resource(User, '/user')
+api.add_resource(getBasicFinancials, '/basicFinancials')
+api.add_resource(getSymbolInfo, '/symbolInfo')
+api.add_resource(getEarningsCalendar, '/earningsDate')
+api.add_resource(getCandles, '/stockCandles')
+api.add_resource(populateWatchlist, '/populateWatchlist')
+api.add_resource(ReturnString, '/returnString')
 api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
 api.add_resource(getAnalystCalls, '/analystCalls')
 
