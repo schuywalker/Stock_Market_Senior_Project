@@ -3,7 +3,7 @@ import base64
 import mysql.connector
 from mysql.connector import Error
 #needs to be indiviuallized for each user and password
-#host, port, database are the same regardless of user
+#host, port, database are the same regardless of user1
 try:
     hst = prt=usr=pswrd=db=''
     with open('./secrets/db_secrets.txt') as f:
