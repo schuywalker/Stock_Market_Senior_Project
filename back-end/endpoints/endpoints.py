@@ -8,9 +8,7 @@ import hashlib
 import base64
 from services.watchlist import *
 from services.analystCalls import *
-# from services.user import *
-# from services.* import *
-
+from services.user import *
 
 
 fh_calls = fh.finh_API_Requester()
@@ -22,18 +20,9 @@ class getQuote(Resource):
     
 class getAnalystCallsDefaultList(Resource):
     def get(self):
-        #default data to display the latest month of analystcalls for the specifc stocks
-        #this data will be moved to another list called newList
-        # data = fh_calls.getAnalystCalls('AAPL')
-        # data2 = fh_calls.getAnalystCalls('AMZN')
-        # data3 = fh_calls.getAnalystCalls('MSFT')
-        # data4 = fh_calls.getAnalystCalls('GOOG')
-        # data5 = fh_calls.getAnalystCalls('CVX')
-        # newList = [data[0], data2[0], data3[0], data4[0], data5[0]]
         newList = AnalystCallsService.getAnalystCalls()
         return (jsonify(newList))
-#test    
-#this is the ticker version of the above method
+
 class getAnalystCalls(Resource):
     def get(self):
         ticker = request.args.get('ticker')
