@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_restful import Resource, reqparse
-import utilities.finnhubCalls as fh
-from utilities.finnhubCalls import *
+import services.external_API_calls.finnhubCalls as fh
+from services.external_API_calls.finnhubCalls import *
 import mysql.connector
 from mysql.connector import Error
 import hashlib

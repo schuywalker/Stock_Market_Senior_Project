@@ -1,5 +1,5 @@
-import utilities.finnhubCalls as fh
-from utilities.finnhubCalls import *
+import services.external_API_calls.finnhubCalls as fh
+from services.external_API_calls.finnhubCalls import *
 
 
 fh_calls = fh.finh_API_Requester()
