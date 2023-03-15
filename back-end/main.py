@@ -1,5 +1,5 @@
 from flask import Flask
-from services.endpoints import *
+from endpoints.endpoints import *
 from flask_cors import CORS
 from flask_restful import Api
 

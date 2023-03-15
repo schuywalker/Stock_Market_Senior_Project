@@ -6,7 +6,7 @@ from mysql.connector import Error
 #host, port, database are the same regardless of user1
 try:
     hst = prt=usr=pswrd=db=''
-    with open('./secrets/db_secrets.txt') as f:
+    with open('../secrets/db_secrets.txt') as f:
             hst = f.readline().strip()
             prt = f.readline().strip()
             usr = f.readline().strip()
