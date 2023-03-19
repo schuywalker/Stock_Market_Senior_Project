@@ -1,25 +1,27 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Sidebar, Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpModeOutlinedIcon from "@mui/icons-material/HelpOutlined";
-import BarCharModeOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartModeOutlinedIcon from "@mui/icons-material/PieChartOutlined";
-import TimelineModeOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import BuildIcon from "@mui/icons-material/Build";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ClearIcon from "@mui/icons-material/Clear";
+import CreateIcon from "@mui/icons-material/Create";
+import IsoIcon from "@mui/icons-material/Iso";
+import PersonIcon from "@mui/icons-material/Person";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapModeOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { isComputedPropertyName } from "typescript";
 
 type itemProps = {
   title: string;
   to: string;
-  icon: string;
+  icon: ReactNode;
   selected: string;
   setSelected: any;
 };
@@ -36,12 +38,12 @@ const Item: React.FunctionComponent<itemProps> = ({
   return (
     <MenuItem
       active={selected === title}
-      style={{ color: colors.grey[100] }}
+      style={{ color: colors.grey[600] }}
       onClick={() => setSelected(title)}
       icon={icon}
+      component={<Link to={to} />}
     >
-      <Typography>{title}</Typography>
-      <Link to={to} />
+      <Typography sx={{ fontsize: 25 }}>{title}</Typography>
     </MenuItem>
   );
 };
@@ -74,65 +76,163 @@ const ProSidebar = () => {
             color: "#868dfb !important",
           },
         }}
-      />
-      <Button onClick={() => toggleSidebar}>toggle</Button>
-      <Sidebar defaultCollapsed={isCollapsed}>
-        <Menu>
-          <MenuItem
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-            rootStyles={{ m: "10px 0 20px 0", color: colors.grey[100] }}
-          >
+      >
+        <Sidebar defaultCollapsed={isCollapsed}>
+          <Menu>
+            <MenuItem
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+              rootStyles={{ m: "10px 0 20px 0", color: colors.grey[100] }}
+            >
+              {!isCollapsed && (
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  ml="15px"
+                >
+                  <Typography variant="h5" color={colors.blue[500]}>
+                    Stock Website
+                  </Typography>
+                  <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                    <MenuOutlinedIcon />
+                  </IconButton>
+                </Box>
+              )}
+            </MenuItem>
+
+            {/* User */}
             {!isCollapsed && (
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                ml="15px"
-              >
-                <Typography variant="h5" color={colors.blue[500]}>
-                  Sidebar
-                </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                  <MenuOutlinedIcon />
-                </IconButton>
+              <Box mb="25px">
+                <Box textAlign="center">
+                  <AccountBoxIcon sx={{ fontSize: 60 }} />
+                  <Typography
+                    variant="h3"
+                    color={colors.blue[500]}
+                    fontWeight="bold"
+                    sx={{ m: "10px 0 0 0" }}
+                  >
+                    Default User
+                  </Typography>
+                  <Typography variant="h5" color={colors.green[300]}>
+                    No Status
+                  </Typography>
+                </Box>
               </Box>
             )}
-          </MenuItem>
 
-          {/* User */}
-          {!isCollapsed && (
-            <Box mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <img
-                  alt="profile-user"
-                  width="100px"
-                  height="100px"
-                  //src={"../../assets/DefaultAccountPic.JPG"}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
-                />
-              </Box>
-
-              <Box textAlign="center">
-                <Typography
-                  variant="h3"
-                  color={colors.blue[500]}
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
-                  Default User
-                </Typography>
-                <Typography variant="h5" color={colors.green[300]}>
-                  No Status
-                </Typography>
-              </Box>
+            {/* Menu Items */}
+            <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+              <Typography
+                variant="h6"
+                color={colors.grey[400]}
+                // sx={{ fontsize: 50, m: "15px 0 5px 10px" }}
+                sx={{ fontsize: 50, m: 1.5 }}
+              >
+                {isCollapsed ? "Lists" : "Watchlists"}
+              </Typography>
+              <Item
+                title="View Watchlists"
+                to="/watchlist"
+                icon={<VisibilityIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Create Watchlist"
+                to="/watchlist"
+                icon={<CreateIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Edit Watchlist"
+                to="/watchlist"
+                icon={<IsoIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Delete Watchlist"
+                to="/watchlist"
+                icon={<ClearIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Typography
+                variant="h6"
+                color={colors.grey[400]}
+                sx={{ fontsize: 50, m: 1.5 }}
+              >
+                {isCollapsed ? "Prefs" : "Preferences"}
+              </Typography>
+              <Item
+                title="Preferences"
+                to="/analyst-calls"
+                icon={<ColorLensIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Typography
+                variant="h6"
+                color={colors.grey[400]}
+                sx={{ fontsize: 50, m: 1.5 }}
+              >
+                {isCollapsed ? "Acct" : "Account"}
+              </Typography>
+              <Item
+                title="View Account"
+                to="/analyst-calls"
+                icon={<PersonIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Manage Account"
+                to="/analyst-calls"
+                icon={<ManageAccountsIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Create Account"
+                to="/analyst-calls"
+                icon={<PersonAddIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Logout"
+                to="/analyst-calls"
+                icon={<LogoutIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Delete Account<-CLICK"
+                to="/analyst-calls"
+                icon={<DeleteIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Typography
+                variant="h6"
+                color={colors.grey[400]}
+                sx={{ fontsize: 50, m: 1.5 }}
+              >
+                {isCollapsed ? "Opts" : "Options"}
+              </Typography>
+              <Item
+                title="Tools"
+                to="/analyst-calls"
+                icon={<BuildIcon sx={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
             </Box>
-          )}
-
-          {/* Menu Items */}
-          <Box paddingLeft={isCollapsed ? undefined : "10%"}></Box>
-        </Menu>
-      </Sidebar>
+          </Menu>
+        </Sidebar>
+      </Box>
     </>
   );
 };

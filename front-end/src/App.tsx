@@ -5,7 +5,7 @@ import ResponsiveSideBar from "./scenes/global/sidebar";
 import AnalystCalls from "./scenes/dashboard/AnalystCalls";
 import Watchlist from "./scenes/watchlist/Watchlist";
 import { ColorModeContext, useMode } from "./theme";
-import { CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, PaletteMode, ThemeProvider } from "@mui/material";
 import { useState } from "react";
 import Stock from "./components/stock/Stock";
 import { ProSidebarProvider } from "react-pro-sidebar";
@@ -22,15 +22,18 @@ function App() {
           <div className="App">
             <div className="content">
               <ResponsiveAppBar />
-              <ProSidebarProvider>
-                <ResponsiveSideBar />
-              </ProSidebarProvider>
-              <Routes>
-                {/* <Route path="/" element={<Home />}/> */}
-                <Route path="/watchlist" element={<Watchlist />} />
-                <Route path="/analyst-calls" element={<AnalystCalls />} />
-                {/* <Route path="*" element={<NotFound />} /> */}
-              </Routes>
+              <Box sx={{ display: "flex", position: "relative" }}>
+                <ProSidebarProvider>
+                  <ResponsiveSideBar />
+                </ProSidebarProvider>
+
+                <Routes>
+                  {/* <Route path="/" element={<Home />}/> */}
+                  <Route path="/watchlist" element={<Watchlist />} />
+                  <Route path="/analyst-calls" element={<AnalystCalls />} />
+                  {/* <Route path="*" element={<NotFound />} /> */}
+                </Routes>
+              </Box>
             </div>
           </div>
         </ThemeProvider>
