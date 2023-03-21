@@ -22,6 +22,11 @@ const style = {
 
 
 export default function SignUpForm(props: any){
+    const [username,setUsername] = React.useState("");
+    const [password,setPass] = React.useState("");
+    const [email,setEmail] = React.useState("");
+    const [first,setFirst] = React.useState("");
+    const [last,setLast] = React.useState("");
     const [close,setClose] = React.useState(false);
     
   return (
@@ -41,11 +46,11 @@ export default function SignUpForm(props: any){
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Create New Account
           </Typography>
-          <TextField id="outlined-basic" label="Username" variant="outlined" />
-          <TextField id="outlined-basic" label="Password" variant="outlined" />
-          <TextField id="outlined-basic" label="Email" variant="outlined" />
-          <TextField id="outlined-basic" label="First Name" variant="outlined" />
-          <TextField id="outlined-basic" label="Last Name" variant="outlined" />
+          <TextField id="username_field" label="Username" variant="outlined" onChange = {(event)=>setUsername(event.target.value)} />
+          <TextField id="password_field" label="Password" variant="outlined" onChange = {(event)=>setPass(event.target.value)}/>
+          <TextField id="email_field" label="Email" variant="outlined" onChange = {(event)=>setEmail(event.target.value)}/>
+          <TextField id="firstname_field" label="First Name" variant="outlined" onChange = {(event)=>setFirst(event.target.value)}/>
+          <TextField id="lastname_field" label="Last Name" variant="outlined" onChange = {(event)=>setLast(event.target.value)}/>
           <Button sx={{
             background: 'white',
             '&:hover':{
@@ -53,7 +58,8 @@ export default function SignUpForm(props: any){
                 color:'white'
             }
           }} onClick={async()=>{
-            let data = await userEndPointConnection.post("/user")
+            let data = await userEndPointConnection.post("/createUser?username="+username+"&password="+password+"&email="+email+"&first="+first+"&last="+last)
+            console.log(data);
           }}>Submit</Button>
         </Box>
       </Modal>

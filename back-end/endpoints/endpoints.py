@@ -10,7 +10,6 @@ from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
 
-
 fh_calls = fh.finh_API_Requester()
 
 class getQuote(Resource):
@@ -29,8 +28,9 @@ class getAnalystCalls(Resource):
         data = fh_calls.getAnalystCalls(ticker)
         return data, 200
     
-class User(Resource):
+class CreateUser(Resource):
     def post(self):
+        username = request.args['username']
         try:
             hst = prt = usr = pswrd = db = ''
             with open('./secrets/db_secrets.txt') as f:
@@ -52,25 +52,25 @@ class User(Resource):
             )
             #User attempts to log in his credentials will be stored here for a time
             cursor = mydb.cursor()
-            username = "root"
-            passwordEntered = "root"  
-            verification = hashlib.sha256(passwordEntered.encode()).hexdigest()  
-            #query the database
-            query = "SELECT COUNT(username) FROM USERS WHERE username = %s AND password = %s"
-            cursor.execute(query, (username, verification))
-            passwordFetched = cursor.fetchall()
+            #passwordEntered = "root"  
+            #verification = hashlib.sha256(passwordEntered.encode()).hexdigest()  
+            #Check if username already exists
+            query = "SELECT username FROM USERS WHERE username = %s"
+            cursor.execute(query, (username,))
+            cursor.fetchall()
             #check if in db
-            if passwordFetched is not None:
-                dbPasswordFetched = passwordFetched[0]
-                response = "Your password is correct"
+            if cursor.rowcount == 0:
+                response = "Username is available"
             else:
-                 response = "Username/password is incorrect please try again.."
+                 response = "Username already exists"
+                 
+            return response, 200 
             mydb.close()
         except Error as e:
             print("Error while connecting to MySQL", e)
             #log if any errors happen with connection
 
-        return username, passwordEntered, response, verification, passwordFetched, 200 #returns correctly
+        return 404 #returns correctly
 
 class ReturnString(Resource):
     def get(self):
