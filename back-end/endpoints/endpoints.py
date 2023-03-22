@@ -30,7 +30,13 @@ class getAnalystCalls(Resource):
     
 class CreateUser(Resource):
     def post(self):
+        #request the POST information args
         username = request.args['username']
+        password = request.args['password']
+        email = request.args['email']
+        first = request.args['first']
+        last = request.args['last']
+
         try:
             hst = prt = usr = pswrd = db = ''
             with open('./secrets/db_secrets.txt') as f:
@@ -57,19 +63,25 @@ class CreateUser(Resource):
             #Check if username already exists
             query = "SELECT username FROM USERS WHERE username = %s"
             cursor.execute(query, (username,))
-            cursor.fetchall()
-            #check if in db
+            result = cursor.fetchall()
+           #check if username exists in database
             if cursor.rowcount == 0:
-                response = "Username is available"
+            #add the user if Username doesnt exist in db
+                query = "INSERT INTO USERS (first_name, last_name, email, password, username) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(query, (first, last, email, password, username))
+                mydb.commit()
+                response = {"message": "User created"}
+                return response, 200
             else:
-                 response = "Username already exists"
-                 
-            return response, 200 
-            mydb.close()
+                response = {"message": "Username already exists"}
+                return response, 409
+         
         except Error as e:
             print("Error while connecting to MySQL", e)
             #log if any errors happen with connection
-
+            response = {"message": "Error while connecting to MySQL"}
+            return response, 500
+        mydb.close()
         return 404 #returns correctly
 
 class ReturnString(Resource):
