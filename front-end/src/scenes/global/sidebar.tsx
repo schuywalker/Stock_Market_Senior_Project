@@ -139,6 +139,16 @@ const ProSidebar = () => {
                         )}
 
                         {/* Menu Items */}
+                        <Box>
+                                <Button sx={{background : colors.green[300]}}
+                                 onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
+                                    <SignUpForm
+                                        open={showAccountCreation}
+                                        close={() =>
+                                            setShowAccountCreation(false)
+                                        }
+                                    />
+                        </Box>
                         <Box paddingLeft={isCollapsed ? undefined : '10%'}>
                             <Typography
                                 variant="h6"
@@ -214,13 +224,6 @@ const ProSidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="Create Account"
-                                to="/analyst-calls"
-                                icon={<PersonAddIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
                                 title="Login"
                                 to="/analyst-calls"
                                 icon={<LogoutIcon sx={{fontSize: 20}} />}
@@ -256,15 +259,7 @@ const ProSidebar = () => {
                                 setSelected={setSelected}
                             />
                         </Box>
-                        <Box>
-                                <Button onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
-                                    <SignUpForm
-                                        open={showAccountCreation}
-                                        close={() =>
-                                            setShowAccountCreation(false)
-                                        }
-                                    />
-                        </Box>
+                        
                     </Menu>
                     
                 </Sidebar>

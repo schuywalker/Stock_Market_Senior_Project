@@ -13,7 +13,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     height: 650,
-    bgcolor: 'background.paper',
+    bgcolor: 'black',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
@@ -95,15 +95,29 @@ export default function SignUpForm(props: any){
         open= {props.open}
         onClose={props.close}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"      >
+        aria-describedby="modal-modal-description"
+        hideBackdrop= {true}      >
         <Box sx={{
             display:'flex',
             flexDirection: 'column',
             rowGap: 5
         }}>
+          
+          <Box sx={{display: 'flex',flexDirection: 'row',columnGap:20}}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Create New Account
           </Typography>
+          <Button sx={{
+            background: 'black',
+            color: 'white',
+            fontSize: 20,
+            '&:hover':{
+                background: 'black',
+                color:'grey'
+            }
+          }} onClick={()=>{props.close()}}>X</Button>
+          </Box>
+          
           <TextField id="username_field" label="Username" variant="outlined" onChange = {(event)=>{
             validateUserName(event.target.value)
             if(userValidated){
