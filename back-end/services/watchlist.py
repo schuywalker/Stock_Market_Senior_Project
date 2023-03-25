@@ -35,7 +35,12 @@ class WatchlistService:
 
     @staticmethod
     def basicFinancials(ticker):
-        basicFinancials = fh_calls.getBasicFinancials(ticker)
+        return WatchlistService.parseBasicFinancials(fh_calls.getBasicFinancials(ticker))
+    
+    @staticmethod
+    def parseBasicFinancials(basicFinancials):
+        if basicFinancials is None:
+            raise(AttributeError("basicFinancials is None"))
         return {
             # TO DO: Categorize dict by commented sections
             "marketCap": basicFinancials.get("metric").get("marketCapitalization"),
@@ -108,4 +113,3 @@ class WatchlistService:
             "totalDebt/totalEquityAnnual": basicFinancials.get("metric").get("totalDebt/totalEquityAnnual"),
             "totalDebt/totalEquityQuarterly": basicFinancials.get("metric").get("totalDebt/totalEquityQuarterly"),
         }
-        
