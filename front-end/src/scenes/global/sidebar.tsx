@@ -17,6 +17,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import {isComputedPropertyName} from 'typescript'
+import SignUpForm from '../../components/SignUpForm'
 
 type itemProps = {
     title: string
@@ -55,6 +56,7 @@ const ProSidebar = () => {
     const [selected, setSelected] = useState('Dashboard')
     const {collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl} =
         useProSidebar()
+    const [showAccountCreation, setShowAccountCreation] = useState(false);
 
     return (
         <>
@@ -219,6 +221,13 @@ const ProSidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
+                                title="Login"
+                                to="/analyst-calls"
+                                icon={<LogoutIcon sx={{fontSize: 20}} />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                            <Item
                                 title="Logout"
                                 to="/analyst-calls"
                                 icon={<LogoutIcon sx={{fontSize: 20}} />}
@@ -247,8 +256,19 @@ const ProSidebar = () => {
                                 setSelected={setSelected}
                             />
                         </Box>
+                        <Box>
+                                <Button onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
+                                    <SignUpForm
+                                        open={showAccountCreation}
+                                        close={() =>
+                                            setShowAccountCreation(false)
+                                        }
+                                    />
+                        </Box>
                     </Menu>
+                    
                 </Sidebar>
+                
             </Box>
         </>
     )
