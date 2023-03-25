@@ -3,7 +3,7 @@ import * as React from 'react';
 import axios from "axios";
 
 const userEndPointConnection = axios.create({
-    baseURL: "http://127.0.0.1:8080"
+    baseURL: 'http://127.0.0.1:8080',
 })
 
 const style = {
@@ -17,8 +17,7 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
-
+}
 
 export default function SignUpForm(props: any){
     const [username,setUsername] = React.useState("");
