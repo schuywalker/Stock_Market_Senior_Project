@@ -1,17 +1,24 @@
-import { Box, FormGroup, Stack, Typography, styled, useTheme } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import Switch from "@mui/material/Switch";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import { useContext, useEffect, useState } from "react";
-import Stock from "../../components/stock/Stock";
-import { ColorModeContext, tokens } from "../../theme";
-import DisplayGroup from "./DisplayGroup";
-import { ThemeProvider } from "@emotion/react";
+import {
+    Box,
+    FormGroup,
+    Stack,
+    Typography,
+    styled,
+    useTheme,
+} from '@mui/material'
+import Paper from '@mui/material/Paper'
+import Switch from '@mui/material/Switch'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import {useContext, useEffect, useState} from 'react'
+import Stock from '../../components/stock/Stock'
+import {ColorModeContext, tokens} from '../../theme'
+import DisplayGroup from './DisplayGroup'
+import {ThemeProvider} from '@emotion/react'
 
 // TODO:
 // more info button (noGutter?)
@@ -22,37 +29,38 @@ import { ThemeProvider } from "@emotion/react";
 // OH CRAP the space-between makes them go to the sides there are 2 per line.. gotta fix sizing..
 
 const Watchlist = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const colorMode = useContext(ColorModeContext);
+    const theme = useTheme()
+    const colors = tokens(theme.palette.mode)
+    const colorMode = useContext(ColorModeContext)
 
-    const [stocks, setStocks] = useState<DisplayGroup[]>([]);
+    const [stocks, setStocks] = useState<DisplayGroup[]>([])
 
     useEffect(() => {
-        fetchWatchlistAssets();
-    }, []);
+        fetchWatchlistAssets()
+    }, [])
 
     async function fetchWatchlistAssets() {
         try {
             // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
-            const response = await fetch(`http://localhost:8080/populateWatchlist`, {}).then(
-                (response) => {
-                    response.json().then((json) => {
-                        setStocks(json);
-                    });
-                }
-            );
+            const response = await fetch(
+                `http://localhost:8080/populateWatchlist`,
+                {}
+            ).then((response) => {
+                response.json().then((json) => {
+                    setStocks(json)
+                })
+            })
         } catch (err) {
-            console.log(err);
+            console.log(err)
         }
     }
 
-    const [gridView, setGridView] = useState<boolean>(true);
+    const [gridView, setGridView] = useState<boolean>(true)
 
     return (
         <>
-            <Box sx={{ mx: "3%" }}>
-                <Box display="flex" sx={{ my: 2, flexWrap: "nowrap" }}>
+            <Box sx={{mx: '3%'}}>
+                <Box display="flex" sx={{my: 2, flexWrap: 'nowrap'}}>
                     <Typography
                         sx={{
                             flexGrow: 1,
@@ -88,7 +96,11 @@ const Watchlist = () => {
                     </FormGroup>
                 </Box>
                 {gridView ? (
-                    <Box display="flex" flexWrap="wrap" sx={{ justifyContent: "space-between" }}>
+                    <Box
+                        display="flex"
+                        flexWrap="wrap"
+                        sx={{justifyContent: 'space-between'}}
+                    >
                         {stocks.map((_stock: any, i: number) => (
                             <Stock
                                 key={i}
@@ -112,47 +124,74 @@ const Watchlist = () => {
                                 <TableHead>
                                     <TableRow
                                         sx={{
-                                            "&:last-child td, &:last-child th": {
-                                                fontSize: theme.typography.h4,
-                                            },
+                                            '&:last-child td, &:last-child th':
+                                                {
+                                                    fontSize:
+                                                        theme.typography.h4,
+                                                },
                                         }}
                                     >
                                         {/* I think we can map the keys of stocks? that way we only have to style one TableCell */}
                                         <TableCell>Name</TableCell>
-                                        <TableCell align="right">Ticker</TableCell>
-                                        <TableCell align="right">Price</TableCell>
-                                        <TableCell align="right">Daily Change</TableCell>
-                                        <TableCell align="right">Market Cap</TableCell>
-                                        <TableCell align="right">peRatio</TableCell>
-                                        <TableCell align="right">peRatioTTM</TableCell>
-                                        <TableCell align="right">Dividend Yield</TableCell>
+                                        <TableCell align="right">
+                                            Ticker
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            Price
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            Daily Change
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            Market Cap
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            peRatio
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            peRatioTTM
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            Dividend Yield
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {stocks.map((_stock) => (
                                         <TableRow
-                                            key={_stock["ticker"]}
+                                            key={_stock['ticker']}
                                             sx={{
-                                                "& > *": { borderBottom: "unset" },
+                                                '& > *': {
+                                                    borderBottom: 'unset',
+                                                },
                                             }}
                                         >
-                                            <TableCell component="th" scope="row">
-                                                {_stock["name"]}
-                                            </TableCell>
-                                            <TableCell align="right">{_stock["ticker"]}</TableCell>
-                                            <TableCell align="right">{_stock["price"]}</TableCell>
-                                            <TableCell align="right">
-                                                {_stock["perChange"]}
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                            >
+                                                {_stock['name']}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {_stock["marketCap"]}
-                                            </TableCell>
-                                            <TableCell align="right">{_stock["peRatio"]}</TableCell>
-                                            <TableCell align="right">
-                                                {_stock["peRatioTTM"]}
+                                                {_stock['ticker']}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {_stock["dividendYield"]}
+                                                {_stock['price']}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock['perChange']}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock['marketCap']}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock['peRatio']}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock['peRatioTTM']}
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                {_stock['dividendYield']}
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -163,7 +202,7 @@ const Watchlist = () => {
                 )}
             </Box>
         </>
-    );
-};
+    )
+}
 
-export default Watchlist;
+export default Watchlist
