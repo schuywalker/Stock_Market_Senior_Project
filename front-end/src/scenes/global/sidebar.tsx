@@ -209,7 +209,7 @@ const ProSidebar = () => {
                 setSelected={setSelected}
               />
               <Item
-                title="Delete Account<-CLICK"
+                title="Delete Account"
                 to="/analyst-calls"
                 icon={<DeleteIcon sx={{ fontSize: 20 }} />}
                 selected={selected}
