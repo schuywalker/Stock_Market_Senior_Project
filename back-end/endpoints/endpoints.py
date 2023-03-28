@@ -18,6 +18,11 @@ class getQuote(Resource):
         data = fh_calls.getQuote('AAPL')
         return (data, 200)
     
+class watchlist_DB_Sandbox(Resource):
+    def get(self):
+        data = WatchlistService.getUserWatchlists("schuyler")
+        return (data, 200)
+
 class getAnalystCallsDefaultList(Resource):
     def get(self):
         newList = AnalystCallsService.getAnalystCalls()

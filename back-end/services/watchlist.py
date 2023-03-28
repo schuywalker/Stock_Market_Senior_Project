@@ -7,6 +7,10 @@ fh_calls = fh.finh_API_Requester()
 class WatchlistService:
 
     @staticmethod
+    def getUserWatchlists(userID = None,  watchlistName = None):
+        return userID, 200
+
+    @staticmethod
     def populateWatchlist(userID = None,  watchlistName = None):
         responseFromDB = ["AAPL", "MSFT", "TSLA", "RBlX", "LYFT", "UBER"]
         #needs userID and watchlist name
