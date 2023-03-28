@@ -2,10 +2,12 @@ from flask import Flask
 from endpoints.endpoints import *
 from flask_cors import CORS
 from flask_restful import Api
+from config.database import db_controller
 
 app = Flask(__name__)
 CORS(app, origins=["*"])
 api = Api(app)
+
 
 
 #TODO: extract this to a separate file or a static init_API() function

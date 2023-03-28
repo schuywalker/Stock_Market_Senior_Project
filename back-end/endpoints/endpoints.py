@@ -20,7 +20,7 @@ class getQuote(Resource):
     
 class watchlist_DB_Sandbox(Resource):
     def get(self):
-        data = WatchlistService.getUserWatchlists("schuyler")
+        data = WatchlistService.getUserWatchlists(request.args.get('userID'))
         return (data, 200)
 
 class getAnalystCallsDefaultList(Resource):

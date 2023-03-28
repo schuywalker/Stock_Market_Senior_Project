@@ -1,5 +1,6 @@
 import services.external_API_calls.finnhubCalls as fh
 from services.external_API_calls.finnhubCalls import *
+from config.database import db_controller
 
 
 fh_calls = fh.finh_API_Requester()
@@ -7,7 +8,15 @@ fh_calls = fh.finh_API_Requester()
 class WatchlistService:
 
     @staticmethod
-    def getUserWatchlists(userID = None,  watchlistName = None):
+    def getUserWatchlists(userID = None):
+        dbc = db_controller()
+        
+        cursor = dbc.connect()
+        cursor.execute(f"SELECT * FROM WATCHLISTS WHERE user_id = {userID}")
+        result = cursor.fetchall()
+        for row in result:
+            print(row)
+        dbc.close()
         return userID, 200
 
     @staticmethod
