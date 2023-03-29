@@ -139,7 +139,7 @@ const ProSidebar = () => {
                         )}
 
                         {/* Menu Items */}
-                        <Box>
+                        <Box sx={{display: 'flex',columnGap: 2}}>
                                 <Button sx={{background : colors.green[300]}}
                                  onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
                                     <SignUpForm
@@ -148,6 +148,7 @@ const ProSidebar = () => {
                                             setShowAccountCreation(false)
                                         }
                                     />
+                                <Button sx={{background : colors.green[300]}}>Login</Button>
                         </Box>
                         <Box paddingLeft={isCollapsed ? undefined : '10%'}>
                             <Typography
@@ -220,13 +221,6 @@ const ProSidebar = () => {
                                 icon={
                                     <ManageAccountsIcon sx={{fontSize: 20}} />
                                 }
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="Login"
-                                to="/analyst-calls"
-                                icon={<LogoutIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />

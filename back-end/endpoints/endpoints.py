@@ -71,18 +71,19 @@ class CreateUser(Resource):
                 cursor.execute(query, (first, last, email, password, username))
                 mydb.commit()
                 response = {"message": "User created"}
+                mydb.close()
                 return response, 200
             else:
                 response = {"message": "Username already exists"}
-                return response, 409
+                mydb.close()
+                return response, 200
          
         except Error as e:
             print("Error while connecting to MySQL", e)
             #log if any errors happen with connection
             response = {"message": "Error while connecting to MySQL"}
+            mydb.close()
             return response, 500
-        mydb.close()
-        return 404 #returns correctly
 
 class ReturnString(Resource):
     def get(self):
