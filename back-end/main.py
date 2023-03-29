@@ -20,7 +20,8 @@ api.add_resource(populateWatchlist, '/populateWatchlist')
 api.add_resource(ReturnString, '/returnString')
 api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
 api.add_resource(getAnalystCalls, '/analystCalls')
-api.add_resource(watchlist_DB_Sandbox, '/watchlist_DB_Sandbox')
+api.add_resource(getUserWatchlists, '/getUserWatchlists')
+api.add_resource(getWatchlistTickers, '/getWatchlistTickers')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

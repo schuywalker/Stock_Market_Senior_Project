@@ -12,12 +12,26 @@ class WatchlistService:
         dbc = db_controller()
         
         cursor = dbc.connect()
-        cursor.execute(f"SELECT * FROM WATCHLISTS WHERE user_id = {userID}")
+        cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s""", (userID,))
         result = cursor.fetchall()
-        for row in result:
-            print(row)
+        
         dbc.close()
-        return userID, 200
+        return result, 200
+    
+    @staticmethod
+    def getTickersInWatchlist(userID = None, watchlistName:str = None):
+        dbc = db_controller()
+        
+        cursor = dbc.connect()
+
+        # cursor.execute("""SELECT id FROM WATCHLISTS WHERE user_id = %s and wl_name like %s """, (userID,('%'+watchlistName+'%'),))
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = (SELECT id FROM WATCHLISTS WHERE user_id = %s and wl_name like %s)""", (userID,('%'+watchlistName+'%'),))
+
+        result = cursor.fetchall()
+        print(f"\n\nresult {result}")
+        
+        dbc.close()
+        return result, 200
 
     @staticmethod
     def populateWatchlist(userID = None,  watchlistName = None):
