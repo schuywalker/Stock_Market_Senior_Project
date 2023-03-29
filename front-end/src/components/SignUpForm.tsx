@@ -1,6 +1,7 @@
 import { Box, Button, Modal, TextField, Typography, styled } from '@mui/material';
 import * as React from 'react';
 import axios from "axios";
+import Cookies from 'universal-cookie';
 import { findByLabelText } from '@testing-library/react';
 
 const userEndPointConnection = axios.create({
@@ -37,6 +38,8 @@ const CustomTextField = styled(TextField)({
 const helperTextStyle = {
   fontSize: 12
 }
+
+const cookies = new Cookies();
 
 export default function SignUpForm(props: any){
     const [username,setUsername] = React.useState("");
@@ -294,7 +297,9 @@ export default function SignUpForm(props: any){
                 }
                 else{
                   //login
+                  cookies.set("user",username,{ path: '/' })
                   props.close()
+                  props.login()
                 } 
               }).catch(e=>{
                 console.log(e);

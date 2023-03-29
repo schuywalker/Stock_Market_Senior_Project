@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import {isComputedPropertyName} from 'typescript'
 import SignUpForm from '../../components/SignUpForm'
+import Cookies from 'universal-cookie';
 
 type itemProps = {
     title: string
@@ -49,6 +50,8 @@ const Item: React.FunctionComponent<itemProps> = ({
     )
 }
 
+const cookies = new Cookies();
+
 const ProSidebar = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
@@ -57,6 +60,8 @@ const ProSidebar = () => {
     const {collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl} =
         useProSidebar()
     const [showAccountCreation, setShowAccountCreation] = useState(false);
+    const [displayName,setDisplayName] = useState("");
+    const [loggedIn,setLoggedIn] = useState(false);
 
     return (
         <>
@@ -126,13 +131,13 @@ const ProSidebar = () => {
                                         fontWeight="bold"
                                         sx={{m: '10px 0 0 0'}}
                                     >
-                                        Default User
+                                        {displayName}
                                     </Typography>
                                     <Typography
                                         variant="h5"
                                         color={colors.green[300]}
                                     >
-                                        No Status
+                                        {loggedIn?"No Status":""}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -147,14 +152,25 @@ const ProSidebar = () => {
                                         close={() =>
                                             setShowAccountCreation(false)
                                         }
+                                        login = {()=>{
+                                            setDisplayName(cookies.get('user'))
+                                            setLoggedIn(true);
+                                        }}
                                     />
-                                <Button sx={{background : colors.green[300]}}>Login</Button>
+                                <Button sx={{background : colors.green[300]}}
+                                onClick = {()=>{
+                                    if(loggedIn){
+                                        cookies.remove('user')
+                                        setDisplayName("")
+                                    }
+                                    setLoggedIn(!loggedIn)
+                                    }}
+                                    >{loggedIn?"Logout":"Login"}</Button>
                         </Box>
                         <Box paddingLeft={isCollapsed ? undefined : '10%'}>
                             <Typography
                                 variant="h6"
                                 color={colors.grey[400]}
-                                // sx={{ fontsize: 50, m: "15px 0 5px 10px" }}
                                 sx={{fontsize: 50, m: 1.5}}
                             >
                                 {isCollapsed ? 'Lists' : 'Watchlists'}
