@@ -36,7 +36,8 @@ class CreateUser(Resource):
         email = request.args['email']
         first = request.args['first']
         last = request.args['last']
-
+        #hash the password
+        hashpass = hashlib.sha256(password.encode()).hexdigest()
         try:
             hst = prt = usr = pswrd = db = ''
             with open('./secrets/db_secrets.txt') as f:
@@ -58,17 +59,15 @@ class CreateUser(Resource):
             )
             #User attempts to log in his credentials will be stored here for a time
             cursor = mydb.cursor()
-            #passwordEntered = "root"  
-            #verification = hashlib.sha256(passwordEntered.encode()).hexdigest()  
             #Check if username already exists
             query = "SELECT username FROM USERS WHERE username = %s"
             cursor.execute(query, (username,))
             result = cursor.fetchall()
-           #check if username exists in database
+            #check if username exists in database
             if cursor.rowcount == 0:
             #add the user if Username doesnt exist in db
                 query = "INSERT INTO USERS (first_name, last_name, email, password, username) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(query, (first, last, email, password, username))
+                cursor.execute(query, (first, last, email, hashpass, username))
                 mydb.commit()
                 response = {"message": "User created"}
                 mydb.close()
