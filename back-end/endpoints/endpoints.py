@@ -17,16 +17,29 @@ class getQuote(Resource):
     def get(self):
         data = fh_calls.getQuote('AAPL')
         return (data, 200)
-    
-class getWatchlistTickers(Resource):
-    def get(self):
-        data = WatchlistService.getTickersInWatchlist(request.args.get('userID'),request.args.get('watchlistName'))
-        return (data, 200)
-    
+
+# WATCHLISTS
 class getUserWatchlists(Resource):
     def get(self):
         data = WatchlistService.getUserWatchlists(request.args.get('userID'))
         return (data, 200)
+
+class createWatchlist(Resource):
+    def get(self):
+        returnCode = WatchlistService.createWatchlists(request.args.get('userID'), request.args.get('watchlistName'))
+        return returnCode
+
+class deleteWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.getUserWatchlists(request.args.get('userID'))
+        return (data, 200)
+
+# WATCHLIST_TICKERS
+class getWatchlistTickers(Resource):
+    def get(self):
+        data = WatchlistService.getTickersInWatchlist(request.args.get('userID'),request.args.get('watchlistName'))
+        return (data, 200)
+        
 
 class getAnalystCallsDefaultList(Resource):
     def get(self):

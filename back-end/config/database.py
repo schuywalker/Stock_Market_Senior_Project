@@ -34,10 +34,9 @@ class db_controller:
             #Ultimately we will need to log failures with date and time
             self.mydb.close()
 
-        return self.mydb.cursor()
+        return (self.mydb, self.mydb.cursor())
 
 
     def close(self):    
         if self.mydb.is_connected():
             self.mydb.close()
-            print("MySQL connection is closed")

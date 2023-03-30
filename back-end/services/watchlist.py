@@ -1,6 +1,9 @@
 import services.external_API_calls.finnhubCalls as fh
 from services.external_API_calls.finnhubCalls import *
 from config.database import db_controller
+import datetime
+from mysql.connector import Error
+from mysql.connector import errorcode
 
 
 fh_calls = fh.finh_API_Requester()
@@ -8,10 +11,11 @@ fh_calls = fh.finh_API_Requester()
 class WatchlistService:
 
     @staticmethod
-    def getUserWatchlists(userID = None):
+    def getUserWatchlists(userID):
+        # TODO: how does this method get user ID? Front-end doesn't know it.. 
+        # basically we need a middleware method to take the session token and get the user ID
         dbc = db_controller()
-        
-        cursor = dbc.connect()
+        cnx, cursor = dbc.connect()
         cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s""", (userID,))
         result = cursor.fetchall()
         
@@ -19,19 +23,76 @@ class WatchlistService:
         return result, 200
     
     @staticmethod
-    def getTickersInWatchlist(userID = None, watchlistName:str = None):
+    def createWatchlists(userID, watchlistName:str):
+        # *tickers
+        # TODO: how does this method get user ID? 
+        ret = None
+        dbc = db_controller()
+        try:
+            cnx, cursor = dbc.connect()
+            nullWrapper = None
+            createdTime = datetime.datetime.now().timestamp()
+            cursor.execute("""INSERT INTO `WATCHLISTS` ( `user_id`, `wl_name`, `created`, `updated`,`deleted`) VALUES
+            (%s, %s, %s, %s,%s)""", (userID, watchlistName,createdTime,createdTime,nullWrapper))
+            cnx.commit()
+            ret = 200
+        except Error as e:
+            if (e.errno == errorcode.ER_DUP_ENTRY):
+                ret = ("Error: Duplicate Entry",409)
+            else:
+                ret = ("Error: ",500)
+            
+            
+        finally:
+            cursor.close()
+            dbc.close()
+
+        return ret
+
+    
+    @staticmethod
+    def deleteWatchlists(userID, watchlistName:str):
+        # TODO: how does this method get user ID? 
         dbc = db_controller()
         
-        cursor = dbc.connect()
+        cnx, cursor = dbc.connect()
+        # cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s""", (userID,))
+        result = cursor.fetchall()
+        
+        dbc.close()
+        return result, 200
+    
+    
+    @staticmethod
+    def getTickersInWatchlist(userID, watchlistName:str):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = (SELECT id FROM WATCHLISTS WHERE user_id = %s and wl_name like %s)""", (userID,('%'+watchlistName+'%'),))
+        result = cursor.fetchall()
+        print(f"\n\nresult {result}")
+        
+        dbc.close()
+        return result, 200
+    
+    @staticmethod
+    def addTickersToWatchlist(userID, watchlistName:str, ticker:str):
+        dbc = db_controller()
+        
+        cnx, cursor = dbc.connect()
 
         # cursor.execute("""SELECT id FROM WATCHLISTS WHERE user_id = %s and wl_name like %s """, (userID,('%'+watchlistName+'%'),))
         cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = (SELECT id FROM WATCHLISTS WHERE user_id = %s and wl_name like %s)""", (userID,('%'+watchlistName+'%'),))
+
+        """INSERT INTO `WATCHLIST_TICKERS` ( `wl_id`, `ticker`, `created`, `updated`,`deleted`,`user_id`) VALUES
+(1, %s, unix_timestamp(),null,null,21)"""
 
         result = cursor.fetchall()
         print(f"\n\nresult {result}")
         
         dbc.close()
         return result, 200
+    
+
 
     @staticmethod
     def populateWatchlist(userID = None,  watchlistName = None):
