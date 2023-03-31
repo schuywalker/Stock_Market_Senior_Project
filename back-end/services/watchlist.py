@@ -133,7 +133,32 @@ class WatchlistService:
         # UNIQUE CONSTRAINT ON ticker AND wl_id and delete
         # CHECK IF EXISTS
         return 200
-        
+
+    @staticmethod
+    def deleteTickersFromWatchlist(wl_ID, user_ID, returnWL: bool = True, *tickers: str):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+
+        post_data = str(tickers)
+        post_data = post_data[1:-1]
+
+        post_data = post_data.replace("'", "")
+        post_data = post_data.split(',')
+        while '' in post_data:
+            post_data.remove('')
+        try:
+            for ticker in post_data:
+                cursor.execute("""DELETE FROM `WATCHLIST_TICKERS` WHERE wl_ID = %s AND user_ID = %s AND ticker = %s""",
+                    (wl_ID, user_ID, ticker))
+                cnx.commit()
+            if (returnWL):
+                return (WatchlistService.getTickersInWatchlist(wl_ID)), 200
+        except Error as e:
+            return ("Error: ", 500)
+        finally:
+            cursor.close()
+            dbc.close()
+        return 200
 
 # TODO: change from default list
     @staticmethod

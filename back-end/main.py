@@ -24,12 +24,12 @@ api.add_resource(getAnalystCalls, '/analystCalls')
 api.add_resource(getUserWatchlists, '/getUserWatchlists')
 api.add_resource(createWatchlist, '/createWatchlist') # NEEDS TO BE PUT OR POST
 api.add_resource(deleteWatchlist, '/deleteWatchlist') # NEEDS TO BE DEL
-# rename watchlist
+api.add_resource(renameWatchlist, '/renameWatchlist')
 
 # WATCHLIST TICKERS
 api.add_resource(getWatchlistTickers, '/getWatchlistTickers') # done
 api.add_resource(addTickersToWatchlist, '/addTickersToWatchlist') # not done (dup entry bug) NEEDs TO BE POST
-# delete tickers from watchlist
+api.add_resource(deleteTickersFromWatchlist, '/deleteTickersFromWatchlist')
 
 
 if __name__ == '__main__':

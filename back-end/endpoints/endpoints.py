@@ -34,6 +34,11 @@ class deleteWatchlist(Resource):
         data = WatchlistService.deleteWatchlist(request.args.get('wl_ID'))
         return (data, 200)
 
+class renameWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.renameWatchlist(request.args.get('wl_id'), request.args.get('new_name'))
+        return (data, 200)
+
 # WATCHLIST_TICKERS
 class getWatchlistTickers(Resource):
     def get(self):
@@ -45,7 +50,11 @@ class addTickersToWatchlist(Resource):
     def get(self):
         data = WatchlistService.addTickersToWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
         return (data, 200)
-        
+
+class deleteTickersFromWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.deleteTickersFromWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
+        return (data, 200)
 
 class getAnalystCallsDefaultList(Resource):
     def get(self):
