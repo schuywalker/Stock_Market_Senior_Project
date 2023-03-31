@@ -21,7 +21,7 @@ class getQuote(Resource):
 # WATCHLISTS
 class getUserWatchlists(Resource):
     def get(self):
-        data = WatchlistService.getUserWatchlists(request.args.get('userID'))
+        data = WatchlistService.getUserWatchlists(request.args.get('userID'), request.args.get('includeDeleted'))
         return (data, 200)
 
 class createWatchlist(Resource):
@@ -31,13 +31,19 @@ class createWatchlist(Resource):
 
 class deleteWatchlist(Resource):
     def get(self):
-        data = WatchlistService.getUserWatchlists(request.args.get('userID'))
+        data = WatchlistService.deleteWatchlist(request.args.get('wl_ID'))
         return (data, 200)
 
 # WATCHLIST_TICKERS
 class getWatchlistTickers(Resource):
     def get(self):
-        data = WatchlistService.getTickersInWatchlist(request.args.get('userID'),request.args.get('watchlistName'))
+        print(f" in getWatchlistTickers wl_ID: {request.args.get('wl_ID')}")
+        data = WatchlistService.getTickersInWatchlist(request.args.get('wl_ID'))
+        return (data, 200)
+    
+class addTickersToWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.addTickersToWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
         return (data, 200)
         
 

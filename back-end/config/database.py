@@ -18,7 +18,6 @@ class db_controller:
                     pswrd = f.readline().strip()
                     db = f.readline().strip()
             f.close()
-            print(hst,prt,usr,pswrd,db)
             prt = int(prt)
             
             self.mydb = mysql.connector.connect(
