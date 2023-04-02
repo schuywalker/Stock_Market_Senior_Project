@@ -27,7 +27,52 @@ class getAnalystCalls(Resource):
         ticker = request.args.get('ticker')
         data = fh_calls.getAnalystCalls(ticker)
         return data, 200
-    
+
+#class for Login
+class Login(Resource):
+    def post(self):
+        username = request.args['username']
+        password = request.args['password']
+        hashpass = hashlib.sha256(password.encode()).hexdigest()
+        try:
+            hst = prt = usr = pswrd = db = ''
+            with open('./secrets/db_secrets.txt') as f:
+                hst = f.readline().strip()
+                prt = f.readline().strip()
+                usr = f.readline().strip()
+                pswrd = f.readline().strip()
+                db = f.readline().strip()
+                f.close()
+                print(hst,prt,usr,pswrd,db)
+                prt = int(prt)
+            mydb = mysql.connector.connect(
+                host=hst,
+                port=prt,
+                user=usr,
+                password=pswrd,
+                database=db
+            )
+            #User attempts to log in and then will check here if he is in the database
+            cursor = mydb.cursor()
+            query = "SELECT username, password FROM USERS WHERE username = %s AND password = %s"
+            cursor.execute(query, (username, hashpass))
+            result = cursor.fetchall()
+            if cursor.rowcount == 1:
+                response = {"message": "Logged in"}
+                mydb.close()
+                return response, 200
+            else:
+                response = {"message": "Invalid credentials"}
+                mydb.close()
+                return response, 200
+        except Error as e:
+            print("Error while connecting to MySQL", e)
+            #log if any errors happen with connection
+            response = {"message": "Error while connecting to MySQL"}
+            mydb.close()
+            return response, 500
+            
+
 class CreateUser(Resource):
     def post(self):
         #request the POST information args
