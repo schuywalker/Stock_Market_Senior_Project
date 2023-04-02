@@ -52,16 +52,14 @@ const Item: React.FunctionComponent<itemProps> = ({
 
 const cookies = new Cookies();
 
-const ProSidebar = () => {
+const ProSidebar = (props: any) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
     const {collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl} =
         useProSidebar()
-    const [showAccountCreation, setShowAccountCreation] = useState(false);
     const [displayName,setDisplayName] = useState("");
-    const [loggedIn,setLoggedIn] = useState(false);
 
     return (
         <>
@@ -131,42 +129,19 @@ const ProSidebar = () => {
                                         fontWeight="bold"
                                         sx={{m: '10px 0 0 0'}}
                                     >
-                                        {displayName}
+                                        {(props.loggedIn?cookies.get('user'):"")}
                                     </Typography>
                                     <Typography
                                         variant="h5"
                                         color={colors.green[300]}
                                     >
-                                        {loggedIn?"No Status":""}
+                                        {props.loggedIn?"No Status":""}
                                     </Typography>
                                 </Box>
                             </Box>
                         )}
 
                         {/* Menu Items */}
-                        <Box sx={{display: 'flex',columnGap: 2}}>
-                                <Button sx={{background : colors.green[300]}}
-                                 onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
-                                    <SignUpForm
-                                        open={showAccountCreation}
-                                        close={() =>
-                                            setShowAccountCreation(false)
-                                        }
-                                        login = {()=>{
-                                            setDisplayName(cookies.get('user'))
-                                            setLoggedIn(true);
-                                        }}
-                                    />
-                                <Button sx={{background : colors.green[300]}}
-                                onClick = {()=>{
-                                    if(loggedIn){
-                                        cookies.remove('user')
-                                        setDisplayName("")
-                                    }
-                                    setLoggedIn(!loggedIn)
-                                    }}
-                                    >{loggedIn?"Logout":"Login"}</Button>
-                        </Box>
                         <Box paddingLeft={isCollapsed ? undefined : '10%'}>
                             <Typography
                                 variant="h6"
