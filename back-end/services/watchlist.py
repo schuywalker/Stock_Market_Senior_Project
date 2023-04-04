@@ -1,14 +1,172 @@
 import services.external_API_calls.finnhubCalls as fh
 from services.external_API_calls.finnhubCalls import *
+from config.database import db_controller
+import datetime
+from mysql.connector import Error
+from mysql.connector import errorcode
 
 
 fh_calls = fh.finh_API_Requester()
 
 class WatchlistService:
 
+    # WATCHLIST - done
     @staticmethod
-    def populateWatchlist(userID = None,  watchlistName = None):
-        responseFromDB = ["AAPL", "MSFT", "TSLA", "RBlX", "LYFT", "UBER"]
+    def getUserWatchlists(userID, includeDeleted:bool = False):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        if (includeDeleted):
+            cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s""", (userID,))
+        else:
+            cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s and deleted IS NULL""", (userID,))
+        result = cursor.fetchall()
+        
+        cursor.close()
+        dbc.close()
+        return result, 200
+    
+    @staticmethod
+    def createWatchlists(userID, watchlistName:str):
+        # TODO: *tickers in args
+        ret = None
+        dbc = db_controller()
+        try:
+            cnx, cursor = dbc.connect()
+            nullWrapper = None
+            createdTime = datetime.datetime.now().timestamp()
+            cursor.execute("""INSERT INTO `WATCHLISTS` ( `user_id`, `wl_name`, `created`, `updated`,`deleted`) VALUES
+            (%s, %s, %s, %s,%s)""", (userID, watchlistName,createdTime,createdTime,nullWrapper))
+            cnx.commit()
+            ret = 200
+        except Error as e:
+            if (e.errno == errorcode.ER_DUP_ENTRY):
+                ret = ("Error: Duplicate Entry",409)
+            else:
+                ret = ("Error: ",500)
+            
+            
+        finally:
+            cursor.close()
+            dbc.close()
+
+        return ret
+
+    @staticmethod
+    def renameWatchlist(wl_id, new_name):
+        dbc = db_controller()
+        try:
+            cnx, cursor = dbc.connect()
+            updatedTime = datetime.datetime.now().timestamp()
+            cursor.execute("""UPDATE WATCHLISTS SET wl_name = %s, updated = %s WHERE id = %s""", (new_name, updatedTime, wl_id,))
+            cnx.commit()
+        except Error as e:
+            print("Error: ",e)
+            return ("Error: ",500)
+        finally:
+            cursor.close()
+            dbc.close()
+        
+        return 200
+    
+    @staticmethod
+    def deleteWatchlist(wl_ID):
+        dbc = db_controller()
+        print("wl_ID: ",wl_ID)
+        try:
+            cnx, cursor = dbc.connect()
+            deletedTime = datetime.datetime.now().timestamp()
+            cursor.execute("""UPDATE WATCHLISTS SET deleted = %s WHERE id = %s""", (deletedTime, wl_ID,))
+            cnx.commit()
+        except Error as e:
+            print("Error: ",e)
+            return ("Error: ",500)
+        finally:
+            cursor.close()
+            dbc.close()
+        
+        return 200
+    
+    
+    # TICKERS
+    @staticmethod
+    def getTickersInWatchlist(wl_ID):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        print(f"in wl service getTickers wl_ID = {wl_ID}")
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = %s""", (wl_ID,))
+        result = cursor.fetchall()
+        print(f"\n\nresult {result}")
+        
+        dbc.close()
+        return result, 200
+    
+    @staticmethod
+    def addTickersToWatchlist(wl_ID, user_ID, returnWL:bool = True, *tickers:str ):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        epochTime = datetime.datetime.now().timestamp()
+        
+        post_data = str(tickers)
+        post_data = post_data[1:-1]
+        
+        post_data = post_data.replace("'", "")
+        post_data = post_data.split(',')
+        while '' in post_data:
+            post_data.remove('')
+        try:
+            for ticker in post_data:
+                cursor.execute("""INSERT INTO `WATCHLIST_TICKERS` ( `wl_id`, `ticker`, `created`, `updated`,`deleted`,`user_id`) VALUES
+                (%s, %s, %s,%s,null,%s)""", (wl_ID, ticker,epochTime,epochTime,user_ID))
+                cnx.commit()
+            if (returnWL):
+                return (WatchlistService.getTickersInWatchlist(wl_ID)),200
+        except Error as e: # DOESNT WORK (deleted constraint because null comparison doesnt work in deleted??)
+            if (e.errno == errorcode.ER_DUP_ENTRY):
+                return ("Error: Duplicate Entry",409)
+            return ("Error: ",500)
+        finally:
+            cursor.close()
+            dbc.close()
+
+        # TODO:
+        # UPDATE WATCHLISTS UPDATED TIME 
+        # UNIQUE CONSTRAINT ON ticker AND wl_id and delete
+        # CHECK IF EXISTS
+        return 200
+
+    @staticmethod
+    def deleteTickersFromWatchlist(wl_ID, user_ID, returnWL: bool = True, *tickers: str):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+
+        post_data = str(tickers)
+        post_data = post_data[1:-1]
+
+        post_data = post_data.replace("'", "")
+        post_data = post_data.split(',')
+        while '' in post_data:
+            post_data.remove('')
+        try:
+            for ticker in post_data:
+                cursor.execute("""DELETE FROM `WATCHLIST_TICKERS` WHERE wl_ID = %s AND user_ID = %s AND ticker = %s""",
+                    (wl_ID, user_ID, ticker))
+                cnx.commit()
+            if (returnWL):
+                return (WatchlistService.getTickersInWatchlist(wl_ID)), 200
+        except Error as e:
+            return ("Error: ", 500)
+        finally:
+            cursor.close()
+            dbc.close()
+        return 200
+
+# TODO: change from default list
+    @staticmethod
+    def populateWatchlist(user_ID, wl_ID):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where user_ID = %s AND wl_id = %s""", (user_ID, wl_ID))
+        responseFromDB = cursor.fetchall()
         #needs userID and watchlist name
         #ticker = request.args.get('ticker')
         ret = []
