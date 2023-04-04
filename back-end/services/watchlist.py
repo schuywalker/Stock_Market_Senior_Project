@@ -162,8 +162,11 @@ class WatchlistService:
 
 # TODO: change from default list
     @staticmethod
-    def populateWatchlist(userID = None,  watchlistName = None):
-        responseFromDB = ["AAPL", "MSFT", "TSLA", "RBlX", "LYFT", "UBER"]
+    def populateWatchlist(user_ID, wl_ID):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where user_ID = %s AND wl_id = %s""", (user_ID, wl_ID))
+        responseFromDB = cursor.fetchall()
         #needs userID and watchlist name
         #ticker = request.args.get('ticker')
         ret = []

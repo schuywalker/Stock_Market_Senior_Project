@@ -117,7 +117,8 @@ class ReturnString(Resource):
 
 class populateWatchlist(Resource):
     def get(self):
-        return WatchlistService.populateWatchlist(), 200
+        data = WatchlistService.populateWatchlist(request.args.get('user_ID'), request.args.get('wl_ID'))
+        return data, 200
         
 class getSymbolInfo(Resource):
     def get(self):
