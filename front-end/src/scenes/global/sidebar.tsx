@@ -17,6 +17,8 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import {isComputedPropertyName} from 'typescript'
+import SignUpForm from '../../components/SignUpForm'
+import Cookies from 'universal-cookie';
 
 type itemProps = {
     title: string
@@ -48,7 +50,9 @@ const Item: React.FunctionComponent<itemProps> = ({
     )
 }
 
-const ProSidebar = () => {
+const cookies = new Cookies();
+
+const ProSidebar = (props: any) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const [isCollapsed, setIsCollapsed] = useState(false)
@@ -58,7 +62,7 @@ const ProSidebar = () => {
 
     return (
         <>
-            <Box
+            <Box  
                 sx={{
                     '&.pro-sidebar-inner': {
                         background: `${colors.primary[400]} !important`,
@@ -75,6 +79,7 @@ const ProSidebar = () => {
                     '&.pro-menu-item:active': {
                         color: '#868dfb !important',
                     },
+                    display: (props.loggedIn?'':'none')
                 }}
             >
                 <Sidebar defaultCollapsed={isCollapsed}>
@@ -124,13 +129,13 @@ const ProSidebar = () => {
                                         fontWeight="bold"
                                         sx={{m: '10px 0 0 0'}}
                                     >
-                                        Default User
+                                        {(props.loggedIn?cookies.get('user'):"")}
                                     </Typography>
                                     <Typography
                                         variant="h5"
                                         color={colors.green[300]}
                                     >
-                                        No Status
+                                        {props.loggedIn?"No Status":""}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -141,7 +146,6 @@ const ProSidebar = () => {
                             <Typography
                                 variant="h6"
                                 color={colors.grey[400]}
-                                // sx={{ fontsize: 50, m: "15px 0 5px 10px" }}
                                 sx={{fontsize: 50, m: 1.5}}
                             >
                                 {isCollapsed ? 'Lists' : 'Watchlists'}
@@ -212,13 +216,6 @@ const ProSidebar = () => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="Create Account"
-                                to="/analyst-calls"
-                                icon={<PersonAddIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
                                 title="Logout"
                                 to="/analyst-calls"
                                 icon={<LogoutIcon sx={{fontSize: 20}} />}
@@ -247,8 +244,11 @@ const ProSidebar = () => {
                                 setSelected={setSelected}
                             />
                         </Box>
+                        
                     </Menu>
+                    
                 </Sidebar>
+                
             </Box>
         </>
     )

@@ -10,7 +10,6 @@ from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
 
-
 fh_calls = fh.finh_API_Requester()
 
 class getQuote(Resource):
@@ -66,9 +65,62 @@ class getAnalystCalls(Resource):
         ticker = request.args.get('ticker')
         data = fh_calls.getAnalystCalls(ticker)
         return data, 200
-    
-class User(Resource):
+
+#class for Login
+class Login(Resource):
     def post(self):
+        username = request.args['username']
+        password = request.args['password']
+        hashpass = hashlib.sha256(password.encode()).hexdigest()
+        try:
+            hst = prt = usr = pswrd = db = ''
+            with open('./secrets/db_secrets.txt') as f:
+                hst = f.readline().strip()
+                prt = f.readline().strip()
+                usr = f.readline().strip()
+                pswrd = f.readline().strip()
+                db = f.readline().strip()
+                f.close()
+                print(hst,prt,usr,pswrd,db)
+                prt = int(prt)
+            mydb = mysql.connector.connect(
+                host=hst,
+                port=prt,
+                user=usr,
+                password=pswrd,
+                database=db
+            )
+            #User attempts to log in and then will check here if he is in the database
+            cursor = mydb.cursor()
+            query = "SELECT username, password FROM USERS WHERE username = %s AND password = %s"
+            cursor.execute(query, (username, hashpass))
+            result = cursor.fetchall()
+            if cursor.rowcount == 1:
+                response = {"message": "Logged in"}
+                mydb.close()
+                return response, 200
+            else:
+                response = {"message": "Invalid credentials"}
+                mydb.close()
+                return response, 200
+        except Error as e:
+            print("Error while connecting to MySQL", e)
+            #log if any errors happen with connection
+            response = {"message": "Error while connecting to MySQL"}
+            mydb.close()
+            return response, 500
+            
+
+class CreateUser(Resource):
+    def post(self):
+        #request the POST information args
+        username = request.args['username']
+        password = request.args['password']
+        email = request.args['email']
+        first = request.args['first']
+        last = request.args['last']
+        #hash the password
+        hashpass = hashlib.sha256(password.encode()).hexdigest()
         try:
             hst = prt = usr = pswrd = db = ''
             with open('./secrets/db_secrets.txt') as f:
@@ -90,25 +142,30 @@ class User(Resource):
             )
             #User attempts to log in his credentials will be stored here for a time
             cursor = mydb.cursor()
-            username = "root"
-            passwordEntered = "root"  
-            verification = hashlib.sha256(passwordEntered.encode()).hexdigest()  
-            #query the database
-            query = "SELECT COUNT(username) FROM USERS WHERE username = %s AND password = %s"
-            cursor.execute(query, (username, verification))
-            passwordFetched = cursor.fetchall()
-            #check if in db
-            if passwordFetched is not None:
-                dbPasswordFetched = passwordFetched[0]
-                response = "Your password is correct"
+            #Check if username already exists
+            query = "SELECT username FROM USERS WHERE username = %s"
+            cursor.execute(query, (username,))
+            result = cursor.fetchall()
+            #check if username exists in database
+            if cursor.rowcount == 0:
+            #add the user if Username doesnt exist in db
+                query = "INSERT INTO USERS (first_name, last_name, email, password, username) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(query, (first, last, email, hashpass, username))
+                mydb.commit()
+                response = {"message": "User created"}
+                mydb.close()
+                return response, 200
             else:
-                 response = "Username/password is incorrect please try again.."
-            mydb.close()
+                response = {"message": "Username already exists"}
+                mydb.close()
+                return response, 200
+         
         except Error as e:
             print("Error while connecting to MySQL", e)
             #log if any errors happen with connection
-
-        return username, passwordEntered, response, verification, passwordFetched, 200 #returns correctly
+            response = {"message": "Error while connecting to MySQL"}
+            mydb.close()
+            return response, 500
 
 class ReturnString(Resource):
     def get(self):

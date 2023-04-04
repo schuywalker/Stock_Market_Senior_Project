@@ -5,13 +5,17 @@ import ResponsiveSideBar from './scenes/global/sidebar'
 import AnalystCalls from './scenes/dashboard/AnalystCalls'
 import Watchlist from './scenes/watchlist/Watchlist'
 import {ColorModeContext, useMode} from './theme'
-import {Box, CssBaseline, PaletteMode, ThemeProvider} from '@mui/material'
+import {Box, Button, CssBaseline, PaletteMode, ThemeProvider} from '@mui/material'
 import {useState} from 'react'
 import Stock from './components/stock/Stock'
 import {ProSidebarProvider} from 'react-pro-sidebar'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function App() {
     const {theme, colorMode} = useMode()
+    const [loggedIn,setLoggedIn] = useState(false);
 
     return (
         <>
@@ -21,10 +25,10 @@ function App() {
                     <CssBaseline />
                     <div className="App">
                         <div className="content">
-                            <ResponsiveAppBar />
+                            <ResponsiveAppBar loginFunction={(value:boolean)=>setLoggedIn(value)} loggedIn = {loggedIn}/>
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
-                                    <ResponsiveSideBar />
+                                    <ResponsiveSideBar loggedIn = {loggedIn} />
                                 </ProSidebarProvider>
 
                                 <Routes>
