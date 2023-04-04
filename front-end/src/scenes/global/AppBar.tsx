@@ -17,12 +17,13 @@ import SignUpForm from '../../components/SignUpForm'
 import { tokens } from '../../theme'
 import { useTheme } from '@mui/material'
 import Cookies from 'universal-cookie'
+import LoginForm from '../../components/LoginForm'
 
 const cookies = new Cookies();
 
 function ResponsiveAppBar( props: any) {
     const [showAccountCreation, setShowAccountCreation] = React.useState(false);
-
+    const [showAccountLogin, setShowAccountLogin] = React.useState(false);
     const setLoggedIn = props.loginFunction;
     
 
@@ -61,10 +62,23 @@ function ResponsiveAppBar( props: any) {
                                 onClick = {()=>{
                                     if(props.loggedIn){
                                         cookies.remove('user')
+                                        setLoggedIn(false)
                                     }
-                                    setLoggedIn(!props.loggedIn)
+                                    else{
+                                        setShowAccountLogin(true)
+                                    }
                                     }}
                                     >{props.loggedIn?"Logout":"Login"}</Button>
+                                    <LoginForm
+                                        open = {showAccountLogin}
+                                        close = {()=>
+                                            setShowAccountLogin(false)
+                                        }
+                                        login = {() =>{
+                                            setLoggedIn(true)
+                                        }}
+                                       
+                                    />
                     </Box>
                 </Toolbar>
             </Container>
