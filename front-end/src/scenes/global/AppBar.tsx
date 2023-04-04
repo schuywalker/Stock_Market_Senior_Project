@@ -21,28 +21,6 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies();
 
 function ResponsiveAppBar( props: any) {
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-        null
-    )
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-        null
-    )
-
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget)
-    }
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget)
-    }
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null)
-    }
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null)
-    }
-
     const [showAccountCreation, setShowAccountCreation] = React.useState(false);
 
     const setLoggedIn = props.loginFunction;
@@ -51,12 +29,22 @@ function ResponsiveAppBar( props: any) {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
+    const buttonStyle = {
+        background : colors.green[300],
+        '&:hover':{
+            background: 'grey',
+            color:colors.green[400]
+        }
+    }
+
     return (
         <AppBar position="static" >
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{marginRight: -30 ,justifyContent: "right"}}>
                 <Box sx={{display: 'flex', columnGap: 2}}>
-                                <Button sx={{background : colors.green[300]}}
+                                <div style = {{display: (props.loggedIn?"none":"")}}>
+                                <Button 
+                                sx={buttonStyle}
                                  onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
                                     <SignUpForm
                                         open={showAccountCreation}
@@ -67,7 +55,9 @@ function ResponsiveAppBar( props: any) {
                                             setLoggedIn(true);
                                         }}
                                     />
-                                <Button sx={{background : colors.green[300]}}
+                                    </div>
+                                <Button 
+                                sx={buttonStyle}
                                 onClick = {()=>{
                                     if(props.loggedIn){
                                         cookies.remove('user')
@@ -75,7 +65,7 @@ function ResponsiveAppBar( props: any) {
                                     setLoggedIn(!props.loggedIn)
                                     }}
                                     >{props.loggedIn?"Logout":"Login"}</Button>
-                        </Box>
+                    </Box>
                 </Toolbar>
             </Container>
         </AppBar>

@@ -59,11 +59,10 @@ const ProSidebar = (props: any) => {
     const [selected, setSelected] = useState('Dashboard')
     const {collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl} =
         useProSidebar()
-    const [displayName,setDisplayName] = useState("");
 
     return (
         <>
-            <Box
+            <Box  
                 sx={{
                     '&.pro-sidebar-inner': {
                         background: `${colors.primary[400]} !important`,
@@ -80,6 +79,7 @@ const ProSidebar = (props: any) => {
                     '&.pro-menu-item:active': {
                         color: '#868dfb !important',
                     },
+                    display: (props.loggedIn?'':'none')
                 }}
             >
                 <Sidebar defaultCollapsed={isCollapsed}>
