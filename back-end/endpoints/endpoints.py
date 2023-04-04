@@ -16,7 +16,45 @@ class getQuote(Resource):
     def get(self):
         data = fh_calls.getQuote('AAPL')
         return (data, 200)
+
+# WATCHLISTS
+class getUserWatchlists(Resource):
+    def get(self):
+        data = WatchlistService.getUserWatchlists(request.args.get('userID'), request.args.get('includeDeleted'))
+        return (data, 200)
+
+class createWatchlist(Resource):
+    def get(self):
+        returnCode = WatchlistService.createWatchlists(request.args.get('userID'), request.args.get('watchlistName'))
+        return returnCode
+
+class deleteWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.deleteWatchlist(request.args.get('wl_ID'))
+        return (data, 200)
+
+class renameWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.renameWatchlist(request.args.get('wl_id'), request.args.get('new_name'))
+        return (data, 200)
+
+# WATCHLIST_TICKERS
+class getWatchlistTickers(Resource):
+    def get(self):
+        print(f" in getWatchlistTickers wl_ID: {request.args.get('wl_ID')}")
+        data = WatchlistService.getTickersInWatchlist(request.args.get('wl_ID'))
+        return (data, 200)
     
+class addTickersToWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.addTickersToWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
+        return (data, 200)
+
+class deleteTickersFromWatchlist(Resource):
+    def get(self):
+        data = WatchlistService.deleteTickersFromWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
+        return (data, 200)
+
 class getAnalystCallsDefaultList(Resource):
     def get(self):
         newList = AnalystCallsService.getAnalystCalls()
@@ -136,7 +174,8 @@ class ReturnString(Resource):
 
 class populateWatchlist(Resource):
     def get(self):
-        return WatchlistService.populateWatchlist(), 200
+        data = WatchlistService.populateWatchlist(request.args.get('user_ID'), request.args.get('wl_ID'))
+        return data, 200
         
 class getSymbolInfo(Resource):
     def get(self):
