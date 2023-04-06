@@ -14,71 +14,69 @@ import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import {Link} from 'react-router-dom'
 import SignUpForm from '../../components/SignUpForm'
-import { tokens } from '../../theme'
-import { useTheme } from '@mui/material'
+import {tokens} from '../../theme'
+import {useTheme} from '@mui/material'
 import Cookies from 'universal-cookie'
 import LoginForm from '../../components/LoginForm'
 
-const cookies = new Cookies();
+const cookies = new Cookies()
 
-function ResponsiveAppBar( props: any) {
-    const [showAccountCreation, setShowAccountCreation] = React.useState(false);
-    const [showAccountLogin, setShowAccountLogin] = React.useState(false);
-    const setLoggedIn = props.loginFunction;
-    
+function ResponsiveAppBar(props: any) {
+    const [showAccountCreation, setShowAccountCreation] = React.useState(false)
+    const [showAccountLogin, setShowAccountLogin] = React.useState(false)
+    const setLoggedIn = props.loginFunction
 
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
     const buttonStyle = {
-        background : colors.green[300],
-        '&:hover':{
+        background: colors.green[300],
+        '&:hover': {
             background: 'grey',
-            color:colors.green[400]
-        }
+            color: colors.green[400],
+        },
     }
 
     return (
-        <AppBar position="static" >
+        <AppBar position="static">
             <Container maxWidth="xl">
-                <Toolbar disableGutters sx={{marginRight: -30 ,justifyContent: "right"}}>
-                <Box sx={{display: 'flex', columnGap: 2}}>
-                                <div style = {{display: (props.loggedIn?"none":"")}}>
-                                <Button 
+                <Toolbar disableGutters sx={{justifyContent: 'right'}}>
+                    <Box sx={{display: 'flex', columnGap: 2}}>
+                        <div style={{display: props.loggedIn ? 'none' : ''}}>
+                            <Button
                                 sx={buttonStyle}
-                                 onClick = {()=>setShowAccountCreation(true)}>Create Account</Button>
-                                    <SignUpForm
-                                        open={showAccountCreation}
-                                        close={() =>
-                                            setShowAccountCreation(false)
-                                        }
-                                        login = {()=>{
-                                            setLoggedIn(true);
-                                        }}
-                                    />
-                                    </div>
-                                <Button 
-                                sx={buttonStyle}
-                                onClick = {()=>{
-                                    if(props.loggedIn){
-                                        cookies.remove('user')
-                                        setLoggedIn(false)
-                                    }
-                                    else{
-                                        setShowAccountLogin(true)
-                                    }
-                                    }}
-                                    >{props.loggedIn?"Logout":"Login"}</Button>
-                                    <LoginForm
-                                        open = {showAccountLogin}
-                                        close = {()=>
-                                            setShowAccountLogin(false)
-                                        }
-                                        login = {() =>{
-                                            setLoggedIn(true)
-                                        }}
-                                       
-                                    />
+                                onClick={() => setShowAccountCreation(true)}
+                            >
+                                Create Account
+                            </Button>
+                            <SignUpForm
+                                open={showAccountCreation}
+                                close={() => setShowAccountCreation(false)}
+                                login={() => {
+                                    setLoggedIn(true)
+                                }}
+                            />
+                        </div>
+                        <Button
+                            sx={buttonStyle}
+                            onClick={() => {
+                                if (props.loggedIn) {
+                                    cookies.remove('user')
+                                    setLoggedIn(false)
+                                } else {
+                                    setShowAccountLogin(true)
+                                }
+                            }}
+                        >
+                            {props.loggedIn ? 'Logout' : 'Login'}
+                        </Button>
+                        <LoginForm
+                            open={showAccountLogin}
+                            close={() => setShowAccountLogin(false)}
+                            login={() => {
+                                setLoggedIn(true)
+                            }}
+                        />
                     </Box>
                 </Toolbar>
             </Container>
