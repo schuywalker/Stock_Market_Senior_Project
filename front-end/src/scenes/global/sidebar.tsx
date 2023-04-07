@@ -28,20 +28,6 @@ type itemProps = {
     selected: string
     setSelected: any
 }
-type backendProps = {
-    endpoint: string
-}
-const BackendLink: React.FunctionComponent<backendProps>=({
-    endpoint
-})=>{
-    console.log(endpoint);
-    return (
-        <Link to='' onClick={async()=>{
-            await axios.post('http://127.0.0.1:8080'+endpoint).then(()=>{window.location.reload()})
-        }}></Link>
-        
-    )
-}
 
 const Item: React.FunctionComponent<itemProps> = ({
     title,
