@@ -40,7 +40,7 @@ function ResponsiveAppBar( props: any) {
     return (
         <AppBar position="static" >
             <Container maxWidth="xl">
-                <Toolbar disableGutters sx={{marginRight: -30 ,justifyContent: "right"}}>
+                <Toolbar disableGutters sx={{justifyContent: "right"}}>
                 <Box sx={{display: 'flex', columnGap: 2}}>
                                 <div style = {{display: (props.loggedIn?"none":"")}}>
                                 <Button 

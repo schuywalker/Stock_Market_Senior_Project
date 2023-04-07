@@ -19,6 +19,7 @@ api.add_resource(ReturnString, '/returnString')
 api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
 api.add_resource(getAnalystCalls, '/analystCalls')
 api.add_resource(CreateUser,'/createUser')
+api.add_resource(deleteUser,'/deleteUser')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
