@@ -203,7 +203,7 @@ class getCandles(Resource):
         return (data), 200
     
 class deleteUser(Resource):
-    def gpost(self):
+    def post(self):
         user = request.args['user']
         try:
             hst = prt = usr = pswrd = db = ''

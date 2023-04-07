@@ -36,9 +36,9 @@ const BackendLink: React.FunctionComponent<backendProps>=({
 })=>{
     console.log(endpoint);
     return (
-        <><Link to='' onClick={async()=>{
+        <Link to='' onClick={async()=>{
             await axios.post('http://127.0.0.1:8080'+endpoint).then(()=>{window.location.reload()})
-        }}></Link></>
+        }}></Link>
         
     )
 }
@@ -239,7 +239,11 @@ const ProSidebar = (props: any) => {
                             />
                             <Item
                                 title="Delete Account"
-                                link={<BackendLink endpoint={"/deleteUser?user="+cookies.get('user')} />}
+                                link={<Link to='' onClick={async()=>{
+                                    await axios.post('http://127.0.0.1:8080/deleteUser?user='+cookies.get('user')).then(()=>{
+                                        cookies.remove("user")
+                                        window.location.reload()})
+                                }}></Link>}//{<BackendLink endpoint={} />}
                                 icon={<DeleteIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
