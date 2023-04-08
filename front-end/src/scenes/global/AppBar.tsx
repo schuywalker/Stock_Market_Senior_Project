@@ -62,6 +62,7 @@ function ResponsiveAppBar( props: any) {
                                 onClick = {()=>{
                                     if(props.loggedIn){
                                         cookies.remove('user')
+                                        cookies.remove('password')
                                         setLoggedIn(false)
                                     }
                                     else{
