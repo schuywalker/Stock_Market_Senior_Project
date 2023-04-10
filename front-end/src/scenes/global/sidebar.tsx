@@ -1,6 +1,6 @@
 import {ReactNode, useState} from 'react'
 import {Sidebar, Menu, MenuItem, useProSidebar} from 'react-pro-sidebar'
-import {Box, Button, IconButton, Typography, useTheme} from '@mui/material'
+import {Box, Button, IconButton, LinkProps, Typography, useTheme} from '@mui/material'
 import {Link} from 'react-router-dom'
 import {tokens} from '../../theme'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
@@ -19,10 +19,11 @@ import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import {isComputedPropertyName} from 'typescript'
 import SignUpForm from '../../components/SignUpForm'
 import Cookies from 'universal-cookie';
+import axios from 'axios'
 
 type itemProps = {
     title: string
-    to: string
+    link: React.ReactElement
     icon: ReactNode
     selected: string
     setSelected: any
@@ -30,7 +31,7 @@ type itemProps = {
 
 const Item: React.FunctionComponent<itemProps> = ({
     title,
-    to,
+    link,
     icon,
     selected,
     setSelected,
@@ -43,7 +44,7 @@ const Item: React.FunctionComponent<itemProps> = ({
             style={{color: colors.grey[600]}}
             onClick={() => setSelected(title)}
             icon={icon}
-            component={<Link to={to} />}
+            component={link}
         >
             <Typography sx={{fontsize: 25}}>{title}</Typography>
         </MenuItem>
@@ -152,28 +153,28 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="View Watchlists"
-                                to="/watchlist"
+                                link={<Link to="/watchlist" />}
                                 icon={<VisibilityIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
                                 title="Create Watchlist"
-                                to="/watchlist"
+                                link={<Link to="/watchlist" />}
                                 icon={<CreateIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
                                 title="Edit Watchlist"
-                                to="/watchlist"
+                                link={<Link to="/watchlist" />}
                                 icon={<IsoIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
                                 title="Delete Watchlist"
-                                to="/watchlist"
+                                link={<Link to="/watchlist" />}
                                 icon={<ClearIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -187,7 +188,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Preferences"
-                                to="/analyst-calls"
+                                link={<Link to="/watchlist" />}
                                 icon={<ColorLensIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -201,14 +202,14 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="View Account"
-                                to="/analyst-calls"
+                                link={<Link to="/watchlist" />}
                                 icon={<PersonIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
                                 title="Manage Account"
-                                to="/analyst-calls"
+                                link={<Link to="/account" />}
                                 icon={
                                     <ManageAccountsIcon sx={{fontSize: 20}} />
                                 }
@@ -216,15 +217,13 @@ const ProSidebar = (props: any) => {
                                 setSelected={setSelected}
                             />
                             <Item
-                                title="Logout"
-                                to="/analyst-calls"
-                                icon={<LogoutIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
                                 title="Delete Account"
-                                to="/analyst-calls"
+                                link={<Link to='' onClick={async()=>{
+                                    await axios.post('http://127.0.0.1:8080/deleteUser?user='+cookies.get('user')).then(()=>{
+                                        cookies.remove("user")
+                                        cookies.remove("password")
+                                        window.location.reload()})
+                                }}></Link>}//{<BackendLink endpoint={} />}
                                 icon={<DeleteIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -238,7 +237,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Tools"
-                                to="/analyst-calls"
+                                link={<Link to="/analystCalls" />}
                                 icon={<BuildIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}

@@ -10,12 +10,13 @@ import {useState} from 'react'
 import Stock from './components/stock/Stock'
 import {ProSidebarProvider} from 'react-pro-sidebar'
 import Cookies from 'universal-cookie';
+import AccountManagement from './components/AccountManagement'
 
 const cookies = new Cookies();
 
 function App() {
     const {theme, colorMode} = useMode()
-    const [loggedIn,setLoggedIn] = useState(false);
+    const [loggedIn,setLoggedIn] = useState((cookies.get("user")?true:false));//Need to check if cookie is valid and user/password is correct
 
     return (
         <>
@@ -40,6 +41,10 @@ function App() {
                                     <Route
                                         path="/analyst-calls"
                                         element={<AnalystCalls />}
+                                    />
+                                    <Route
+                                        path="/account"
+                                        element={<AccountManagement />}
                                     />
                                     {/* <Route path="*" element={<NotFound />} /> */}
                                 </Routes>
