@@ -92,13 +92,14 @@ class WatchlistService:
     def getTickersInWatchlist(wl_ID):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
-        print(f"in wl service getTickers wl_ID = {wl_ID}")
+        
         cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = %s""", (wl_ID,))
         result = cursor.fetchall()
-        print(f"\n\nresult {result}")
         
+        cursor.execute("""SELECT wl_name FROM WATCHLISTS WHERE id = %s""", (wl_ID,))
+        name = cursor.fetchone()
         dbc.close()
-        return result, 200
+        return result, name, 200
     
     @staticmethod
     def addTickersToWatchlist(wl_ID, user_ID, returnWL:bool = True, *tickers:str ):
