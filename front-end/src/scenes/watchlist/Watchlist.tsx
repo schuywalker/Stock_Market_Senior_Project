@@ -43,7 +43,7 @@ const Watchlist = () => {
         try {
             // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
             const response = await fetch(
-                `http://127.0.0.1:8080/populateWatchlist?user_ID=21&wl_ID=1`,
+                `http://127.0.0.1:8080/populateWatchlist?user_ID=27&wl_ID=5`,
                 {}
             ).then((response) => {
                 response.json().then((json) => {
@@ -60,7 +60,7 @@ const Watchlist = () => {
     return (
         <>
             <Box sx={{mx: '3%'}}>
-                <Box display="flex" sx={{my: 2, flexWrap: 'nowrap'}}>
+                <Box display="flex" sx={{my: 2}}>
                     <Typography
                         sx={{
                             flexGrow: 1,
@@ -84,7 +84,6 @@ const Watchlist = () => {
                                 color="secondary"
                                 onClick={() => setGridView(!gridView)}
                             />
-                            {/* sx={{ color: colors.green[300] }} */}
                             <Typography
                                 sx={{
                                     fontSize: theme.typography.h5,
@@ -97,9 +96,13 @@ const Watchlist = () => {
                 </Box>
                 {gridView ? (
                     <Box
-                        display="flex"
-                        flexWrap="wrap"
-                        sx={{justifyContent: 'space-between'}}
+                        sx={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            border: 1,
+                            m: 1,
+                            justifyContent: 'flex-start',
+                        }}
                     >
                         {stocks.map((_stock: any, i: number) => (
                             <Stock

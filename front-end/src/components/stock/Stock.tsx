@@ -30,23 +30,24 @@ const Stock = (props: DisplayGroup) => {
             ? colors.green[400]
             : perChange === 0
             ? colors.grey[100]
-            : colors.red[400]
+            : colors.red[300]
 
     return (
         <>
             <Card
-                flex-basis="200px"
                 sx={{
                     // size cards based on breakpoints like below
                     // width: { xs: "100%", sm: "100%", md: "100%", lg: "100%", xl: "100%" },
-                    width: '18%', // this is finally getting closer, but with this, we always have 5 per line. Want them to get smaller/ reduce # per line (which happens without width:"x%")
+                    // width: '18%', // this is finally getting closer, but with this, we always have 5 per line. Want them to get smaller/ reduce # per line (which happens without width:"x%")
+                    // flexBasis: 'min-content',
+                    flexBasis: 'auto',
                     m: '.5em',
                     bgcolor: dailyChangeStatus,
                     color: colors.primary[900],
                 }}
             >
                 <CardContent sx={{p: 1, '&:last-child': {pb: 1}}}>
-                    <Box display="flex">
+                    <Box sx={{display: 'flex', columnGap: 2}}>
                         <Typography
                             sx={{
                                 fontSize: theme.typography.h5,
@@ -55,7 +56,7 @@ const Stock = (props: DisplayGroup) => {
                             {name} - {ticker}
                         </Typography>
                     </Box>
-                    <Box display="flex">
+                    <Box sx={{display: 'flex', columnGap: 2}}>
                         <Typography
                             sx={{
                                 flexGrow: 1,
