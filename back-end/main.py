@@ -21,6 +21,7 @@ api.add_resource(ReturnString, '/returnString')
 api.add_resource(getAnalystCallsDefaultList, '/analystCallsDefaultList')
 api.add_resource(getAnalystCalls, '/analystCalls')
 api.add_resource(CreateUser,'/createUser')
+api.add_resource(deleteUser,'/deleteUser')
 api.add_resource(Login, '/userLogin')
 # WATCHLISTS - DONE
 api.add_resource(getUserWatchlists, '/getUserWatchlists')

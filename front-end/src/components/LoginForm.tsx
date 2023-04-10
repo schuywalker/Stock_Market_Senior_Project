@@ -182,6 +182,7 @@ const cookies = new Cookies();
                             else{
                               //login
                               cookies.set("user",username,{ path: '/' })
+                              cookies.set("password",password,{ path: '/' })
                               props.close()
                               props.login()
                             } 

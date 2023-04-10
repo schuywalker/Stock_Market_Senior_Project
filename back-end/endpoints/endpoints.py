@@ -201,3 +201,46 @@ class getCandles(Resource):
         ticker = request.args.get('ticker')
         data = fh_calls.getCandles(ticker)
         return (data), 200
+    
+class deleteUser(Resource):
+    def post(self):
+        user = request.args['user']
+        try:
+            hst = prt = usr = pswrd = db = ''
+            with open('./secrets/db_secrets.txt') as f:
+                hst = f.readline().strip()
+                prt = f.readline().strip()
+                usr = f.readline().strip()
+                pswrd = f.readline().strip()
+                db = f.readline().strip()
+                f.close()
+                print(hst,prt,usr,pswrd,db)
+                prt = int(prt)
+    
+            mydb = mysql.connector.connect(
+                host=hst,
+                port=prt,
+                user=usr,
+                password=pswrd,
+                database=db    
+            )
+            cursor = mydb.cursor()
+            watchlistsQuery = "delete from WATCHLISTS where user_id = (select user_id from USERS where username = %s)"
+            watchlistsTickerQuery = "delete from WATCHLIST_TICKERS where user_id = (select user_id from USERS where username = %s)"
+            usersQuery = "delete from USERS where username = %s"
+            cursor.execute(watchlistsQuery, (user,))
+            mydb.commit()
+            cursor.execute(watchlistsTickerQuery, (user,))
+            mydb.commit()
+            cursor.execute(usersQuery, (user,))
+            mydb.commit()
+            response = {'message':'Account Deleted'}
+            mydb.close()
+            return response, 200
+         
+        except Error as e:
+            print("Error while connecting to MySQL", e)
+            #log if any errors happen with connection
+            response = {"message": "Error while connecting to MySQL"}
+            mydb.close()
+            return response, 500
