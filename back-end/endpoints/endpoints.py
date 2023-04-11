@@ -25,7 +25,7 @@ class getUserWatchlists(Resource):
 
 class createWatchlist(Resource):
     def get(self):
-        returnCode = WatchlistService.createWatchlists(request.args.get('user_ID'), request.args.get('watchlistName'))
+        returnCode = WatchlistService.createWatchlists(request.args.get('user_ID'), request.args.get('watchlistName'), request.args.get('tickers'))
         return returnCode
 
 class deleteWatchlist(Resource):

@@ -23,10 +23,13 @@ class WatchlistService:
         
         cursor.close()
         dbc.close()
-        return result, 200
+        if (result is not None):
+            return result, 200
+        else:
+            return result, 404
     
     @staticmethod
-    def createWatchlists(user_ID, watchlistName:str):
+    def createWatchlists(user_ID, watchlistName:str, *tickers):
         # TODO: *tickers in args
         ret = None
         dbc = db_controller()
@@ -37,12 +40,20 @@ class WatchlistService:
             cursor.execute("""INSERT INTO `WATCHLISTS` ( `user_id`, `wl_name`, `created`, `updated`,`deleted`) VALUES
             (%s, %s, %s, %s,%s)""", (user_ID, watchlistName,createdTime,createdTime,nullWrapper))
             cnx.commit()
+
+            if (len(tickers) > 0):
+                cursor = cnx.cursor(buffered=True)
+                cursor.execute("""SELECT wl_id FROM WATCHLISTS WHERE user_id = %s and wl_name = %s and deleted is null""", (user_ID, watchlistName))
+                wl_id = cursor.fetchone()[0]
+                created_WL = WatchlistService.addTickersToWatchlist(wl_id, user_ID, True, *tickers)
+                return created_WL, 200
+
             ret = 200
         except Error as e:
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 ret = ("Error: Duplicate Entry",409)
             else:
-                ret = ("Error: ",500)
+                ret = ("Error: ",e,500)
             
             
         finally:
@@ -122,6 +133,7 @@ class WatchlistService:
         post_data = post_data.split(',')
         while '' in post_data:
             post_data.remove('')
+        print("post_data: ",post_data)
         try:
             for ticker in post_data:
                 cursor.execute("""INSERT INTO `WATCHLIST_TICKERS` ( `wl_id`, `ticker`, `created`, `user_id`) VALUES
