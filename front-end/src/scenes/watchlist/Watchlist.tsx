@@ -99,7 +99,7 @@ const Watchlist = () => {
                         sx={{
                             display: 'flex',
                             flexWrap: 'wrap',
-                            border: 1,
+
                             m: 1,
                             justifyContent: 'flex-start',
                         }}
