@@ -248,3 +248,8 @@ class deleteUser(Resource):
 class getUserData(Resource):
     def get(self):
         return (UserService.getUserData(request.args["user"]))
+
+class alterUsername(Resource):
+    def post(self):
+        print("reached it")
+        return (UserService.alterUsername(request.args["originalUser"], request.args["user"]))

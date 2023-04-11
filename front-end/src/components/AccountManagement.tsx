@@ -106,6 +106,7 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
                             //If valid, call backend, update value, call stateFunction, close modal
                             //Else display the error
                             if(validationFunction(newValue)){
+                                axios.post(backendBaseAddress+endpoint+newValue)
                                 displayedValueFunction(newValue)
                                 onClose()
                             }
@@ -188,33 +189,41 @@ export default function AccountManagement(props:any){
 
    //Validation Functions
    const validateUsername= (name:string)=>{
-        if(name.length >0 && name !== username)return true
+        if(name.length >0 && name !== username){
+            return true
+        }
         return false
    }
    
    const validateFirstName=(name:string)=>{
+    if(name.length >0 && name !== firstName){
         return true
+    }
+    return false
    }
 
    const validateLastName=(name:string)=>{
+    if(name.length >0 && name !== lastName){
         return true
+    }
+    return false
    }
 
-   const validateEmail=(email:string)=>{
+   const validateEmail=(name:string)=>{
+    if(name.length >0 && name !== email){
         return true
+    }
+    return false
    }
    
-   const validatePassword=(password:string)=>{
-        return true
-   }
    if(rendered){
         return(
             <div>
                 <Box sx={{border: '1px solid white',display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'10px',gridAutoRows:"minmax(100px,auto)"}}>
-                    <Field endpoint="" displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                    <Field endpoint="" displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
-                    <Field endpoint="" displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
-                    <Field endpoint="" displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                    <Field endpoint={"/alterUsername?originalUser=" + username +"&user="} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field endpoint={"/alterFirstName?user="+ username + "&firstName="} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                    <Field endpoint={"/alterLastName?user="+ username + "&lastName="} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                    <Field endpoint={"/alterEmail?user="+ username + "&email="} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
                 </Box>
             </div>
 

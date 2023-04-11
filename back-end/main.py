@@ -36,6 +36,7 @@ api.add_resource(deleteTickersFromWatchlist, '/deleteTickersFromWatchlist')
 
 #ACCOUNT MANAGEMENT
 api.add_resource(getUserData, '/getUserData')
+api.add_resource(alterUsername, '/alterUsername')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

@@ -175,10 +175,10 @@ const cookies = new Cookies();
                             setPasswordHelperText("")
                             
             
-                            if(response.data['message']=='Username already exists'){
+                            if(response.data['message']=='Invalid credentials'){
                               setUsernameValidated(false)
                               setUsernameTextFieldError(true)
-                              setUsernameHelperText("Username already exists")
+                              setUsernameHelperText("Username doesn't exist")
                             }
                             else{
                               //login

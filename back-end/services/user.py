@@ -17,3 +17,19 @@ class UserService:
         cursor.close()
         dbc.close()
         return result, 200
+    
+    @staticmethod
+    def alterUsername(originalUsername, username):
+        dbc = db_controller()
+        try:
+            cnx, cursor = dbc.connect()
+            cursor.execute("""UPDATE USERS SET username = %s WHERE username = %s""", (username, originalUsername,))
+            cnx.commit()
+        except Error as e:
+            print("Error: ",e)
+            return ("Error: ",500)
+        finally:
+            cursor.close()
+            dbc.close()
+        
+        return 200
