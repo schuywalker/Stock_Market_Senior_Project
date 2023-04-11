@@ -244,3 +244,7 @@ class deleteUser(Resource):
             response = {"message": "Error while connecting to MySQL"}
             mydb.close()
             return response, 500
+
+class getUserData(Resource):
+    def get(self):
+        return (UserService.getUserData(request.args["user"]))

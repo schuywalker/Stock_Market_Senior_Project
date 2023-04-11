@@ -2,6 +2,7 @@ import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
 import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
+import { useEffect } from 'react';
 
 
 const cookies = new Cookies();
@@ -150,6 +151,17 @@ const Field: React.FunctionComponent<FieldProps> = ({
         - Create all of the state variables/methods for the fields
         - Create the validation functions for the fields
 */
+async function getUserFunction(stateFunc:((arg1: any)=>void)){
+    await axios.get("http://127.0.0.1:8080/getUserData?user="+cookies.get('user')).then((response)=>{
+        console.log(response.data)
+        let x = response.data[0]
+        console.log(x)
+        stateFunc(response.data[0])
+    }
+    )
+}
+
+
 export default function AccountManagement(props:any){
     /*
         Need to get user info to display from backend
@@ -159,17 +171,46 @@ export default function AccountManagement(props:any){
                         need to find a way to change state of the sidebar
             -PASSWORD: 
     */
-
+   
+         
+   
+   
    //State variables/functions
-   const[username,setUserName] = React.useState("USERNAME");
+   const[username,setUserName] = React.useState("USERNAME")
+   const[firstName,setFirstName] = React.useState("FIRSTNAME");
+   const[lastName,setLastName] = React.useState("LASTNAME");
+   const[email,setEmail] = React.useState("EMAIL");
+   
+   const setInitialValues = (userData:any) =>{
+    if(username != userData[2]){
+        setUserName(userData[2])
+    }
+   }
+   React.useEffect(() => {
+    getUserFunction(setInitialValues)
+   },[username]);
+   
+
 
    //Validation Functions
    const validateUsername= (name:string)=>{
         if(name.length >0 && name !== username)return true
         return false
    }
-
+   
    const validateFirstName=(name:string)=>{
+        return true
+   }
+
+   const validateLastName=(name:string)=>{
+        return true
+   }
+
+   const validateEmail=(email:string)=>{
+        return true
+   }
+   
+   const validatePassword=(password:string)=>{
         return true
    }
 
@@ -177,7 +218,9 @@ export default function AccountManagement(props:any){
         <div>
             <Box sx={{border: '1px solid white',display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'10px',gridAutoRows:"minmax(100px,auto)"}}>
                 <Field endpoint="" displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                <Field endpoint="" displayValue='FIRSTNAME' displayedValueFunction={(val:string)=>{console.log("Setting New Value "+val)}} validationFunction={validateFirstName}/>
+                <Field endpoint="" displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                <Field endpoint="" displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                <Field endpoint="" displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
             </Box>
         </div>
 
