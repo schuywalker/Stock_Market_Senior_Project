@@ -3,17 +3,14 @@ import {Sidebar, Menu, MenuItem, useProSidebar} from 'react-pro-sidebar'
 import {Box, IconButton, Typography, useTheme} from '@mui/material'
 import {Link} from 'react-router-dom'
 import {tokens} from '../../theme'
-import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import BuildIcon from '@mui/icons-material/Build'
-import ColorLensIcon from '@mui/icons-material/ColorLens'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import ClearIcon from '@mui/icons-material/Clear'
 import CreateIcon from '@mui/icons-material/Create'
 import IsoIcon from '@mui/icons-material/Iso'
-import PersonIcon from '@mui/icons-material/Person'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
+import PhoneIcon from '@mui/icons-material/Phone';
 import Cookies from 'universal-cookie';
 import axios from 'axios'
 
@@ -45,6 +42,13 @@ const Item: React.FunctionComponent<itemProps> = ({
             <Typography sx={{fontsize: 25}}>{title}</Typography>
         </MenuItem>
     )
+}
+
+function truncateString(str: string) {
+    if(str.length > 10){
+        return(str.slice(0, 7) + "...")
+    }
+    return(str)
 }
 
 const cookies = new Cookies();
@@ -102,7 +106,7 @@ const ProSidebar = (props: any) => {
                                         variant="h5"
                                         color={colors.blue[500]}
                                     >
-                                        Stock Website
+                                        NVST
                                     </Typography>
                                     <IconButton
                                         onClick={() =>
@@ -119,20 +123,20 @@ const ProSidebar = (props: any) => {
                         {!isCollapsed && (
                             <Box mb="25px">
                                 <Box textAlign="center">
-                                    <AccountBoxIcon sx={{fontSize: 60}} />
+                                    <Box display="inline-block" borderRadius="50%" 
+                                        sx={{width: 100, height: 100, backgroundColor: 'primary.main'}}
+                                    >
+                                        <Typography variant="h1" color={colors.grey[100]} marginTop="10px">
+                                        {(props.loggedIn?truncateString(cookies.get('user')).slice(0,1).toUpperCase():"")}
+                                        </Typography>
+                                    </Box>
                                     <Typography
                                         variant="h3"
                                         color={colors.blue[500]}
                                         fontWeight="bold"
                                         sx={{m: '10px 0 0 0'}}
                                     >
-                                        {(props.loggedIn?cookies.get('user'):"")}
-                                    </Typography>
-                                    <Typography
-                                        variant="h5"
-                                        color={colors.green[300]}
-                                    >
-                                        {props.loggedIn?"No Status":""}
+                                        {(props.loggedIn?truncateString(cookies.get('user')):"")}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -140,6 +144,20 @@ const ProSidebar = (props: any) => {
 
                         {/* Menu Items */}
                         <Box paddingLeft={isCollapsed ? undefined : '10%'}>
+                            <Typography
+                                variant="h6"
+                                color={colors.grey[400]}
+                                sx={{fontsize: 50, m: 1.5}}
+                            >
+                                Tools
+                            </Typography>
+                            <Item
+                                title="Analyst Calls"
+                                link={<Link to="/analystCalls" />}
+                                icon={<PhoneIcon sx={{fontSize: 20}} />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
                             <Typography
                                 variant="h6"
                                 color={colors.grey[400]}
@@ -180,29 +198,8 @@ const ProSidebar = (props: any) => {
                                 color={colors.grey[400]}
                                 sx={{fontsize: 50, m: 1.5}}
                             >
-                                {isCollapsed ? 'Prefs' : 'Preferences'}
-                            </Typography>
-                            <Item
-                                title="Preferences"
-                                link={<Link to="/watchlist" />}
-                                icon={<ColorLensIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Typography
-                                variant="h6"
-                                color={colors.grey[400]}
-                                sx={{fontsize: 50, m: 1.5}}
-                            >
                                 {isCollapsed ? 'Acct' : 'Account'}
                             </Typography>
-                            <Item
-                                title="View Account"
-                                link={<Link to="/watchlist" />}
-                                icon={<PersonIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
                             <Item
                                 title="Manage Account"
                                 link={<Link to="/account" />}
@@ -221,20 +218,6 @@ const ProSidebar = (props: any) => {
                                         window.location.reload()})
                                 }}></Link>}
                                 icon={<DeleteIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Typography
-                                variant="h6"
-                                color={colors.grey[400]}
-                                sx={{fontsize: 50, m: 1.5}}
-                            >
-                                {isCollapsed ? 'Opts' : 'Options'}
-                            </Typography>
-                            <Item
-                                title="Tools"
-                                link={<Link to="/analystCalls" />}
-                                icon={<BuildIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
