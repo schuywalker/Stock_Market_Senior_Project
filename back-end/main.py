@@ -34,6 +34,8 @@ api.add_resource(getWatchlistTickers, '/getWatchlistTickers') # done
 api.add_resource(addTickersToWatchlist, '/addTickersToWatchlist') # not done (dup entry bug) NEEDs TO BE POST
 api.add_resource(deleteTickersFromWatchlist, '/deleteTickersFromWatchlist')
 
+#ACCOUNT MANAGEMENT
+api.add_resource(getUserData, '/getUserData')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

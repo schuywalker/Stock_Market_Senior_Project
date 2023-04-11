@@ -1,6 +1,6 @@
 import {ReactNode, useState} from 'react'
 import {Sidebar, Menu, MenuItem, useProSidebar} from 'react-pro-sidebar'
-import {Box, Button, IconButton, LinkProps, Typography, useTheme} from '@mui/material'
+import {Box, IconButton, Typography, useTheme} from '@mui/material'
 import {Link} from 'react-router-dom'
 import {tokens} from '../../theme'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
@@ -12,12 +12,8 @@ import ClearIcon from '@mui/icons-material/Clear'
 import CreateIcon from '@mui/icons-material/Create'
 import IsoIcon from '@mui/icons-material/Iso'
 import PersonIcon from '@mui/icons-material/Person'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
-import LogoutIcon from '@mui/icons-material/Logout'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
-import {isComputedPropertyName} from 'typescript'
-import SignUpForm from '../../components/SignUpForm'
 import Cookies from 'universal-cookie';
 import axios from 'axios'
 
@@ -223,7 +219,7 @@ const ProSidebar = (props: any) => {
                                         cookies.remove("user")
                                         cookies.remove("password")
                                         window.location.reload()})
-                                }}></Link>}//{<BackendLink endpoint={} />}
+                                }}></Link>}
                                 icon={<DeleteIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
