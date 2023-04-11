@@ -15,16 +15,15 @@ INSERT INTO `WATCHLISTS` ( `user_id`, `wl_name`, `created`, `updated`,`deleted`)
 
 
 
-CREATE TABLE IF NOT EXISTS `WATCHLIST_TICKERS` (
-	`id` int NOT NULL, -- wl ticker row id 
-    `wl_id` int NOT NULL, -- conceptually a foreign key of watchlists.id
-    `ticker` varchar(16),
-    `created` int NOT NULL, -- date, but use epoch time
-    `updated` int, -- date, but use epoch time
-    `user_id` int NOT NULL, -- just for convenience
-    `deleted` int default(null), -- epoch time of when deleted
-	PRIMARY KEY (`id`)
-);
+CREATE TABLE `WATCHLIST_TICKERS` (
+  `ticker_id` int NOT NULL AUTO_INCREMENT,
+  `wl_id` int NOT NULL,
+  `ticker` varchar(16) NOT NULL,
+  `created` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`ticker_id`),
+  UNIQUE KEY `duplicateTickersInWatchlist` (`wl_id`,`ticker`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 INSERT INTO `WATCHLIST_TICKERS` ( `wl_id`, `ticker`, `created`, `updated`,`deleted`,`user_id`) VALUES
 (1, 'WEN', unix_timestamp(),null,null,21),
