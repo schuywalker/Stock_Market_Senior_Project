@@ -247,3 +247,15 @@ class deleteUser(Resource):
 class getUserData(Resource):
     def get(self):
         return (UserService.getUserData(request.args["user"]))
+
+class alterUserFirstName(Resource):
+    def get(self):
+        return (UserService.getUserData(request.args["newFName"], request.args["username"]))
+
+class alterUserLastName(Resource):
+    def get(self):
+        return (UserService.getUserData(request.args["newLName"], request.args["username"]))
+
+class alterUserEmail(Resource):
+    def get(self):
+        return (UserService.getUserData(request.args["newEmail"], request.args["username"]))
