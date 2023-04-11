@@ -2,8 +2,7 @@ import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
 import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
-import { useEffect } from 'react';
-
+import {backendBaseAddress} from '../config/globalVariables'
 
 const cookies = new Cookies();
 /*
@@ -151,16 +150,6 @@ const Field: React.FunctionComponent<FieldProps> = ({
         - Create all of the state variables/methods for the fields
         - Create the validation functions for the fields
 */
-async function getUserFunction(stateFunc:((arg1: any)=>void)){
-    await axios.get("http://127.0.0.1:8080/getUserData?user="+cookies.get('user')).then((response)=>{
-        console.log(response.data)
-        let x = response.data[0]
-        console.log(x)
-        stateFunc(response.data[0])
-    }
-    )
-}
-
 
 export default function AccountManagement(props:any){
     /*
@@ -171,26 +160,31 @@ export default function AccountManagement(props:any){
                         need to find a way to change state of the sidebar
             -PASSWORD: 
     */
-   
-         
-   
-   
-   //State variables/functions
-   const[username,setUserName] = React.useState("USERNAME")
-   const[firstName,setFirstName] = React.useState("FIRSTNAME");
-   const[lastName,setLastName] = React.useState("LASTNAME");
-   const[email,setEmail] = React.useState("EMAIL");
-   
-   const setInitialValues = (userData:any) =>{
-    if(username != userData[2]){
-        setUserName(userData[2])
-    }
-   }
-   React.useEffect(() => {
-    getUserFunction(setInitialValues)
-   },[username]);
-   
 
+   //State variables/functions
+   const[rendered, setRendered] = React.useState(false)
+   const[username,setUserName] = React.useState("")
+   const[firstName,setFirstName] = React.useState("");
+   const[lastName,setLastName] = React.useState("");
+   const[email,setEmail] = React.useState("");
+   
+   React.useEffect(() => {
+        axios.get(backendBaseAddress+"/getUserData?user="+cookies.get('user')).then((response)=>{
+            let data = response.data[0]
+            
+            let first_name = data[0]
+            let last_name = data[1]
+            let username = data[2]
+            let email = data[3]
+
+            setUserName(username)
+            setFirstName(first_name)
+            setLastName(last_name)
+            setEmail(email)
+            setRendered(true)
+        }
+    )
+   },[]);//Only called on component mount since the dependencies are empty
 
    //Validation Functions
    const validateUsername= (name:string)=>{
@@ -213,16 +207,24 @@ export default function AccountManagement(props:any){
    const validatePassword=(password:string)=>{
         return true
    }
+   if(rendered){
+        return(
+            <div>
+                <Box sx={{border: '1px solid white',display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'10px',gridAutoRows:"minmax(100px,auto)"}}>
+                    <Field endpoint="" displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field endpoint="" displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                    <Field endpoint="" displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                    <Field endpoint="" displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                </Box>
+            </div>
 
-    return(
-        <div>
-            <Box sx={{border: '1px solid white',display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'10px',gridAutoRows:"minmax(100px,auto)"}}>
-                <Field endpoint="" displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                <Field endpoint="" displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
-                <Field endpoint="" displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
-                <Field endpoint="" displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
-            </Box>
-        </div>
-
-    );
+        );
+    }
+    else{
+        return(
+            <React.Fragment>
+                <Typography sx={{fontSize:24}}>Loading</Typography>
+            </React.Fragment>
+        );
+    }
 }

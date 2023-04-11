@@ -2,9 +2,10 @@ import { Box, Button, Modal, TextField, Typography, styled } from '@mui/material
 import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
+import {backendBaseAddress} from '../config/globalVariables'
 
 const userEndPointConnection = axios.create({
-    baseURL: 'http://127.0.0.1:8080',
+    baseURL: backendBaseAddress,
 })
 
 const style = {
