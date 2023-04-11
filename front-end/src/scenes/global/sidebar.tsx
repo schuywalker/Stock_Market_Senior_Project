@@ -1,6 +1,14 @@
 import {ReactNode, useState} from 'react'
 import {Sidebar, Menu, MenuItem, useProSidebar} from 'react-pro-sidebar'
-import {Box, Button, IconButton, LinkProps, Typography, useTheme} from '@mui/material'
+import {
+    Box,
+    Button,
+    IconButton,
+    LinkProps,
+    Select,
+    Typography,
+    useTheme,
+} from '@mui/material'
 import {Link} from 'react-router-dom'
 import {tokens} from '../../theme'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
@@ -18,7 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import {isComputedPropertyName} from 'typescript'
 import SignUpForm from '../../components/SignUpForm'
-import Cookies from 'universal-cookie';
+import Cookies from 'universal-cookie'
 import axios from 'axios'
 
 type itemProps = {
@@ -51,7 +59,7 @@ const Item: React.FunctionComponent<itemProps> = ({
     )
 }
 
-const cookies = new Cookies();
+const cookies = new Cookies()
 
 const ProSidebar = (props: any) => {
     const theme = useTheme()
@@ -63,7 +71,7 @@ const ProSidebar = (props: any) => {
 
     return (
         <>
-            <Box  
+            <Box
                 sx={{
                     '&.pro-sidebar-inner': {
                         background: `${colors.primary[400]} !important`,
@@ -80,7 +88,7 @@ const ProSidebar = (props: any) => {
                     '&.pro-menu-item:active': {
                         color: '#868dfb !important',
                     },
-                    display: (props.loggedIn?'':'none')
+                    display: props.loggedIn ? '' : 'none',
                 }}
             >
                 <Sidebar defaultCollapsed={isCollapsed}>
@@ -130,13 +138,15 @@ const ProSidebar = (props: any) => {
                                         fontWeight="bold"
                                         sx={{m: '10px 0 0 0'}}
                                     >
-                                        {(props.loggedIn?cookies.get('user'):"")}
+                                        {props.loggedIn
+                                            ? cookies.get('user')
+                                            : ''}
                                     </Typography>
                                     <Typography
                                         variant="h5"
                                         color={colors.green[300]}
                                     >
-                                        {props.loggedIn?"No Status":""}
+                                        {props.loggedIn ? 'No Status' : ''}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -158,6 +168,7 @@ const ProSidebar = (props: any) => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />
+                            {/* <Select>Watchlists</Select> */}
                             <Item
                                 title="Create Watchlist"
                                 link={<Link to="/watchlist" />}
@@ -218,12 +229,23 @@ const ProSidebar = (props: any) => {
                             />
                             <Item
                                 title="Delete Account"
-                                link={<Link to='' onClick={async()=>{
-                                    await axios.post('http://127.0.0.1:8080/deleteUser?user='+cookies.get('user')).then(()=>{
-                                        cookies.remove("user")
-                                        cookies.remove("password")
-                                        window.location.reload()})
-                                }}></Link>}//{<BackendLink endpoint={} />}
+                                link={
+                                    <Link
+                                        to=""
+                                        onClick={async () => {
+                                            await axios
+                                                .post(
+                                                    'http://127.0.0.1:8080/deleteUser?user=' +
+                                                        cookies.get('user')
+                                                )
+                                                .then(() => {
+                                                    cookies.remove('user')
+                                                    cookies.remove('password')
+                                                    window.location.reload()
+                                                })
+                                        }}
+                                    ></Link>
+                                } //{<BackendLink endpoint={} />}
                                 icon={<DeleteIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -243,11 +265,8 @@ const ProSidebar = (props: any) => {
                                 setSelected={setSelected}
                             />
                         </Box>
-                        
                     </Menu>
-                    
                 </Sidebar>
-                
             </Box>
         </>
     )

@@ -20,12 +20,12 @@ class getQuote(Resource):
 # WATCHLISTS
 class getUserWatchlists(Resource):
     def get(self):
-        data = WatchlistService.getUserWatchlists(request.args.get('userID'), request.args.get('includeDeleted'))
+        data = WatchlistService.getUserWatchlists(request.args.get('user_ID'), request.args.get('includeDeleted'))
         return (data, 200)
 
 class createWatchlist(Resource):
     def get(self):
-        returnCode = WatchlistService.createWatchlists(request.args.get('userID'), request.args.get('watchlistName'))
+        returnCode = WatchlistService.createWatchlists(request.args.get('user_ID'), request.args.get('watchlistName'), request.args.get('tickers'))
         return returnCode
 
 class deleteWatchlist(Resource):
@@ -35,13 +35,12 @@ class deleteWatchlist(Resource):
 
 class renameWatchlist(Resource):
     def get(self):
-        data = WatchlistService.renameWatchlist(request.args.get('wl_id'), request.args.get('new_name'))
+        data = WatchlistService.renameWatchlist(request.args.get('wl_ID'), request.args.get('new_name'))
         return (data, 200)
 
 # WATCHLIST_TICKERS
 class getWatchlistTickers(Resource):
     def get(self):
-        print(f" in getWatchlistTickers wl_ID: {request.args.get('wl_ID')}")
         data = WatchlistService.getTickersInWatchlist(request.args.get('wl_ID'))
         return (data, 200)
     
@@ -191,8 +190,8 @@ class getEarningsCalendar(Resource):
     def get(self):
         ticker = request.args.get('ticker')
         data = fh_calls.getEarningsCalendar(ticker)
-        print(type(data))
-        print(data)
+        # print(type(data))
+        # print(data)
         return (jsonify(data.get("earningsCalendar")))
         # return (jsonify(((data.get("earningsCalendar"))[0]).get("date"))) # to grab specific value
 
