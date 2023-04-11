@@ -221,9 +221,9 @@ export default function AccountManagement(props:any){
             <div>
                 <Box sx={{border: '1px solid white',display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'10px',gridAutoRows:"minmax(100px,auto)"}}>
                     <Field endpoint={"/alterUsername?originalUser=" + username +"&user="} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                    <Field endpoint={"/alterFirstName?user="+ username + "&firstName="} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
-                    <Field endpoint={"/alterLastName?user="+ username + "&lastName="} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
-                    <Field endpoint={"/alterEmail?user="+ username + "&email="} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                    <Field endpoint={"/alterUserFirstName?user="+ username + "&firstName="} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                    <Field endpoint={"/alterUserLastName?user="+ username + "&lastName="} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                    <Field endpoint={"/alterUserEmail?user="+ username + "&email="} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
                 </Box>
             </div>
 

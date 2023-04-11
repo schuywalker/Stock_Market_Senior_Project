@@ -250,16 +250,17 @@ class getUserData(Resource):
 
 
 class alterUserFirstName(Resource):
-    def get(self):
-        return (UserService.getUserData(request.args["newFName"], request.args["username"]))
+    def post(self):
+        print("reached it")
+        return (UserService.alterUserFirstName(request.args["firstName"], request.args["user"]))
 
 class alterUserLastName(Resource):
-    def get(self):
-        return (UserService.getUserData(request.args["newLName"], request.args["username"]))
+    def post(self):
+        return (UserService.alterUserLastName(request.args["lastName"], request.args["user"]))
 
 class alterUserEmail(Resource):
-    def get(self):
-        return (UserService.getUserData(request.args["newEmail"], request.args["username"]))
+    def post(self):
+        return (UserService.alterUserEmail(request.args["email"], request.args["user"]))
 
 class alterUsername(Resource):
     def post(self):

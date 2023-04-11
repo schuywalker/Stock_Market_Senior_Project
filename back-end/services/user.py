@@ -21,28 +21,33 @@ class UserService:
 
 
     @staticmethod
-    def alterUserFirstName(username, newFName):
+    def alterUserFirstName(newFName, username):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
+        print(username)
+        print(newFName)
         cursor.execute("""UPDATE USERS SET first_name = %s WHERE username = %s""", (newFName, username,))
+        cnx.commit()
         cursor.close()
         dbc.close()
         return 200
 
     @staticmethod
-    def alterUserLastName(username, newLName):
+    def alterUserLastName(newLName, username):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
         cursor.execute("""UPDATE USERS SET last_name = %s WHERE username = %s""", (newLName, username,))
+        cnx.commit()
         cursor.close()
         dbc.close()
         return 200
 
     @staticmethod
-    def alterUserEmail(username, newEmail):
+    def alterUserEmail(newEmail, username):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
         cursor.execute("""UPDATE USERS SET email = %s WHERE username = %s""", (newEmail, username,))
+        cnx.commit()
         cursor.close()
         dbc.close()
         return 200
