@@ -2,7 +2,7 @@ import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
 import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
-
+import {backendBaseAddress} from '../config/globalVariables'
 
 const cookies = new Cookies();
 /*
@@ -48,6 +48,7 @@ const CustomModal = styled(Modal)({
             endpoint: The endpoint starting with  /<endpoint_name> 
 */
 type FieldProps={
+    fieldName: string
     endpoint:string
     displayValue: string
     displayedValueFunction: (value:string)=>void
@@ -106,6 +107,7 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
                             //If valid, call backend, update value, call stateFunction, close modal
                             //Else display the error
                             if(validationFunction(newValue)){
+                                axios.post(backendBaseAddress+endpoint+newValue)
                                 displayedValueFunction(newValue)
                                 onClose()
                             }
@@ -124,18 +126,29 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
     TO-DO:
         - Styling
 */
+const FieldStyle={
+    display: "flex",
+    flexDirection:"row",
+    border:'1px solid grey',
+    justifyContent:'space-between',
+    alignItems: 'center',
+    padding: 1,
+    backgroundColor:"black",
+    borderRadius: 2
+}
 const Field: React.FunctionComponent<FieldProps> = ({
-    endpoint,displayValue,displayedValueFunction,validationFunction
+    fieldName,endpoint,displayValue,displayedValueFunction,validationFunction
 })=>{
     const [showModal,setShowModal] = React.useState(false)
     return(
-        <Box sx={{display: "flex", flexDirection:"row", border:'1px solid grey', justifyContent:'space-between'}}>
-            <Typography sx={{marginRight: 2, fontSize:20}}>{displayValue}</Typography>
+        <Box sx={FieldStyle}>
+            <Typography sx={{marginRight: 2, fontSize:20}}>{fieldName}: {displayValue}</Typography>
             
             <Link onClick={()=>{
                 setShowModal(true)
             }} 
-            sx={{color:"white"}}><Typography sx={{fontSize:20}}>EDIT</Typography></Link>
+            sx={{color:"blue"}}>
+            <Typography sx={{fontSize:16}}>EDIT</Typography></Link>
             <ModalField open = {showModal} onClose={()=>setShowModal(false)}displayValue={displayValue} displayedValueFunction={displayedValueFunction} 
             endpoint={endpoint} validationFunction={validationFunction}/>
         </Box>
@@ -150,6 +163,16 @@ const Field: React.FunctionComponent<FieldProps> = ({
         - Create all of the state variables/methods for the fields
         - Create the validation functions for the fields
 */
+
+const AccountManagementStyle = {
+    //border: '1px solid white',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2,1fr)',
+    gap:'10px',
+    gridAutoRows:"minmax(100px,auto)",
+    margin:5
+}
+
 export default function AccountManagement(props:any){
     /*
         Need to get user info to display from backend
@@ -161,25 +184,77 @@ export default function AccountManagement(props:any){
     */
 
    //State variables/functions
-   const[username,setUserName] = React.useState("USERNAME");
+   const[rendered, setRendered] = React.useState(false)
+   const[username,setUserName] = React.useState("")
+   const[firstName,setFirstName] = React.useState("");
+   const[lastName,setLastName] = React.useState("");
+   const[email,setEmail] = React.useState("");
+   
+   React.useEffect(() => {
+        axios.get(backendBaseAddress+"/getUserData?user="+cookies.get('user')).then((response)=>{
+            let data = response.data[0]
+            
+            let first_name = data[0]
+            let last_name = data[1]
+            let username = data[2]
+            let email = data[3]
+
+            setUserName(username)
+            setFirstName(first_name)
+            setLastName(last_name)
+            setEmail(email)
+            setRendered(true)
+        }
+    )
+   },[]);//Only called on component mount since the dependencies are empty
 
    //Validation Functions
    const validateUsername= (name:string)=>{
-        if(name.length >0 && name !== username)return true
+        if(name.length >0 && name !== username){
+            return true
+        }
         return false
    }
-
+   
    const validateFirstName=(name:string)=>{
+    if(name.length >0 && name !== firstName){
         return true
+    }
+    return false
    }
 
-    return(
-        <div>
-            <Box sx={{border: '1px solid white',display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'10px',gridAutoRows:"minmax(100px,auto)"}}>
-                <Field endpoint="" displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                <Field endpoint="" displayValue='FIRSTNAME' displayedValueFunction={(val:string)=>{console.log("Setting New Value "+val)}} validationFunction={validateFirstName}/>
-            </Box>
-        </div>
+   const validateLastName=(name:string)=>{
+    if(name.length >0 && name !== lastName){
+        return true
+    }
+    return false
+   }
 
-    );
+   const validateEmail=(name:string)=>{
+    if(name.length >0 && name !== email){
+        return true
+    }
+    return false
+   }
+   
+   if(rendered){
+        return(
+            <div>
+                <Box sx={AccountManagementStyle}>
+                    <Field fieldName='Username' endpoint={"/alterUsername?originalUser=" + username +"&user="} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field fieldName='First Name' endpoint={"/alterUserFirstName?user="+ username + "&firstName="} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                    <Field fieldName = 'Last Name' endpoint={"/alterUserLastName?user="+ username + "&lastName="} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                    <Field fieldName = 'Email' endpoint={"/alterUserEmail?user="+ username + "&email="} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                </Box>
+            </div>
+
+        );
+    }
+    else{
+        return(
+            <React.Fragment>
+                <Typography sx={{fontSize:24}}>Loading</Typography>
+            </React.Fragment>
+        );
+    }
 }
