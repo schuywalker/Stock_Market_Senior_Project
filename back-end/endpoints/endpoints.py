@@ -68,103 +68,13 @@ class getAnalystCalls(Resource):
 #class for Login
 class Login(Resource):
     def post(self):
-        username = request.args['username']
-        password = request.args['password']
-        hashpass = hashlib.sha256(password.encode()).hexdigest()
-        try:
-            hst = prt = usr = pswrd = db = ''
-            with open('./secrets/db_secrets.txt') as f:
-                hst = f.readline().strip()
-                prt = f.readline().strip()
-                usr = f.readline().strip()
-                pswrd = f.readline().strip()
-                db = f.readline().strip()
-                f.close()
-                print(hst,prt,usr,pswrd,db)
-                prt = int(prt)
-            mydb = mysql.connector.connect(
-                host=hst,
-                port=prt,
-                user=usr,
-                password=pswrd,
-                database=db
-            )
-            #User attempts to log in and then will check here if he is in the database
-            cursor = mydb.cursor()
-            query = "SELECT username, password FROM USERS WHERE username = %s AND password = %s"
-            cursor.execute(query, (username, hashpass))
-            result = cursor.fetchall()
-            if cursor.rowcount == 1:
-                response = {"message": "Logged in"}
-                mydb.close()
-                return response, 200
-            else:
-                response = {"message": "Invalid credentials"}
-                mydb.close()
-                return response, 200
-        except Error as e:
-            print("Error while connecting to MySQL", e)
-            #log if any errors happen with connection
-            response = {"message": "Error while connecting to MySQL"}
-            mydb.close()
-            return response, 500
-            
+        data = UserService.login(request.args.get('username'), request.args.get('password'))
+        return data, 200         
 
 class CreateUser(Resource):
     def post(self):
-        #request the POST information args
-        username = request.args['username']
-        password = request.args['password']
-        email = request.args['email']
-        first = request.args['first']
-        last = request.args['last']
-        #hash the password
-        hashpass = hashlib.sha256(password.encode()).hexdigest()
-        try:
-            hst = prt = usr = pswrd = db = ''
-            with open('./secrets/db_secrets.txt') as f:
-                hst = f.readline().strip()
-                prt = f.readline().strip()
-                usr = f.readline().strip()
-                pswrd = f.readline().strip()
-                db = f.readline().strip()
-                f.close()
-                print(hst,prt,usr,pswrd,db)
-                prt = int(prt)
-    
-            mydb = mysql.connector.connect(
-                host=hst,
-                port=prt,
-                user=usr,
-                password=pswrd,
-                database=db    
-            )
-            #User attempts to log in his credentials will be stored here for a time
-            cursor = mydb.cursor()
-            #Check if username already exists
-            query = "SELECT username FROM USERS WHERE username = %s"
-            cursor.execute(query, (username,))
-            result = cursor.fetchall()
-            #check if username exists in database
-            if cursor.rowcount == 0:
-            #add the user if Username doesnt exist in db
-                query = "INSERT INTO USERS (first_name, last_name, email, password, username) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(query, (first, last, email, hashpass, username))
-                mydb.commit()
-                response = {"message": "User created"}
-                mydb.close()
-                return response, 200
-            else:
-                response = {"message": "Username already exists"}
-                mydb.close()
-                return response, 200
-         
-        except Error as e:
-            print("Error while connecting to MySQL", e)
-            #log if any errors happen with connection
-            response = {"message": "Error while connecting to MySQL"}
-            mydb.close()
-            return response, 500
+        data = UserService.createUser(request.args.get('username'), request.args.get('password'), request.args.get('email'), request.args.get('first'), request.args.get('last'))
+        return data, 200
 
 class ReturnString(Resource):
     def get(self):
@@ -203,46 +113,8 @@ class getCandles(Resource):
     
 class deleteUser(Resource):
     def post(self):
-        user = request.args['user']
-        try:
-            hst = prt = usr = pswrd = db = ''
-            with open('./secrets/db_secrets.txt') as f:
-                hst = f.readline().strip()
-                prt = f.readline().strip()
-                usr = f.readline().strip()
-                pswrd = f.readline().strip()
-                db = f.readline().strip()
-                f.close()
-                print(hst,prt,usr,pswrd,db)
-                prt = int(prt)
-    
-            mydb = mysql.connector.connect(
-                host=hst,
-                port=prt,
-                user=usr,
-                password=pswrd,
-                database=db    
-            )
-            cursor = mydb.cursor()
-            watchlistsQuery = "delete from WATCHLISTS where user_id = (select user_id from USERS where username = %s)"
-            watchlistsTickerQuery = "delete from WATCHLIST_TICKERS where user_id = (select user_id from USERS where username = %s)"
-            usersQuery = "delete from USERS where username = %s"
-            cursor.execute(watchlistsQuery, (user,))
-            mydb.commit()
-            cursor.execute(watchlistsTickerQuery, (user,))
-            mydb.commit()
-            cursor.execute(usersQuery, (user,))
-            mydb.commit()
-            response = {'message':'Account Deleted'}
-            mydb.close()
-            return response, 200
-         
-        except Error as e:
-            print("Error while connecting to MySQL", e)
-            #log if any errors happen with connection
-            response = {"message": "Error while connecting to MySQL"}
-            mydb.close()
-            return response, 500
+        data = UserService.deleteUser(request.args.get('user'))
+        return data, 200
 
 class getUserData(Resource):
     def get(self):
