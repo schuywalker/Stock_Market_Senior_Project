@@ -82,10 +82,9 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
     const style = {
         position: 'absolute' as 'absolute',
         top: '50%',
-        left:'50%',
-        pt: 3,
-        px: 6,
-        pb: 4,
+        left:'40%',
+        pt: 2,
+        
       };
     var newValue:string = displayValue;
     return(
@@ -98,7 +97,9 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
             aria-describedby="modal-modal-description"
             >
                     <Box sx={{display:'flex', flexdirection:'row',border:'1px solid white', background:'black', width:'fit-content',padding:1}}>
-                        <TextField defaultValue={displayValue} onChange={(event)=>{
+                        <TextField InputProps={{
+                                  style: {fontSize:16}
+                            }} defaultValue={displayValue} onChange={(event)=>{
                             newValue = event.target.value;
                         }}/>
                         <Button sx={{backgroundColor:'white', margin:1}}
@@ -134,7 +135,8 @@ const FieldStyle={
     alignItems: 'center',
     padding: 1,
     backgroundColor:"black",
-    borderRadius: 2
+    borderRadius: 2,
+    
 }
 const Field: React.FunctionComponent<FieldProps> = ({
     fieldName,endpoint,displayValue,displayedValueFunction,validationFunction
@@ -142,7 +144,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     const [showModal,setShowModal] = React.useState(false)
     return(
         <Box sx={FieldStyle}>
-            <Typography sx={{marginRight: 2, fontSize:20}}>{fieldName}: {displayValue}</Typography>
+            <Typography sx={{marginRight: 2, fontSize:20}}>{fieldName}: &nbsp;&nbsp;<Typography sx={{display: 'inline', fontSize:20,color:"#ADD8E6"}}>{displayValue}</Typography></Typography>
             
             <Link onClick={()=>{
                 setShowModal(true)
@@ -165,9 +167,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
 */
 
 const AccountManagementStyle = {
-    //border: '1px solid white',
     display: 'grid',
-    gridTemplateColumns: 'repeat(2,1fr)',
+    gridTemplateColumns: 'repeat(1,1fr)',
     gap:'10px',
     gridAutoRows:"minmax(100px,auto)",
     margin:5
