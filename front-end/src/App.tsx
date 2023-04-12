@@ -1,4 +1,4 @@
-import {Route, Routes} from 'react-router-dom'
+import {Route, Routes, useNavigate} from 'react-router-dom'
 import './App.css'
 import ResponsiveAppBar from './scenes/global/AppBar'
 import ResponsiveSideBar from './scenes/global/sidebar'
@@ -11,12 +11,21 @@ import Stock from './components/stock/Stock'
 import {ProSidebarProvider} from 'react-pro-sidebar'
 import Cookies from 'universal-cookie';
 import AccountManagement from './components/AccountManagement'
+import LandingPage from './scenes/LandingPage'
 
 const cookies = new Cookies();
 
 function App() {
     const {theme, colorMode} = useMode()
     const [loggedIn,setLoggedIn] = useState((cookies.get("user")?true:false));//Need to check if cookie is valid and user/password is correct
+
+    const navigate = useNavigate();
+    const handleLogin = (value: boolean)=>{
+        if(!value){
+            navigate("/")
+        }
+        setLoggedIn(value)
+    }
 
     return (
         <>
@@ -26,7 +35,7 @@ function App() {
                     <CssBaseline />
                     <div className="App">
                         <div className="content">
-                            <ResponsiveAppBar loginFunction={(value:boolean)=>setLoggedIn(value)} loggedIn = {loggedIn}/>
+                            <ResponsiveAppBar loginFunction={(value:boolean)=>handleLogin(value)} loggedIn = {loggedIn}/>
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
                                     <ResponsiveSideBar loggedIn = {loggedIn} />
@@ -34,6 +43,10 @@ function App() {
 
                                 <Routes>
                                     {/* <Route path="/" element={<Home />}/> */}
+                                    <Route
+                                        path="/"
+                                        element={<LandingPage />}
+                                    />
                                     <Route
                                         path="/watchlist"
                                         element={<Watchlist />}
