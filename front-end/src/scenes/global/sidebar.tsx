@@ -48,6 +48,12 @@ function truncateString(str: string) {
     if(str.length > 10){
         return(str.slice(0, 7) + "...")
     }
+
+    var regexp = new RegExp('(.*W){4}')
+    if(str.length > 8 && regexp.test(str)){
+        return(str.slice(0,6) + "...")
+    }
+
     return(str)
 }
 
