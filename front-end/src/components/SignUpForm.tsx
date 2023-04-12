@@ -297,8 +297,10 @@ export default function SignUpForm(props: any){
                 }
                 else{
                   //login
+                  console.log(response.data[0]['user_id'])
                   cookies.set("user",username,{ path: '/' })
                   cookies.set("password",password,{ path: '/' })
+                  cookies.set("user_id",response.data[0]['user_id']);
                   props.close()
                   props.login()
                 } 

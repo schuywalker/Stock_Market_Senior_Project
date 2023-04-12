@@ -54,6 +54,7 @@ function ResponsiveAppBar(props: any) {
                                 if (props.loggedIn) {
                                     cookies.remove('user')
                                     cookies.remove('password')
+                                    cookies.remove("user_id");
                                     setLoggedIn(false)
                                 } else {
                                     setShowAccountLogin(true)

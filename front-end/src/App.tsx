@@ -6,7 +6,7 @@ import AnalystCalls from './scenes/dashboard/AnalystCalls'
 import Watchlist from './scenes/watchlist/Watchlist'
 import {ColorModeContext, useMode} from './theme'
 import {Box, Button, CssBaseline, PaletteMode, ThemeProvider} from '@mui/material'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Stock from './components/stock/Stock'
 import {ProSidebarProvider} from 'react-pro-sidebar'
 import Cookies from 'universal-cookie';
@@ -17,6 +17,7 @@ const cookies = new Cookies();
 
 function App() {
     const {theme, colorMode} = useMode()
+    const[initialLogin, setInitialLogin] = useState(false);
     const [loggedIn,setLoggedIn] = useState((cookies.get("user")?true:false));//Need to check if cookie is valid and user/password is correct
 
     const navigate = useNavigate();
@@ -29,6 +30,12 @@ function App() {
         }
         setLoggedIn(value)
     }
+    useEffect(()=>{
+        if(!initialLogin && loggedIn){
+            navigate("/analyst-calls")
+        }
+        setInitialLogin(true)
+    },[])
 
     return (
         <>
