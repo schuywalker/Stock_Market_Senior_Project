@@ -78,11 +78,11 @@ class UserService:
             cnx, cursor = dbc.connect()
             #User attempts to log in and then will check here if he is in the database
             cursor = cnx.cursor()
-            query = "SELECT username, password FROM USERS WHERE username = %s AND password = %s"
+            query = "SELECT user_id FROM USERS WHERE username = %s AND password = %s"
             cursor.execute(query, (username, hashpass))
             result = cursor.fetchall()
             if cursor.rowcount == 1:
-                response = {"message": "Logged in"}
+                response = {"message": "Logged in","user_id":result[0][0]}
                 cnx.close()
                 return response, 200
             else:
@@ -114,8 +114,9 @@ class UserService:
             #add the user if Username doesnt exist in db
                 query = "INSERT INTO USERS (first_name, last_name, email, password, username) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(query, (first, last, email, hashpass, username))
+                user_id =cursor.lastrowid
                 cnx.commit()
-                response = {"message": "User created"}
+                response = {"message": "User created","user_id":user_id}
                 cnx.close()
                 return response, 200
             else:
@@ -128,7 +129,7 @@ class UserService:
             #log if any errors happen with connection
             response = {"message": "Error while connecting to MySQL"}
             cnx.close()
-            return response, 500
+            return response, 400
         
     @staticmethod
     def deleteUser(user):

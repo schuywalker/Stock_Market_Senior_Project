@@ -237,6 +237,7 @@ const ProSidebar = (props: any) => {
                                                 .then(() => {
                                                     cookies.remove('user')
                                                     cookies.remove('password')
+                                                    cookies.remove("user_id");
                                                     window.location.reload()
                                                 })
                                         }}
