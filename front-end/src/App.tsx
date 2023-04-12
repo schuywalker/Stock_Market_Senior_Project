@@ -24,6 +24,9 @@ function App() {
         if(!value){
             navigate("/")
         }
+        else{
+            navigate("/analyst-calls")
+        }
         setLoggedIn(value)
     }
 
