@@ -1,5 +1,5 @@
 import {ReactNode, useState} from 'react'
-import {Sidebar, Menu, MenuItem, useProSidebar} from 'react-pro-sidebar'
+import {Sidebar, Menu, MenuItem} from 'react-pro-sidebar'
 import {Box, IconButton, Typography, useTheme} from '@mui/material'
 import {Link} from 'react-router-dom'
 import {tokens} from '../../theme'
@@ -64,8 +64,6 @@ const ProSidebar = (props: any) => {
     const colors = tokens(theme.palette.mode)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
-    const {collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl} =
-        useProSidebar()
 
     return (
         <>
