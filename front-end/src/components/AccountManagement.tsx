@@ -86,6 +86,8 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
         pt: 2,
         
       };
+      const[errorText,setErrorText] = React.useState("")
+      const[showError,setShowError]= React.useState(false)
     var newValue:string = displayValue;
     return(
         <React.Fragment>
@@ -97,23 +99,27 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
             aria-describedby="modal-modal-description"
             >
                     <Box sx={{display:'flex', flexdirection:'row',border:'1px solid white', background:'black', width:'fit-content',padding:1}}>
-                        <TextField InputProps={{
+                        <TextField error = {showError} helperText={errorText} InputProps={{
                                   style: {fontSize:16}
                             }} defaultValue={displayValue} onChange={(event)=>{
                             newValue = event.target.value;
                         }}/>
                         <Button sx={{backgroundColor:'white', margin:1}}
-                        onClick={()=>{
+                        onClick={async ()=>{
                             //Validate input. If value is the same, exit, otherwise reference SignUpForm for what to validate against
                             //If valid, call backend, update value, call stateFunction, close modal
                             //Else display the error
                             if(validationFunction(newValue)){
-                                axios.post(backendBaseAddress+endpoint+newValue)
+                                setShowError(false)
+                                setErrorText("")
+                                await axios.post(backendBaseAddress+endpoint+newValue)
                                 displayedValueFunction(newValue)
+                                cookies.set('user',newValue)
                                 onClose()
                             }
                             else{
-
+                                setShowError(true)
+                                setErrorText("Invalid")
                             }   
                         }}>Submit</Button>
                     </Box>
@@ -144,7 +150,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     const [showModal,setShowModal] = React.useState(false)
     return(
         <Box sx={FieldStyle}>
-            <Typography sx={{marginRight: 2, fontSize:20}}>{fieldName}: &nbsp;&nbsp;<Typography sx={{display: 'inline', fontSize:20,color:"#ADD8E6"}}>{displayValue}</Typography></Typography>
+            <Typography sx={{marginRight: 2, fontSize:20}}>{fieldName}: &nbsp;&nbsp;<Typography component={'span'} sx={{display: 'inline', fontSize:20,color:"#ADD8E6"}}>{displayValue}</Typography></Typography>
             
             <Link onClick={()=>{
                 setShowModal(true)
@@ -192,7 +198,7 @@ export default function AccountManagement(props:any){
    const[email,setEmail] = React.useState("");
    
    React.useEffect(() => {
-        axios.get(backendBaseAddress+"/getUserData?user="+cookies.get('user')).then((response)=>{
+            axios.get(backendBaseAddress+"/getUserData?user="+cookies.get('user')).then((response)=>{
             let data = response.data[0]
             
             let first_name = data[0]
