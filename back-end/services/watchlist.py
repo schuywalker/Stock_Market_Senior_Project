@@ -54,7 +54,7 @@ class WatchlistService:
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 ret = ("Error: Duplicate Entry",409)
             else:
-                ret = ("Error: ",e,500)
+                ret = ("Error: ",e,400)
             
             
         finally:
