@@ -48,7 +48,7 @@ function App() {
                             <ResponsiveAppBar loginFunction={(value:boolean)=>handleLogin(value)} loggedIn = {loggedIn}/>
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
-                                    <ResponsiveSideBar loggedIn = {loggedIn} />
+                                    <ResponsiveSideBar loggedIn = {loggedIn} loginFunction = {(value:boolean)=>{handleLogin(value)}}/>
                                 </ProSidebarProvider>
 
                                 <Routes>

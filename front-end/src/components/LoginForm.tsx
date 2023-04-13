@@ -63,7 +63,7 @@ const cookies = new Cookies();
                 }
                 else{
                     setUsernameTextFieldError(true)
-                    if(usernameHelperText == "")setUsernameHelperText("Invalid Username Entered")
+                    if(usernameHelperText === "")setUsernameHelperText("Invalid Username Entered")
                 }
                 if(passwordValidated){
                     setPasswordTextFieldError(false)
@@ -71,7 +71,7 @@ const cookies = new Cookies();
                 }
                 else{
                     setPasswordTextFieldError(true)
-                    if(passwordHelperText == "")setPasswordHelperText("Invalid Password Entered")
+                    if(passwordHelperText === "")setPasswordHelperText("Invalid Password Entered")
                 }
             }
             return false;
@@ -174,7 +174,7 @@ const cookies = new Cookies();
                             setPasswordTextFieldError(false)
                             setPasswordHelperText("")
             
-                            if(response.data[0]['message']=='Invalid credentials'){
+                            if(response.data[0]['message']==='Invalid credentials'){
                               setUsernameValidated(false)
                               setUsernameTextFieldError(true)
                               setUsernameHelperText("Username doesn't exist")

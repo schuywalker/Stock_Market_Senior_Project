@@ -53,6 +53,7 @@ type FieldProps={
     displayValue: string
     displayedValueFunction: (value:string)=>void
     validationFunction: (value:string)=>boolean
+    errorMessage?: string 
 }
 type ModalFieldProps={
     open: boolean
@@ -61,6 +62,7 @@ type ModalFieldProps={
     displayedValueFunction: (value:string)=>void
     validationFunction: (value:string)=>boolean
     endpoint:string
+    errorMessage: string
 }
 
 /*
@@ -77,7 +79,7 @@ type ModalFieldProps={
 */
 
 const ModalField: React.FunctionComponent<ModalFieldProps>=({
-    open,onClose,displayValue,displayedValueFunction,endpoint,validationFunction
+    open,onClose,displayValue,displayedValueFunction,endpoint,validationFunction,errorMessage
 })=>{
     const style = {
         position: 'absolute' as 'absolute',
@@ -119,7 +121,7 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
                             }
                             else{
                                 setShowError(true)
-                                setErrorText("Invalid")
+                                setErrorText(errorMessage)
                             }   
                         }}>Submit</Button>
                     </Box>
@@ -145,9 +147,10 @@ const FieldStyle={
     
 }
 const Field: React.FunctionComponent<FieldProps> = ({
-    fieldName,endpoint,displayValue,displayedValueFunction,validationFunction
+    fieldName,endpoint,displayValue,displayedValueFunction,validationFunction,errorMessage
 })=>{
     const [showModal,setShowModal] = React.useState(false)
+    if(!errorMessage)errorMessage = "Invalid"
     return(
         <Box sx={FieldStyle}>
             <Typography sx={{marginRight: 2, fontSize:20}}>{fieldName}: &nbsp;&nbsp;<Typography component={'span'} sx={{display: 'inline', fontSize:20,color:"#ADD8E6"}}>{displayValue}</Typography></Typography>
@@ -157,7 +160,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
             }} 
             sx={{color:"blue"}}>
             <Typography sx={{fontSize:16}}>EDIT</Typography></Link>
-            <ModalField open = {showModal} onClose={()=>setShowModal(false)}displayValue={displayValue} displayedValueFunction={displayedValueFunction} 
+            <ModalField errorMessage={errorMessage} open = {showModal} onClose={()=>setShowModal(false)}displayValue={displayValue} displayedValueFunction={displayedValueFunction} 
             endpoint={endpoint} validationFunction={validationFunction}/>
         </Box>
     )
@@ -248,7 +251,7 @@ export default function AccountManagement(props:any){
         return(
             <div>
                 <Box sx={AccountManagementStyle}>
-                    <Field fieldName='Username' endpoint={"/alterUsername?originalUser=" + username +"&user="} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field errorMessage='test' fieldName='Username' endpoint={"/alterUsername?originalUser=" + username +"&user="} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
                     <Field fieldName='First Name' endpoint={"/alterUserFirstName?user="+ username + "&firstName="} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
                     <Field fieldName = 'Last Name' endpoint={"/alterUserLastName?user="+ username + "&lastName="} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
                     <Field fieldName = 'Email' endpoint={"/alterUserEmail?user="+ username + "&email="} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>

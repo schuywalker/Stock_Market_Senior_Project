@@ -24,6 +24,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import Cookies from 'universal-cookie'
 import axios from 'axios'
+import React from 'react'
+import {backendBaseAddress} from '../../config/globalVariables'
 
 type itemProps = {
     title: string
@@ -62,10 +64,19 @@ const ProSidebar = (props: any) => {
     const colors = tokens(theme.palette.mode)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
-    const {collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl} =
-        useProSidebar()
+    const[loggedIn, setLoggedIn] = useState(props.loggedIn)
+    React.useEffect(()=>{
+        if(props.loggedIn)setLoggedIn(true)
+        else setLoggedIn(false)
+    },[props.loggedIn])
 
-    return (
+    if(!loggedIn){
+        return(
+            <>
+            </>
+        )
+    }
+    else return (
         <>
             <Box
                 sx={{
@@ -84,7 +95,6 @@ const ProSidebar = (props: any) => {
                     '&.pro-menu-item:active': {
                         color: '#868dfb !important',
                     },
-                    display: props.loggedIn ? '' : 'none',
                 }}
             >
                 <Sidebar defaultCollapsed={isCollapsed}>
@@ -228,18 +238,18 @@ const ProSidebar = (props: any) => {
                                 link={
                                     <Link
                                         to=""
-                                        onClick={async () => {
-                                            await axios
+                                        onClick={() => {
+                                            setLoggedIn(false)
+                                            let user = cookies.get('user')
+                                            cookies.remove('user')
+                                            cookies.remove('password')
+                                            cookies.remove("user_id");
+                                            props.loginFunction(false)
+                                            axios
                                                 .post(
-                                                    'http://127.0.0.1:8080/deleteUser?user=' +
-                                                        cookies.get('user')
+                                                    backendBaseAddress+'/deleteUser?user=' +
+                                                        user
                                                 )
-                                                .then(() => {
-                                                    cookies.remove('user')
-                                                    cookies.remove('password')
-                                                    cookies.remove("user_id");
-                                                    window.location.reload()
-                                                })
                                         }}
                                     ></Link>
                                 } //{<BackendLink endpoint={} />}
