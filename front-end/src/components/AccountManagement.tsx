@@ -32,6 +32,9 @@ const CustomModal = styled(Modal)({
             displayedValueFunction: The state function to change the displayedValue
 
             validationFunction: The stateless function to validate if the new input is correct
+
+            errorMessage: Optional string to display as an error message if the field is wrong Defaults
+                          to invalid if nothing is provided
         
 
         ModalFieldProps:
@@ -46,6 +49,8 @@ const CustomModal = styled(Modal)({
             validationFunction: The stateless function to validate if the new input is correct 
 
             endpoint: The endpoint starting with  /<endpoint_name> 
+
+            errorMessage: Optional string to display as an error message if the field is wrong. 
 */
 type FieldProps={
     fieldName: string
@@ -91,6 +96,12 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
       const[errorText,setErrorText] = React.useState("")
       const[showError,setShowError]= React.useState(false)
     var newValue:string = displayValue;
+    React.useEffect(()=>{
+        if(open){
+            setErrorText("")
+            setShowError(false)
+        }
+    },[open])
     return(
         <React.Fragment>
             <CustomModal
@@ -158,8 +169,8 @@ const Field: React.FunctionComponent<FieldProps> = ({
             <Link onClick={()=>{
                 setShowModal(true)
             }} 
-            sx={{color:"blue"}}>
-            <Typography sx={{fontSize:16}}>EDIT</Typography></Link>
+            sx={{color:"#0096FF",fontSize:16}}>
+            EDIT</Link>
             <ModalField errorMessage={errorMessage} open = {showModal} onClose={()=>setShowModal(false)}displayValue={displayValue} displayedValueFunction={displayedValueFunction} 
             endpoint={endpoint} validationFunction={validationFunction}/>
         </Box>
@@ -263,7 +274,9 @@ export default function AccountManagement(props:any){
     else{
         return(
             <React.Fragment>
-                <Typography sx={{fontSize:24}}>Loading</Typography>
+                <Box sx={{position: 'absolute' as 'absolute',top:'50%',left:'50%'}}>
+                    <Typography sx={{fontSize:24}}>Loading</Typography>
+                </Box>      
             </React.Fragment>
         );
     }

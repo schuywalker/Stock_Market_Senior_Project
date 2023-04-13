@@ -189,7 +189,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Analyst Calls"
-                                link={<Link to="/analystCalls" />}
+                                link={<Link to="/analyst-calls" />}
                                 icon={<PhoneIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
