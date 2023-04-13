@@ -94,6 +94,9 @@ const Watchlist = () => {
                         </Stack>
                     </FormGroup>
                 </Box>
+                <Box>
+                    <Typography>list of watchlists</Typography>
+                </Box>
                 {gridView ? (
                     <Box
                         sx={{
