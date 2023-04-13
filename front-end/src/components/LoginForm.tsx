@@ -218,7 +218,7 @@ export default function LoginForm(props: any) {
                                         setPasswordHelperText('')
 
                                         if (
-                                            response.data[0]['message'] ==
+                                            response.data['message'] ==
                                             'Invalid credentials'
                                         ) {
                                             setUsernameValidated(false)
