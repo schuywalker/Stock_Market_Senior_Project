@@ -1,20 +1,24 @@
-import {Typography} from '@mui/material'
+import {
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Typography,
+    useTheme,
+} from '@mui/material'
 import {Box} from '@mui/system'
 import Watchlist from '../watchlist/Watchlist'
 import {useEffect, useState} from 'react'
 
 const Dashboard = () => {
-    const [userWatchlists, setUserWatchlists] = useState([
-        'value',
-        'growth',
-        'option plays',
-    ])
+    const theme = useTheme()
+
+    const [userWatchlists, setUserWatchlists] = useState([])
 
     useEffect(() => {
         fetchUserWatchlists()
     }, [])
 
-    //request.args.get('user_ID'), request.args.get('includeDeleted')
     async function fetchUserWatchlists() {
         try {
             // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
@@ -23,19 +27,81 @@ const Dashboard = () => {
                 {}
             ).then((response) => {
                 response.json().then((json) => {
-                    setUserWatchlists(json)
-                    console.log(json)
+                    setUserWatchlists(json[0])
                 })
             })
         } catch (err) {
             console.log(err)
         }
     }
+    ////////// LINE 22 hard coded user_ID
+
+    const [watchlistSelected, setWatchlistSelected] = useState<{
+        selected: boolean
+        wl_ID: number
+    }>({selected: false, wl_ID: -1})
+    function loadWatchlist(wl_ID: number) {
+        setWatchlistSelected({selected: true, wl_ID})
+    }
+
+    useEffect(() => {
+        console.log(
+            'loadWatchlist',
+            watchlistSelected['selected'],
+            watchlistSelected['wl_ID']
+        )
+    }, [watchlistSelected])
+    useEffect(() => {
+        console.log(userWatchlists)
+    }, [userWatchlists])
 
     return (
         <Box>
-            {userWatchlists}
-            <Watchlist />
+            <List
+                sx={{
+                    width: '100%',
+                    maxWidth: 360,
+                    bgcolor: 'background.paper',
+                    position: 'relative',
+                    overflow: 'auto',
+                    maxHeight: 300,
+                    '& ul': {padding: 0},
+                    m: '3%',
+                    itemSize: '46',
+                }}
+            >
+                {userWatchlists.map((_userWatchlists, key) => {
+                    return (
+                        <ListItem
+                            sx={{fontSize: theme.typography.h4}}
+                            key={key}
+                        >
+                            <ListItemButton
+                                onClick={() =>
+                                    // console.log(userWatchlists[key][0])
+                                    loadWatchlist(
+                                        Number(userWatchlists[key][0])
+                                    )
+                                }
+                            >
+                                {userWatchlists[key][2]}
+                            </ListItemButton>
+                        </ListItem>
+                    )
+                })}
+            </List>
+            <Box sx={{ml: 2}}>
+                {userWatchlists.map((_userWatchlists, key) => {
+                    return (
+                        <Typography key={key}>
+                            {userWatchlists[key][2]}
+                        </Typography>
+                    )
+                })}
+            </Box>
+            {watchlistSelected.selected && (
+                <Watchlist wl_ID={watchlistSelected['wl_ID']} />
+            )}
         </Box>
     )
 }
