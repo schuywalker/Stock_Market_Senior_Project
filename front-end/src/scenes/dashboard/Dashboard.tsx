@@ -36,24 +36,18 @@ const Dashboard = () => {
     }
     ////////// LINE 22 hard coded user_ID
 
-    const [watchlistSelected, setWatchlistSelected] = useState<{
-        selected: boolean
-        wl_ID: number
-    }>({selected: false, wl_ID: -1})
-    function loadWatchlist(wl_ID: number) {
-        setWatchlistSelected({selected: true, wl_ID})
+    const [watchlistSelected, setWatchlistSelected] = useState(0)
+
+    const [showWatchlist, setShowWatchlist] = useState(false)
+
+    function handleLoadingWatchlist(wl_ID: number) {
+        setShowWatchlist(true)
+        setWatchlistSelected(wl_ID)
     }
 
-    useEffect(() => {
-        console.log(
-            'loadWatchlist',
-            watchlistSelected['selected'],
-            watchlistSelected['wl_ID']
-        )
-    }, [watchlistSelected])
-    useEffect(() => {
-        console.log(userWatchlists)
-    }, [userWatchlists])
+    // useEffect(() => {
+    //     console.log(watchlistSelected, 'watchlistSelected')
+    // }, [watchlistSelected])
 
     return (
         <Box>
@@ -79,7 +73,7 @@ const Dashboard = () => {
                             <ListItemButton
                                 onClick={() =>
                                     // console.log(userWatchlists[key][0])
-                                    loadWatchlist(
+                                    handleLoadingWatchlist(
                                         Number(userWatchlists[key][0])
                                     )
                                 }
@@ -90,9 +84,11 @@ const Dashboard = () => {
                     )
                 })}
             </List>
-            {watchlistSelected.selected && (
-                <Watchlist wl_ID={watchlistSelected['wl_ID']} />
-            )}
+
+            {/* {showWatchlist && ( */}
+            <Watchlist wl_ID={watchlistSelected} />
+            {/* <Watchlist wl_ID={watchlistSelected['wl_ID']} /> */}
+            {/* )} */}
         </Box>
     )
 }

@@ -38,15 +38,19 @@ const Watchlist = (props: WatchlistProps) => {
 
     useEffect(() => {
         fetchWatchlistAssets()
-    }, [])
+        console.log(props.wl_ID, 'wl_ID')
+    }, [props.wl_ID])
 
     async function fetchWatchlistAssets() {
         try {
             const response = await fetch(
-                // `http://127.0.0.1:8080/populateWatchlist?user_ID=27&wl_ID=${props.wl_ID}`,
-                `http://127.0.0.1:8080/populateWatchlist?user_ID=${cookies.get(
-                    'user_id'
-                )}&wl_ID=${props.wl_ID}`,
+                // `http://127.0.0.1:8080/populateWatchlist?user_ID=27&wl_ID=5`,
+
+                `http://127.0.0.1:8080/populateWatchlist?user_ID=27&wl_ID=${props.wl_ID}`,
+
+                // `http://127.0.0.1:8080/populateWatchlist?user_ID=${cookies.get(
+                //     'user_id'
+                // )}&wl_ID=${props.wl_ID}`,
                 {}
             ).then((response) => {
                 response.json().then((json) => {
