@@ -13,6 +13,7 @@ import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import PhoneIcon from '@mui/icons-material/Phone'
 import Cookies from 'universal-cookie'
 import axios from 'axios'
+import {ShowChart} from '@mui/icons-material'
 
 type itemProps = {
     title: string
@@ -50,11 +51,11 @@ function truncateString(str: string) {
     }
 
     var regexp = new RegExp('(.*W){4}')
-    if(str.length > 8 && regexp.test(str)){
-        return(str.slice(0,6) + "...")
+    if (str.length > 8 && regexp.test(str)) {
+        return str.slice(0, 6) + '...'
     }
 
-    return(str)
+    return str
 }
 
 const cookies = new Cookies()
@@ -168,6 +169,13 @@ const ProSidebar = (props: any) => {
 
                         {/* Menu Items */}
                         <Box paddingLeft={isCollapsed ? undefined : '10%'}>
+                            <Item
+                                title="Dashboard"
+                                link={<Link to="/Dashboard" />}
+                                icon={<ShowChart sx={{fontSize: 20}} />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
                             <Typography
                                 variant="h6"
                                 color={colors.grey[400]}
@@ -248,7 +256,7 @@ const ProSidebar = (props: any) => {
                                                 .then(() => {
                                                     cookies.remove('user')
                                                     cookies.remove('password')
-                                                    cookies.remove("user_id");
+                                                    cookies.remove('user_id')
                                                     window.location.reload()
                                                 })
                                         }}

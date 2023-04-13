@@ -19,6 +19,8 @@ import Stock from '../../components/stock/Stock'
 import {ColorModeContext, tokens} from '../../theme'
 import DisplayGroup from './DisplayGroup'
 import {ThemeProvider} from '@emotion/react'
+import {type} from 'os'
+import {PropaneSharp} from '@mui/icons-material'
 
 // TODO:
 // more info button (noGutter?)
@@ -28,7 +30,13 @@ import {ThemeProvider} from '@emotion/react'
 // font color on cards.. probably a theme thing.
 // OH CRAP the space-between makes them go to the sides there are 2 per line.. gotta fix sizing..
 
-const Watchlist = () => {
+type WatchlistProps = {
+    // name: string
+    wl_ID: number
+}
+
+// const Watchlist = (props:WatchlistProps) => {
+const Watchlist = (props: WatchlistProps) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
@@ -68,7 +76,8 @@ const Watchlist = () => {
                             color: colors.green[500],
                         }}
                     >
-                        Watchlist Name Here
+                        {/* {props.name} */}
+                        Watchlist Name
                     </Typography>
                     <FormGroup>
                         <Stack direction="row" spacing={1} alignItems="center">
@@ -93,9 +102,6 @@ const Watchlist = () => {
                             </Typography>
                         </Stack>
                     </FormGroup>
-                </Box>
-                <Box>
-                    <Typography>list of watchlists</Typography>
                 </Box>
                 {gridView ? (
                     <Box

@@ -38,14 +38,13 @@ function App() {
     }
     useEffect(() => {
         if (!initialLogin && loggedIn) {
-            navigate('/dashboard')
+            navigate('/')
         }
         setInitialLogin(true)
     }, [])
 
     return (
         <>
-            {/* <ColorModeContext.Provider value = {{toggleColorMode}}> */}
             <ColorModeContext.Provider value={colorMode}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
@@ -76,6 +75,7 @@ function App() {
                                         path="/account"
                                         element={<AccountManagement />}
                                     />
+
                                     {/* <Route path="*" element={<NotFound />} /> */}
                                 </Routes>
                             </Box>
