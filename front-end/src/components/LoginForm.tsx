@@ -173,9 +173,8 @@ const cookies = new Cookies();
                             setUsernameHelperText("")
                             setPasswordTextFieldError(false)
                             setPasswordHelperText("")
-                            
             
-                            if(response.data['message']=='Invalid credentials'){
+                            if(response.data[0]['message']=='Invalid credentials'){
                               setUsernameValidated(false)
                               setUsernameTextFieldError(true)
                               setUsernameHelperText("Username doesn't exist")
