@@ -173,7 +173,6 @@ const cookies = new Cookies();
                             setUsernameHelperText("")
                             setPasswordTextFieldError(false)
                             setPasswordHelperText("")
-                            console.log(response)
             
                             if(response.data[0]['message']=='Invalid credentials'){
                               setUsernameValidated(false)
