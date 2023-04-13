@@ -90,15 +90,6 @@ const Dashboard = () => {
                     )
                 })}
             </List>
-            <Box sx={{ml: 2}}>
-                {userWatchlists.map((_userWatchlists, key) => {
-                    return (
-                        <Typography key={key}>
-                            {userWatchlists[key][2]}
-                        </Typography>
-                    )
-                })}
-            </Box>
             {watchlistSelected.selected && (
                 <Watchlist wl_ID={watchlistSelected['wl_ID']} />
             )}

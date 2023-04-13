@@ -1,11 +1,5 @@
-import {
-    Box,
-    FormGroup,
-    Stack,
-    Typography,
-    styled,
-    useTheme,
-} from '@mui/material'
+import {ThemeProvider} from '@emotion/react'
+import {Box, FormGroup, Stack, Typography, useTheme} from '@mui/material'
 import Paper from '@mui/material/Paper'
 import Switch from '@mui/material/Switch'
 import Table from '@mui/material/Table'
@@ -18,9 +12,7 @@ import {useContext, useEffect, useState} from 'react'
 import Stock from '../../components/stock/Stock'
 import {ColorModeContext, tokens} from '../../theme'
 import DisplayGroup from './DisplayGroup'
-import {ThemeProvider} from '@emotion/react'
-import {type} from 'os'
-import {PropaneSharp} from '@mui/icons-material'
+import Cookies from 'universal-cookie'
 
 // TODO:
 // more info button (noGutter?)
@@ -37,6 +29,7 @@ type WatchlistProps = {
 
 // const Watchlist = (props:WatchlistProps) => {
 const Watchlist = (props: WatchlistProps) => {
+    const cookies = new Cookies()
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
@@ -49,15 +42,19 @@ const Watchlist = (props: WatchlistProps) => {
 
     async function fetchWatchlistAssets() {
         try {
-            // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
             const response = await fetch(
-                `http://127.0.0.1:8080/populateWatchlist?user_ID=27&wl_ID=5`,
+                // `http://127.0.0.1:8080/populateWatchlist?user_ID=27&wl_ID=${props.wl_ID}`,
+                `http://127.0.0.1:8080/populateWatchlist?user_ID=${cookies.get(
+                    'user_id'
+                )}&wl_ID=${props.wl_ID}`,
                 {}
             ).then((response) => {
                 response.json().then((json) => {
                     setStocks(json)
                 })
             })
+            cookies.get('user_id')
+            console.log(cookies.get('user_id'))
         } catch (err) {
             console.log(err)
         }
