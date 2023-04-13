@@ -81,14 +81,16 @@ class UserService:
             query = "SELECT user_id FROM USERS WHERE username = %s AND password = %s"
             cursor.execute(query, (username, hashpass))
             result = cursor.fetchall()
-            if cursor.rowcount == 1:
-                response = {"message": "Logged in","user_id":result[0][0]}
-                cnx.close()
-                return response, 200
-            else:
+            if (not result):
                 response = {"message": "Invalid credentials"}
                 cnx.close()
                 return response, 200
+                
+            else:
+                response = {"message": "Logged in","user_id":result[0][0]}
+                cnx.close()
+                return response, 200
+                
         except Error as e:
             print("Error while connecting to MySQL", e)
             #log if any errors happen with connection
