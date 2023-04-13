@@ -236,7 +236,7 @@ export default function LoginForm(props: any) {
                                             })
                                             cookies.set(
                                                 'user_id',
-                                                response.data['user_id']
+                                                response.data[0]['user_id']
                                             )
                                             props.close()
                                             props.login()
