@@ -11,11 +11,17 @@ const Dashboard = () => {
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
+    const [wlUpdated, setWLUpdated] = useState(false)
+
+    const handleUpdateWL = () =>{
+        setWLUpdated(!wlUpdated)
+    } 
+
     const cookies = new Cookies()
 
     useEffect(() => {
         fetchUserWatchlists()
-    }, [])
+    }, [wlUpdated])
 
     async function fetchUserWatchlists() {
         try {
@@ -33,6 +39,7 @@ const Dashboard = () => {
             console.log(err)
         }
     }
+
 
     const [watchlistSelected, setWatchlistSelected] = useState(0)
 
@@ -82,7 +89,7 @@ const Dashboard = () => {
                     )
                 })}
             </List>
-            <Watchlist wl_ID={watchlistSelected} wl_name={wl_name} />
+            <Watchlist wl_ID={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL}/>
         </Box>
     )
 }

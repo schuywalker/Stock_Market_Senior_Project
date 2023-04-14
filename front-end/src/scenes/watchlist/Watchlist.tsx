@@ -36,6 +36,7 @@ import Searchbar from '../../components/UI/Searchbar'
 type WatchlistProps = {
     wl_name: string
     wl_ID: number
+    wlUpdated: any
 }
 
 // const Watchlist = (props:WatchlistProps) => {
@@ -86,7 +87,7 @@ const Watchlist = (props: WatchlistProps) => {
     const [gridView, setGridView] = useState<boolean>(true)
 
     const [newWLName, setNewWLName] = useState('')
-    async function postNewWatchlist() {
+    async function postNewWatchlist(wlUpdated: any) {
         console.log(newWLName)
         handleClose1()
         const response = await fetch(
@@ -97,8 +98,10 @@ const Watchlist = (props: WatchlistProps) => {
         ).then((response) => {
             response.json().then((json) => {
                 console.log(json)
+                wlUpdated()
             })
         })
+
     }
 
     // async function postAddTickers()
@@ -133,7 +136,7 @@ const Watchlist = (props: WatchlistProps) => {
                         />
                         <Button
                             sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => postNewWatchlist()}
+                            onClick={() => postNewWatchlist(props.wlUpdated)}
                         >
                             Submit
                         </Button>
