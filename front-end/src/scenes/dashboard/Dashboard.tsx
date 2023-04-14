@@ -17,6 +17,7 @@ const Dashboard = () => {
     const theme = useTheme()
 
     const [userWatchlists, setUserWatchlists] = useState([])
+    const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
     const cookies = new Cookies()
 
@@ -26,7 +27,6 @@ const Dashboard = () => {
 
     async function fetchUserWatchlists() {
         try {
-            // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
             const response = await fetch(
                 `http://127.0.0.1:8080/getUserWatchlists?user_ID=${cookies.get(
                     'user_id'
@@ -41,7 +41,6 @@ const Dashboard = () => {
             console.log(err)
         }
     }
-    ////////// LINE 22 hard coded user_ID
 
     const [watchlistSelected, setWatchlistSelected] = useState(0)
 
@@ -50,11 +49,9 @@ const Dashboard = () => {
     function handleLoadingWatchlist(wl_ID: number) {
         setShowWatchlist(true)
         setWatchlistSelected(wl_ID)
+        console.log(userWatchlists[wl_ID][2])
+        set_wl_name(userWatchlists[wl_ID][2])
     }
-
-    // useEffect(() => {
-    //     console.log(watchlistSelected, 'watchlistSelected')
-    // }, [watchlistSelected])
 
     return (
         <Box>
@@ -91,8 +88,7 @@ const Dashboard = () => {
                     )
                 })}
             </List>
-
-            <Watchlist wl_ID={watchlistSelected} />
+            <Watchlist wl_ID={watchlistSelected} wl_name={wl_name} />
         </Box>
     )
 }

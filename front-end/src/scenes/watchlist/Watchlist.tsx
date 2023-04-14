@@ -23,8 +23,8 @@ import Cookies from 'universal-cookie'
 // OH CRAP the space-between makes them go to the sides there are 2 per line.. gotta fix sizing..
 
 type WatchlistProps = {
-    // name: string
     wl_ID: number
+    wl_name: string
 }
 
 // const Watchlist = (props:WatchlistProps) => {
@@ -39,6 +39,7 @@ const Watchlist = (props: WatchlistProps) => {
     useEffect(() => {
         fetchWatchlistAssets()
         console.log(props.wl_ID, 'wl_ID')
+        console.log('stocks in Watchlist', stocks)
     }, [props.wl_ID])
 
     async function fetchWatchlistAssets() {
@@ -65,7 +66,7 @@ const Watchlist = (props: WatchlistProps) => {
     return (
         <>
             <Box sx={{mx: '3%'}}>
-                <Box display="flex" sx={{my: 2}}>
+                <Box display="flexgrow" sx={{my: 2}}>
                     <Typography
                         sx={{
                             flexGrow: 1,
@@ -73,8 +74,7 @@ const Watchlist = (props: WatchlistProps) => {
                             color: colors.green[500],
                         }}
                     >
-                        {/* {props.name} */}
-                        Watchlist Name
+                        {props.wl_name}
                     </Typography>
                     <FormGroup>
                         <Stack direction="row" spacing={1} alignItems="center">
@@ -105,7 +105,6 @@ const Watchlist = (props: WatchlistProps) => {
                         sx={{
                             display: 'flex',
                             flexWrap: 'wrap',
-
                             m: 1,
                             justifyContent: 'flex-start',
                         }}
