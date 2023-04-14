@@ -66,6 +66,7 @@ const Dashboard = () => {
                     '& ul': {padding: 0},
                     m: '3%',
                     itemSize: '46',
+                    // display: 'inline',
                 }}
             >
                 {userWatchlists.map((_userWatchlists, key) => {
