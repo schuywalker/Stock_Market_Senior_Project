@@ -33,7 +33,7 @@ const CustomModal = styled(Modal)({
 
             validationFunction: The stateless function to validate if the new input is correct
 
-            errorMessage: Optional string to display as an error message if the field is wrong Defaults
+            errorMessage: Optional string to display as an error message if the field is wrong. Defaults
                           to invalid if nothing is provided
         
 
@@ -50,7 +50,7 @@ const CustomModal = styled(Modal)({
 
             endpoint: The endpoint starting with  /<endpoint_name> 
 
-            errorMessage: Optional string to display as an error message if the field is wrong. 
+            errorMessage: String to display as an error message if the field is wrong. 
 */
 type FieldProps={
     fieldName: string
@@ -76,9 +76,6 @@ type ModalFieldProps={
         - Have the field change display for input that is invalid and display a message stating this fact
             *Reference LoginForm/SignUpForm for what will be needed here. We may need to pass another prop
              which is the error message if we don't just want a generic one.
-
-        - Call the backend if the input is valid and perform the necessary updates. Right now it
-          just updates the field's displayed value and closes the modal
 
         - Styling
 */
@@ -184,12 +181,6 @@ const Field: React.FunctionComponent<FieldProps> = ({
 }
 /*
     Component which handles changing a user's information
-    TO-DO:
-        - Styling
-        - Create all of the fields for different parts of the user's information
-        - Hook to backend, we need to read in the values initially so the component knows what to display
-        - Create all of the state variables/methods for the fields
-        - Create the validation functions for the fields
 */
 
 const AccountManagementStyle = {
@@ -201,14 +192,6 @@ const AccountManagementStyle = {
 }
 
 export default function AccountManagement(props:any){
-    /*
-        Need to get user info to display from backend
-        When a field is updated, the corresponding field in the database needs updated as well
-        Some fields need additional functionality such as:
-            -USERNAME: Updates the cookie with the new user name for the site and we may
-                        need to find a way to change state of the sidebar
-            -PASSWORD: 
-    */
 
    //State variables/functions
    const[rendered, setRendered] = React.useState(false)
