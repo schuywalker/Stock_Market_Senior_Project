@@ -1,16 +1,14 @@
 import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
-import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
+import { Box, Button, Link, Modal, TextField, Typography, styled, useTheme } from '@mui/material';
 import {getUserData,alterUsername,alterUserFirstName,alterUserLastName,alterUserEmail} from '../config/WebcallAPI'
+import {tokens} from '../theme'
 
 const cookies = new Cookies();
+
 /*
     Styled Modal so the backdrop covers the whole screen and is slightly transparent
-    TO-DO:
-        - Integrate Schuyler's theme/color file instead of the hardcoded value I have.
-          It is currently hardcoded because it was the first solution I found where I could set
-          the opacity and color
 */
 const CustomModal = styled(Modal)({
     '.MuiBackdrop-root': {
@@ -18,9 +16,12 @@ const CustomModal = styled(Modal)({
       top: '0%',
       height: "100vh",
       width: "100vw",
-      backgroundColor: 'rgba(125,125,125,0.2)'//Grey backdrop with 20% opacity
+      backgroundColor: 'rgba(10,10,10,0.5)'//Grey backdrop with 20% opacity
+      
     }
   });
+
+  
 /*
     Props for the custom components(DONE Unless more props become necessary)
 
@@ -73,9 +74,6 @@ type ModalFieldProps={
 /*
     Component to display a modal dialog for a user to change a given field
     TO-DO:
-        - Have the field change display for input that is invalid and display a message stating this fact
-            *Reference LoginForm/SignUpForm for what will be needed here. We may need to pass another prop
-             which is the error message if we don't just want a generic one.
 
         - Styling
 */
@@ -108,13 +106,15 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             >
-                    <Box sx={{display:'flex', flexdirection:'row',border:'1px solid white', background:'black', width:'fit-content',padding:1}}>
+                    <Box sx={{display:'flex', flexdirection:'row', background:'black', width:'fit-content',padding:1}}>
                         <TextField error = {showError} helperText={errorText} InputProps={{
                                   style: {fontSize:16}
-                            }} defaultValue={displayValue} onChange={(event)=>{
+                            }} FormHelperTextProps ={{style:{fontSize:10}}} defaultValue={displayValue} onChange={(event)=>{
                             newValue = event.target.value;
                         }}/>
-                        <Button sx={{backgroundColor:'white', margin:1}}
+                        <Button sx={{height: "100%",backgroundColor:"white", margin:1,marginTop:2,'&:hover': {
+                                    background: 'grey', color: 'white',
+                                    },}}
                         onClick={async ()=>{
                             if(validationFunction(newValue)){
                                 await axios.post(endpoint+newValue).then((response)=>{
@@ -146,8 +146,6 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
 }
 /*
     Component to display one part of a user's info
-    TO-DO:
-        - Link to Schuyler's Color Sheet
 */
 const FieldStyle={
     display: "flex",
@@ -260,10 +258,10 @@ export default function AccountManagement(props:any){
         return(
             <div>
                 <Box sx={AccountManagementStyle}>
-                    <Field errorMessage='test' fieldName='Username' endpoint={alterUsername(username)} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field errorMessage='Invalid Username' fieldName='Username' endpoint={alterUsername(username)} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
                     <Field fieldName='First Name' endpoint={alterUserFirstName(username)} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
                     <Field fieldName = 'Last Name' endpoint={alterUserLastName(username)} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
-                    <Field fieldName = 'Email' endpoint={alterUserEmail(username)} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                    <Field errorMessage='Invalid Email' fieldName = 'Email' endpoint={alterUserEmail(username)} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
                 </Box>
             </div>
 
