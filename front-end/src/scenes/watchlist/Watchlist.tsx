@@ -101,6 +101,20 @@ const Watchlist = (props: WatchlistProps) => {
                 wlUpdated()
             })
         })
+    }
+
+    async function delWatchlist(wlUpdated: any) {
+        console.log(newWLName)
+        handleClose4()
+        const response = await fetch(
+            `http://127.0.0.1:8080/deleteWatchlist?wl_ID=${props.wl_ID}`,
+            {}
+        ).then((response) => {
+            response.json().then((json) => {
+                console.log(json)
+                wlUpdated()
+            })
+        })
 
     }
 
@@ -122,8 +136,9 @@ const Watchlist = (props: WatchlistProps) => {
                     <Box sx={modalStyle}>
                         <Typography
                             id="modal-modal-title"
-                            variant="h6"
+                            variant="h4"
                             component="h2"
+                            sx={{marginBottom: 1}}
                         >
                             Create New Watchlist
                         </Typography>
@@ -187,6 +202,7 @@ const Watchlist = (props: WatchlistProps) => {
                             id="modal-modal-title"
                             variant="h6"
                             component="h2"
+                            sx={{marginBottom: 1}}
                         >
                             Delete Tickers
                         </Typography>
@@ -207,15 +223,31 @@ const Watchlist = (props: WatchlistProps) => {
                 >
                     <Box sx={modalStyle}>
                         <Typography
-                            id="modal-modal-title"
-                            variant="h6"
-                            component="h2"
+                            
+                            variant="h4"
+                            
+                            sx={{marginBottom: 1}}
                         >
                             Delete Watchlist
+                            
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{mt: 2}}>
-                            Remove this watchlist
+                        <Typography
+                            fontSize="16px"
+                        >
+                            Are you sure you want to delete watchlist "{props.wl_name}"?
                         </Typography>
+                        <Button
+                            sx={{backgroundColor: 'white', margin: 1}}
+                            onClick={() => delWatchlist(props.wlUpdated)}
+                        >
+                            Yes
+                        </Button>
+                        <Button
+                            sx={{backgroundColor: 'white', margin: 1}}
+                            onClick={() => handleClose4()}
+                        >
+                            No
+                        </Button>
                     </Box>
                 </Modal>
             </Box>
@@ -228,8 +260,7 @@ const Watchlist = (props: WatchlistProps) => {
                             color: colors.green[500],
                         }}
                     >
-                        {/* {props.name} */}
-                        Watchlist Name
+                    {props.wl_name}
                     </Typography>
                     <FormGroup>
                         <Stack direction="row" spacing={1} alignItems="center">
