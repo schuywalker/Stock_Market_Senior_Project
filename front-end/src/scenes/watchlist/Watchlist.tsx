@@ -46,6 +46,8 @@ const Watchlist = (props: WatchlistProps) => {
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
 
+    const[watchlistAdd,setWatchlistAdd] = useState([])
+
     const [stocks, setStocks] = useState<DisplayGroup[]>([])
     const [open1, setOpen1] = useState(false)
     const [open2, setOpen2] = useState(false)
@@ -87,6 +89,7 @@ const Watchlist = (props: WatchlistProps) => {
     const [gridView, setGridView] = useState<boolean>(true)
 
     const [newWLName, setNewWLName] = useState('')
+
     async function postNewWatchlist(wlUpdated: any) {
         console.log(newWLName)
         handleClose1()
@@ -103,6 +106,18 @@ const Watchlist = (props: WatchlistProps) => {
         })
     }
 
+    async function addTickersToWL(wlAddTickers: String) {
+        handleClose2()
+        const response = await fetch(
+            `http://127.0.0.1:8080/addTickersToWatchlist?wl_ID=${props.wl_ID}&&user_id=${cookies.get('user_id')}&&returnWL=True&&tickers=${wlAddTickers}`,
+            {}
+        ).then((response) => {
+            response.json().then((json) => {
+                console.log(json)
+            })
+        })
+    }
+
     async function delWatchlist(wlUpdated: any) {
         console.log(newWLName)
         handleClose4()
@@ -115,10 +130,7 @@ const Watchlist = (props: WatchlistProps) => {
                 wlUpdated()
             })
         })
-
     }
-
-    // async function postAddTickers()
 
     return (
         <>
@@ -164,15 +176,21 @@ const Watchlist = (props: WatchlistProps) => {
                 <Modal open={open2} onClose={handleClose2}>
                     <Box sx={modalStyle}>
                         <Box sx={{m: 1}}>
-                            <Typography
-                                id="modal-title"
-                                sx={{fontSize: theme.typography.h4}}
+                        <Typography
+                                variant="h4"
+                                sx={{marginBottom: 1}}
                             >
                                 Add Tickers
                             </Typography>
+                            <Typography
+                                fontSize="16px"
+                            >
+                                Add tickers to "{props.wl_name}"
+                            </Typography>
                         </Box>
                         <Box sx={{display: 'flex'}}>
-                            <Searchbar />
+                            
+                            <Searchbar addValueFunction = {setWatchlistAdd}/>
                             <Button
                                 variant="contained"
                                 sx={{
@@ -180,7 +198,7 @@ const Watchlist = (props: WatchlistProps) => {
                                     m: 1,
                                 }}
                                 // onClick={() => {postAddTickers(watchlistAdditions)}}
-                                onClick={() => handleClose2()}
+                                onClick={() => addTickersToWL(watchlistAdd.toString().toUpperCase())}
                             >
                                 Submit
                             </Button>
@@ -198,17 +216,33 @@ const Watchlist = (props: WatchlistProps) => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={modalStyle}>
-                        <Typography
-                            id="modal-modal-title"
-                            variant="h6"
-                            component="h2"
-                            sx={{marginBottom: 1}}
-                        >
-                            Delete Tickers
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{mt: 2}}>
-                            Enter tickers you want to remove from this watchlist
-                        </Typography>
+                        <Box sx={{m: 1}}>
+                            <Typography
+                                variant="h4"
+                                sx={{marginBottom: 1}}
+                            >
+                                Delete Tickers
+                            </Typography>
+                            <Typography
+                                fontSize="16px"
+                            >
+                                Delete tickers from "{props.wl_name}"
+                            </Typography>
+                        </Box>
+                        <Box sx={{display: 'flex'}}>
+                            <Searchbar />
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    color: colors.green[400],
+                                    m: 1,
+                                }}
+                                // onClick={() => {delTickers(watchlistAdditions)}}
+                                onClick={() => handleClose3()}
+                            >
+                                Submit
+                            </Button>
+                        </Box>
                     </Box>
                 </Modal>
                 {/* DELETE WL */}
@@ -223,13 +257,10 @@ const Watchlist = (props: WatchlistProps) => {
                 >
                     <Box sx={modalStyle}>
                         <Typography
-                            
                             variant="h4"
-                            
                             sx={{marginBottom: 1}}
                         >
                             Delete Watchlist
-                            
                         </Typography>
                         <Typography
                             fontSize="16px"

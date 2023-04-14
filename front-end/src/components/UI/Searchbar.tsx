@@ -10,12 +10,16 @@ import {
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import sp100 from '../../assets/sp100'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
-const Searchbar = () => {
+const Searchbar = (props:any) => {
     const theme = useTheme()
+    const addToWatchlistFunction = props.addValueFunction
 
     const [watchlistAdditions, setWatchlistAdditions] = useState<string[]>([])
+    useEffect(() => {
+        addToWatchlistFunction(watchlistAdditions)
+    }, [watchlistAdditions])
 
     return (
         <>
@@ -39,7 +43,9 @@ const Searchbar = () => {
                     sx={{flex: 1, border: 0}}
                     freeSolo
                     options={sp100.map((option) => option.ticker)}
-                    onChange={(e, value) => setWatchlistAdditions(value)}
+                    onChange={(e, value) => {setWatchlistAdditions(value)
+                    
+                    }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -49,6 +55,9 @@ const Searchbar = () => {
                                 borderColor: 'transparent',
                             }}
                             label="Enter Tickers to Add"
+                            onChange={(event)=>{
+                                
+                            }}
                         />
                     )}
                 />

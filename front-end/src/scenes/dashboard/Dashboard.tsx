@@ -54,7 +54,7 @@ const Dashboard = () => {
 
     return (
         <Box>
-            <Searchbar />
+            {/* <Searchbar /> */}
             <List
                 sx={{
                     width: '100%',
