@@ -23,6 +23,7 @@ import {ColorModeContext, tokens} from '../../theme'
 import DisplayGroup from './DisplayGroup'
 import Cookies from 'universal-cookie'
 import modalStyle from './WatchlistStyles'
+import Searchbar from '../../components/UI/Searchbar'
 
 // TODO:
 // more info button (noGutter?)
@@ -100,9 +101,12 @@ const Watchlist = (props: WatchlistProps) => {
         })
     }
 
+    // async function postAddTickers()
+
     return (
         <>
             <Box sx={{margin: 2}}>
+                {/* CREATE WL */}
                 <Button variant="contained" onClick={handleOpen1}>
                     Create Watchlist
                 </Button>
@@ -135,28 +139,37 @@ const Watchlist = (props: WatchlistProps) => {
                         </Button>
                     </Box>
                 </Modal>
+                {/* ADD TICKERS */}
                 <Button variant="contained" onClick={handleOpen2}>
                     Add Tickers
                 </Button>
-                <Modal
-                    open={open2}
-                    onClose={handleClose2}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
+                <Modal open={open2} onClose={handleClose2}>
                     <Box sx={modalStyle}>
-                        <Typography
-                            id="modal-modal-title"
-                            variant="h6"
-                            component="h2"
-                        >
-                            Add Tickers
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{mt: 2}}>
-                            Enter tickers you want to add to this watchlist
-                        </Typography>
+                        <Box sx={{m: 1}}>
+                            <Typography
+                                id="modal-title"
+                                sx={{fontSize: theme.typography.h4}}
+                            >
+                                Add Tickers
+                            </Typography>
+                        </Box>
+                        <Box sx={{display: 'flex'}}>
+                            <Searchbar />
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    color: colors.green[400],
+                                    m: 1,
+                                }}
+                                // onClick={() => {postAddTickers(watchlistAdditions)}}
+                                onClick={() => handleClose2()}
+                            >
+                                Submit
+                            </Button>
+                        </Box>
                     </Box>
                 </Modal>
+                {/* DELETE TICKERS */}
                 <Button variant="contained" onClick={handleOpen3}>
                     Delete Tickers
                 </Button>
@@ -179,6 +192,7 @@ const Watchlist = (props: WatchlistProps) => {
                         </Typography>
                     </Box>
                 </Modal>
+                {/* DELETE WL */}
                 <Button variant="contained" onClick={handleOpen4}>
                     Delete Watchlist
                 </Button>
@@ -244,7 +258,6 @@ const Watchlist = (props: WatchlistProps) => {
                         sx={{
                             display: 'flex',
                             flexWrap: 'wrap',
-
                             m: 1,
                             justifyContent: 'flex-start',
                         }}

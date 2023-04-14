@@ -30,7 +30,6 @@ class WatchlistService:
     
     @staticmethod
     def createWatchlists(user_ID, watchlistName:str, *tickers):
-        # TODO: *tickers in args
         ret = None
         dbc = db_controller()
         try:
