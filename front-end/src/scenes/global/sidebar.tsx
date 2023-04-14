@@ -16,6 +16,8 @@ import axios from 'axios'
 import React from 'react'
 import {deleteUser} from '../../config/WebcallAPI'
 
+import ConfirmationModal from '../../components/ConfirmationModal'
+
 type itemProps = {
     title: string
     link: React.ReactElement
@@ -67,6 +69,16 @@ const ProSidebar = (props: any) => {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
     const[loggedIn, setLoggedIn] = useState(props.loggedIn)
+    const[showModal, setShowModal] = useState(false)
+    const[userURL, setUserURL] = useState("/analyst-calls")
+
+    const handleClick = () =>{
+        setShowModal(true)
+    }
+
+
+    
+
     React.useEffect(()=>{
         if(props.loggedIn){
             setLoggedIn(true)
@@ -191,7 +203,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Analyst Calls"
-                                link={<Link to="/analyst-calls" />}
+                                link={<Link to="/analyst-calls" onClick={() => setUserURL('/analyst-calls')}/>}
                                 icon={<PhoneIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -205,7 +217,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="View Watchlists"
-                                link={<Link to="/watchlist" />}
+                                link={<Link to="/watchlist" onClick={() => setUserURL('/watchlist')}/>}
                                 icon={<VisibilityIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -213,21 +225,21 @@ const ProSidebar = (props: any) => {
                             {/* <Select>Watchlists</Select> */}
                             <Item
                                 title="Create Watchlist"
-                                link={<Link to="/watchlist" />}
+                                link={<Link to="/watchlist" onClick={() => setUserURL('/watchlist')}/>}
                                 icon={<CreateIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
                                 title="Edit Watchlist"
-                                link={<Link to="/watchlist" />}
+                                link={<Link to="/watchlist" onClick={() => setUserURL('/watchlist')}/>}
                                 icon={<IsoIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
                             />
                             <Item
                                 title="Delete Watchlist"
-                                link={<Link to="/watchlist" />}
+                                link={<Link to="/watchlist" onClick={() => setUserURL('/watchlist')}/>}
                                 icon={<ClearIcon sx={{fontSize: 20}} />}
                                 selected={selected}
                                 setSelected={setSelected}
@@ -241,7 +253,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Manage Account"
-                                link={<Link to="/account" />}
+                                link={<Link to="/account" onClick= {() =>setUserURL('/account')} />}
                                 icon={
                                     <ManageAccountsIcon sx={{fontSize: 20}} />
                                 }
@@ -252,17 +264,9 @@ const ProSidebar = (props: any) => {
                                 title="Delete Account"
                                 link={
                                     <Link
-                                        to=""
-                                        onClick={() => {
-                                            setLoggedIn(false)
-                                            let user = cookies.get('user')
-                                            cookies.remove('user')
-                                            cookies.remove('password')
-                                            cookies.remove("user_id");
-                                            props.loginFunction(false)
-                                            axios.post(deleteUser(user))
-                                        }}
-                                    ></Link>
+                                        to={userURL}
+                                        onClick={() => {setShowModal(!showModal)}
+                                }></Link>
                                 }
                                 icon={<DeleteIcon sx={{fontSize: 20}} />}
                                 selected={selected}
@@ -271,6 +275,7 @@ const ProSidebar = (props: any) => {
                         </Box>
                     </Menu>
                 </Sidebar>
+                <ConfirmationModal open={showModal} onClose = {()=> setShowModal(false)} sidebarDisplay={(value:boolean)=> setLoggedIn(value) } loginFunction={props.loginFunction}/>
             </Box>
         </>
     )
