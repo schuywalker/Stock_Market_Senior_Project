@@ -241,7 +241,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Manage Account"
-                                link={<Link to="/account" />}
+                                link={<Link to="/account"/>}
                                 icon={
                                     <ManageAccountsIcon sx={{fontSize: 20}} />
                                 }
