@@ -15,7 +15,6 @@ import Cookies from 'universal-cookie'
 import axios from 'axios'
 import React from 'react'
 import {deleteUser} from '../../config/WebcallAPI'
-
 import ConfirmationModal from '../../components/ConfirmationModal'
 
 type itemProps = {
@@ -75,10 +74,6 @@ const ProSidebar = (props: any) => {
     const handleClick = () =>{
         setShowModal(true)
     }
-
-
-    
-
     React.useEffect(()=>{
         if(props.loggedIn){
             setLoggedIn(true)
@@ -253,11 +248,7 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Manage Account"
-<<<<<<< HEAD
                                 link={<Link to="/account" onClick= {() =>setUserURL('/account')} />}
-=======
-                                link={<Link to="/account"/>}
->>>>>>> c1dd2bcdb2ace6d370807181e68f771c00d640c6
                                 icon={
                                     <ManageAccountsIcon sx={{fontSize: 20}} />
                                 }
