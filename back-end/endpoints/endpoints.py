@@ -118,23 +118,24 @@ class deleteUser(Resource):
 
 class getUserData(Resource):
     def get(self):
-        return (UserService.getUserData(request.args["user"]))
+        return (UserService.getUserData(request.args["user"])),200
 
 
 class alterUserFirstName(Resource):
     def post(self):
-        print("reached it")
-        return (UserService.alterUserFirstName(request.args["firstName"], request.args["user"]))
+        return (UserService.alterUserFirstName(request.args["firstName"], request.args["user"])),200
 
 class alterUserLastName(Resource):
     def post(self):
-        return (UserService.alterUserLastName(request.args["lastName"], request.args["user"]))
+        return (UserService.alterUserLastName(request.args["lastName"], request.args["user"])),200
 
 class alterUserEmail(Resource):
     def post(self):
-        return (UserService.alterUserEmail(request.args["email"], request.args["user"]))
+        return (UserService.alterUserEmail(request.args["email"], request.args["user"])),200
 
 class alterUsername(Resource):
     def post(self):
-        print("reached it")
-        return (UserService.alterUsername(request.args["originalUser"], request.args["user"]))
+        if(UserService.isUserNameAvailable(request.args["user"])):
+           return (UserService.alterUsername(request.args["originalUser"], request.args["user"])),200
+        else:
+            return  {"message": "Username already exists"},400

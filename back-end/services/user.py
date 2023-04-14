@@ -110,7 +110,7 @@ class UserService:
             #Check if username already exists
             query = "SELECT username FROM USERS WHERE username = %s"
             cursor.execute(query, (username,))
-            result = cursor.fetchall()
+            cursor.fetchall()
             #check if username exists in database
             if cursor.rowcount == 0:
             #add the user if Username doesnt exist in db
@@ -160,4 +160,21 @@ class UserService:
             response = {"message": "Error while connecting to MySQL"}
             cnx.close()
             return response, 500
+        
+    @staticmethod
+    def isUserNameAvailable(username):
+        dbc = db_controller()
+        returnValue = True
+        try:
+            cnx, cursor = dbc.connect()
+            query = "SELECT username FROM USERS WHERE username = %s"
+            cursor.execute(query, (username,))
+            cursor.fetchall()
+            if(cursor.rowcount > 0):
+                returnValue = False
+            cnx.close()
+            return returnValue
+        except Error as e:
+            cnx.close()
+            return False
         

@@ -119,15 +119,22 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
                         }}/>
                         <Button sx={{backgroundColor:'white', margin:1}}
                         onClick={async ()=>{
-                            //Validate input. If value is the same, exit, otherwise reference SignUpForm for what to validate against
-                            //If valid, call backend, update value, call stateFunction, close modal
-                            //Else display the error
                             if(validationFunction(newValue)){
-                                setShowError(false)
-                                setErrorText("")
-                                await axios.post(endpoint+newValue)
-                                displayedValueFunction(newValue)
-                                onClose()
+                                await axios.post(endpoint+newValue).then((response)=>{
+                                    setShowError(false)
+                                    setErrorText("")
+                                    displayedValueFunction(newValue)
+                                    onClose()
+                                    
+                                }).catch((error)=>{
+                                    if(error.response.request.status ===400){
+                                        setShowError(true)
+                                        setErrorText(error.response.data['message'])
+                                    }
+                                    else console.log(error)
+                                    
+                                })
+                                
                             }
                             else{
                                 setShowError(true)
@@ -143,7 +150,7 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
 /*
     Component to display one part of a user's info
     TO-DO:
-        - Styling
+        - Link to Schuyler's Color Sheet
 */
 const FieldStyle={
     display: "flex",
@@ -209,22 +216,21 @@ export default function AccountManagement(props:any){
    const[firstName,setFirstName] = React.useState("");
    const[lastName,setLastName] = React.useState("");
    const[email,setEmail] = React.useState("");
-   const updateUsernameFunction = props.updateUsername;
+   const updateSiteUsernameFunction = props.updateUsername;
    
    React.useEffect(() => {
-    console.log("Initial use Effect")
             axios.get(getUserData(cookies.get('user'))).then((response)=>{
-            let data = response.data[0]
+            let data = response.data[0][0]
             
             let first_name = data[0]
             let last_name = data[1]
-            let username = data[2]
-            let email = data[3]
+            let user = data[2]
+            let e = data[3]
 
-            setUserName(username)
+            setUserName(user)
             setFirstName(first_name)
             setLastName(last_name)
-            setEmail(email)
+            setEmail(e)
             setRendered(true)
         }
     )
@@ -233,7 +239,7 @@ export default function AccountManagement(props:any){
    React.useEffect(()=>{
         if(username !== ""){
             cookies.set('user',username)
-            updateUsernameFunction(username)
+            updateSiteUsernameFunction(username)
         }
    },[username])
 
@@ -259,8 +265,9 @@ export default function AccountManagement(props:any){
     return false
    }
 
-   const validateEmail=(name:string)=>{
-    if(name.length >0 && name !== email){
+   const validateEmail=(e:string)=>{
+    let reg = /[a-zA-Z0-9].*@..*\.com/
+    if(e.length >0 && e !== email && reg.test(e)){
         return true
     }
     return false

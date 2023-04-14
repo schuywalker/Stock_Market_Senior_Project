@@ -132,8 +132,8 @@ export default function SignUpForm(props: any){
         
     }
     const validateEmail = (email:string)=>{
-      
-      if(email.length > 0){
+      let reg = /[a-zA-Z0-9].*@..*\.com/
+      if(email.length > 0 && reg.test(email)){
         setEmailValidated(true);
       }
       else{
@@ -227,8 +227,7 @@ export default function SignUpForm(props: any){
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="username_field" label="Username" variant="outlined" required error = {userTextFieldError} helperText = {usernameHelperText}
            onChange = {(event)=>{
             validateUserName(event.target.value)
-            if(userValidated){
-              setUsername(event.target.value)}
+            setUsername(event.target.value)
             }
             } 
             
@@ -236,32 +235,28 @@ export default function SignUpForm(props: any){
           <CustomTextField type='password' InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="password_field" label="Password" variant="outlined" required 
           error = {passwordTextFieldError} helperText = {passwordHelperText} onChange = {(event)=>{
             validatePassword(event.target.value)
-            if(passwordValidated){
-              setPass(event.target.value)}
+            setPass(event.target.value)
             }
             
             }/>
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="email_field" label="Email" variant="outlined" required 
          error = {emailTextFieldError} helperText = {emailHelperText} onChange = {(event)=>{
             validateEmail(event.target.value)
-            if(emailValidated){
-              setEmail(event.target.value)}
+            setEmail(event.target.value)   
             }
             
             }/>
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="firstname_field" label="First Name" variant="outlined" required 
           error = {firstNameTextFieldError} helperText = {firstNameHelperText} onChange = {(event)=>{
             validateFirstName(event.target.value)
-            if(firstNameValidated){
-              setFirst(event.target.value)}
-            }
+            setFirst(event.target.value)
+          }
             
             }/>
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="lastname_field" label="Last Name" variant="outlined" required 
           error = {lastNameTextFieldError} helperText = {lastNameHelperText} onChange = {(event)=>{
             validateLastName(event.target.value)
-            if(lastNameValidated){
-              setLast(event.target.value)}
+            setLast(event.target.value)
             }
             
             }/>
