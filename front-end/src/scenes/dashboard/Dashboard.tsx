@@ -1,19 +1,24 @@
 import {
+    Button,
     List,
     ListItem,
     ListItemButton,
     ListItemText,
     Typography,
+    colors,
     useTheme,
 } from '@mui/material'
 import {Box} from '@mui/system'
 import Watchlist from '../watchlist/Watchlist'
 import {useEffect, useState} from 'react'
+import Cookies from 'universal-cookie'
 
 const Dashboard = () => {
     const theme = useTheme()
 
     const [userWatchlists, setUserWatchlists] = useState([])
+
+    const cookies = new Cookies()
 
     useEffect(() => {
         fetchUserWatchlists()
@@ -23,7 +28,9 @@ const Dashboard = () => {
         try {
             // const response = await fetch(`http://127.0.0.1:8080/populateWatchlist?WL=${props.name}?userID=${userID}`, {}).then(
             const response = await fetch(
-                `http://127.0.0.1:8080/getUserWatchlists?user_ID=27`,
+                `http://127.0.0.1:8080/getUserWatchlists?user_ID=${cookies.get(
+                    'user_id'
+                )}`,
                 {}
             ).then((response) => {
                 response.json().then((json) => {
@@ -85,10 +92,7 @@ const Dashboard = () => {
                 })}
             </List>
 
-            {/* {showWatchlist && ( */}
             <Watchlist wl_ID={watchlistSelected} />
-            {/* <Watchlist wl_ID={watchlistSelected['wl_ID']} /> */}
-            {/* )} */}
         </Box>
     )
 }

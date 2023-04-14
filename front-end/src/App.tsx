@@ -38,7 +38,7 @@ function App() {
     }
     useEffect(() => {
         if (!initialLogin && loggedIn) {
-            navigate('/')
+            navigate('/dashboard')
         }
         setInitialLogin(true)
     }, [])
