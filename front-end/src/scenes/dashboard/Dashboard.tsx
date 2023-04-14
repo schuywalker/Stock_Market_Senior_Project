@@ -1,17 +1,9 @@
-import {
-    Button,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    Typography,
-    colors,
-    useTheme,
-} from '@mui/material'
+import {List, ListItem, ListItemButton, useTheme} from '@mui/material'
 import {Box} from '@mui/system'
-import Watchlist from '../watchlist/Watchlist'
 import {useEffect, useState} from 'react'
 import Cookies from 'universal-cookie'
+import Watchlist from '../watchlist/Watchlist'
+import Searchbar from '../../components/UI/Searchbar'
 
 const Dashboard = () => {
     const theme = useTheme()
@@ -55,6 +47,7 @@ const Dashboard = () => {
 
     return (
         <Box>
+            <Searchbar />
             <List
                 sx={{
                     width: '100%',
@@ -77,7 +70,6 @@ const Dashboard = () => {
                         >
                             <ListItemButton
                                 onClick={() =>
-                                    // console.log(userWatchlists[key][0])
                                     handleLoadingWatchlist(
                                         Number(userWatchlists[key][0]),
                                         userWatchlists[key][2]
