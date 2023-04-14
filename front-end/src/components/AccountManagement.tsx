@@ -3,7 +3,6 @@ import axios from "axios";
 import Cookies from 'universal-cookie';
 import { Box, Button, Link, Modal, TextField, Typography, styled, useTheme } from '@mui/material';
 import {getUserData,alterUsername,alterUserFirstName,alterUserLastName,alterUserEmail} from '../config/WebcallAPI'
-import {tokens} from '../theme'
 
 const cookies = new Cookies();
 
@@ -73,9 +72,6 @@ type ModalFieldProps={
 
 /*
     Component to display a modal dialog for a user to change a given field
-    TO-DO:
-
-        - Styling
 */
 
 const ModalField: React.FunctionComponent<ModalFieldProps>=({

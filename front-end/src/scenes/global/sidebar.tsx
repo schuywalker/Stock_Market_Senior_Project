@@ -253,7 +253,11 @@ const ProSidebar = (props: any) => {
                             </Typography>
                             <Item
                                 title="Manage Account"
+<<<<<<< HEAD
                                 link={<Link to="/account" onClick= {() =>setUserURL('/account')} />}
+=======
+                                link={<Link to="/account"/>}
+>>>>>>> c1dd2bcdb2ace6d370807181e68f771c00d640c6
                                 icon={
                                     <ManageAccountsIcon sx={{fontSize: 20}} />
                                 }
