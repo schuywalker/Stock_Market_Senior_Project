@@ -46,11 +46,11 @@ const Dashboard = () => {
 
     const [showWatchlist, setShowWatchlist] = useState(false)
 
-    function handleLoadingWatchlist(wl_ID: number) {
+    function handleLoadingWatchlist(wl_ID: number, wl_name: string) {
         setShowWatchlist(true)
         setWatchlistSelected(wl_ID)
-        console.log(userWatchlists[wl_ID][2])
-        set_wl_name(userWatchlists[wl_ID][2])
+        console.log(wl_name)
+        set_wl_name(wl_name)
     }
 
     return (
@@ -78,7 +78,8 @@ const Dashboard = () => {
                                 onClick={() =>
                                     // console.log(userWatchlists[key][0])
                                     handleLoadingWatchlist(
-                                        Number(userWatchlists[key][0])
+                                        Number(userWatchlists[key][0]),
+                                        userWatchlists[key][2]
                                     )
                                 }
                             >
