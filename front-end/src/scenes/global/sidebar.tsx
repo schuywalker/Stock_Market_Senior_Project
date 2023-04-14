@@ -14,7 +14,7 @@ import PhoneIcon from '@mui/icons-material/Phone'
 import Cookies from 'universal-cookie'
 import axios from 'axios'
 import React from 'react'
-import {backendBaseAddress} from '../../config/globalVariables'
+import {deleteUser} from '../../config/WebcallAPI'
 
 type itemProps = {
     title: string
@@ -68,7 +68,9 @@ const ProSidebar = (props: any) => {
     const [selected, setSelected] = useState('Dashboard')
     const[loggedIn, setLoggedIn] = useState(props.loggedIn)
     React.useEffect(()=>{
-        if(props.loggedIn)setLoggedIn(true)
+        if(props.loggedIn){
+            setLoggedIn(true)
+        }
         else setLoggedIn(false)
     },[props.loggedIn])
 
@@ -155,7 +157,7 @@ const ProSidebar = (props: any) => {
                                         >
                                             {props.loggedIn
                                                 ? truncateString(
-                                                      cookies.get('user')
+                                                      props.username
                                                   )
                                                       .slice(0, 1)
                                                       .toUpperCase()
@@ -170,7 +172,7 @@ const ProSidebar = (props: any) => {
                                     >
                                         {props.loggedIn
                                             ? truncateString(
-                                                  cookies.get('user')
+                                                props.username
                                               )
                                             : ''}
                                     </Typography>
@@ -258,11 +260,7 @@ const ProSidebar = (props: any) => {
                                             cookies.remove('password')
                                             cookies.remove("user_id");
                                             props.loginFunction(false)
-                                            axios
-                                                .post(
-                                                    backendBaseAddress+'/deleteUser?user=' +
-                                                        user
-                                                )
+                                            axios.post(deleteUser(user))
                                         }}
                                     ></Link>
                                 }

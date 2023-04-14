@@ -18,20 +18,24 @@ function App() {
     const {theme, colorMode} = useMode()
     const[initialLogin, setInitialLogin] = useState(false);
     const [loggedIn,setLoggedIn] = useState((cookies.get("user")?true:false));//Need to check if cookie is valid and user/password is correct
+    const [username,setUsername] = useState("")
 
     const navigate = useNavigate();
     const handleLogin = (value: boolean)=>{
         if(!value){
             navigate("/")
+            setUsername("")
         }
         else{
             navigate("/analyst-calls")
+            setUsername(cookies.get('user'))
         }
         setLoggedIn(value)
     }
     useEffect(()=>{
         if(!initialLogin && loggedIn){
             navigate("/analyst-calls")
+            setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
     },[])
@@ -47,7 +51,7 @@ function App() {
                             <ResponsiveAppBar loginFunction={(value:boolean)=>handleLogin(value)} loggedIn = {loggedIn}/>
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
-                                    <ResponsiveSideBar loggedIn = {loggedIn} loginFunction = {(value:boolean)=>{handleLogin(value)}}/>
+                                    <ResponsiveSideBar loggedIn = {loggedIn} loginFunction = {(value:boolean)=>{handleLogin(value)}} username={username}/>
                                 </ProSidebarProvider>
 
                                 <Routes>
@@ -66,7 +70,7 @@ function App() {
                                     />
                                     <Route
                                         path="/account"
-                                        element={<AccountManagement />}
+                                        element={<AccountManagement updateUsername = {(val:string)=>setUsername(val)} />}
                                     />
                                     {/* <Route path="*" element={<NotFound />} /> */}
                                 </Routes>

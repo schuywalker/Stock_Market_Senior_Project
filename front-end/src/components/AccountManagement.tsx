@@ -2,7 +2,7 @@ import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
 import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
-import {backendBaseAddress} from '../config/globalVariables'
+import {getUserData,alterUsername,alterUserFirstName,alterUserLastName,alterUserEmail} from '../config/WebcallAPI'
 
 const cookies = new Cookies();
 /*
@@ -125,9 +125,8 @@ const ModalField: React.FunctionComponent<ModalFieldProps>=({
                             if(validationFunction(newValue)){
                                 setShowError(false)
                                 setErrorText("")
-                                await axios.post(backendBaseAddress+endpoint+newValue)
+                                await axios.post(endpoint+newValue)
                                 displayedValueFunction(newValue)
-                                cookies.set('user',newValue)
                                 onClose()
                             }
                             else{
@@ -210,9 +209,11 @@ export default function AccountManagement(props:any){
    const[firstName,setFirstName] = React.useState("");
    const[lastName,setLastName] = React.useState("");
    const[email,setEmail] = React.useState("");
+   const updateUsernameFunction = props.updateUsername;
    
    React.useEffect(() => {
-            axios.get(backendBaseAddress+"/getUserData?user="+cookies.get('user')).then((response)=>{
+    console.log("Initial use Effect")
+            axios.get(getUserData(cookies.get('user'))).then((response)=>{
             let data = response.data[0]
             
             let first_name = data[0]
@@ -228,6 +229,13 @@ export default function AccountManagement(props:any){
         }
     )
    },[]);//Only called on component mount since the dependencies are empty
+
+   React.useEffect(()=>{
+        if(username !== ""){
+            cookies.set('user',username)
+            updateUsernameFunction(username)
+        }
+   },[username])
 
    //Validation Functions
    const validateUsername= (name:string)=>{
@@ -262,10 +270,10 @@ export default function AccountManagement(props:any){
         return(
             <div>
                 <Box sx={AccountManagementStyle}>
-                    <Field errorMessage='test' fieldName='Username' endpoint={"/alterUsername?originalUser=" + username +"&user="} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                    <Field fieldName='First Name' endpoint={"/alterUserFirstName?user="+ username + "&firstName="} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
-                    <Field fieldName = 'Last Name' endpoint={"/alterUserLastName?user="+ username + "&lastName="} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
-                    <Field fieldName = 'Email' endpoint={"/alterUserEmail?user="+ username + "&email="} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                    <Field errorMessage='test' fieldName='Username' endpoint={alterUsername(username)} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field fieldName='First Name' endpoint={alterUserFirstName(username)} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                    <Field fieldName = 'Last Name' endpoint={alterUserLastName(username)} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                    <Field fieldName = 'Email' endpoint={alterUserEmail(username)} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
                 </Box>
             </div>
 

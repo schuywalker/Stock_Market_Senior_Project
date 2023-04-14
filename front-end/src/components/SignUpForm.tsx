@@ -2,11 +2,7 @@ import { Box, Button, Modal, TextField, Typography, styled } from '@mui/material
 import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
-import {backendBaseAddress} from '../config/globalVariables'
-
-const userEndPointConnection = axios.create({
-    baseURL: backendBaseAddress,
-})
+import {createUser} from '../config/WebcallAPI'
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -278,7 +274,7 @@ export default function SignUpForm(props: any){
           }}
            onClick={async()=>{
             if(canSubmit()){
-              await userEndPointConnection.post("/createUser?username="+username+"&password="+password+"&email="+email+"&first="+first+"&last="+last).then((response)=>{
+              await axios.post(createUser(username,password,email,first,last)).then((response)=>{
                 setUserTextFieldError(false)
                 setUsernameHelperText("")
                 setPasswordTextFieldError(false)

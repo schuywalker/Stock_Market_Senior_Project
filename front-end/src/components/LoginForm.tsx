@@ -2,11 +2,7 @@ import {Box, Button, Modal, TextField, Typography, styled} from '@mui/material'
 import * as React from 'react'
 import axios from 'axios'
 import Cookies from 'universal-cookie'
-import {backendBaseAddress} from '../config/globalVariables'
-
-const userEndPointConnection = axios.create({
-    baseURL: backendBaseAddress,
-})
+import {login} from '../config/WebcallAPI'
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -203,7 +199,7 @@ export default function LoginForm(props: any) {
                     }}
                     onClick={async()=>{
                         if(canSubmit()){
-                          await userEndPointConnection.post("/userLogin?username="+username+"&password="+password).then((response)=>{
+                          await axios.post(login(username,password)).then((response)=>{
                             setUsernameTextFieldError(false)
                             setUsernameHelperText("")
                             setPasswordTextFieldError(false)
