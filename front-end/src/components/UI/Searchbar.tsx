@@ -6,11 +6,17 @@ import {
     Paper,
     Stack,
     TextField,
+    useTheme,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import sp100 from '../../assets/sp100'
+import {useState} from 'react'
 
 const Searchbar = () => {
+    const theme = useTheme()
+
+    const [watchlistAdditions, setWatchlistAdditions] = useState<string[]>([])
+
     return (
         <>
             <Paper
@@ -21,6 +27,7 @@ const Searchbar = () => {
                     display: 'flex',
                     alignItems: 'center',
                     width: 'max',
+                    flexGrow: 1,
                 }}
             >
                 <IconButton type="button" sx={{p: '10px'}} aria-label="search">
@@ -32,12 +39,15 @@ const Searchbar = () => {
                     sx={{flex: 1, border: 0}}
                     freeSolo
                     options={sp100.map((option) => option.ticker)}
-                    onChange={(e, value) => console.log(value)}
+                    onChange={(e, value) => setWatchlistAdditions(value)}
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             variant="outlined"
-                            sx={{borderColor: 'transparent'}}
+                            sx={{
+                                fontSize: theme.typography.h3,
+                                borderColor: 'transparent',
+                            }}
                             label="Enter Tickers to Add"
                         />
                     )}
