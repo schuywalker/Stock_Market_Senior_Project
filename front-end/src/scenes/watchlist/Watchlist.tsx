@@ -5,6 +5,7 @@ import {
     FormGroup,
     Modal,
     Stack,
+    TextField,
     Typography,
     useTheme,
 } from '@mui/material'
@@ -83,6 +84,22 @@ const Watchlist = (props: WatchlistProps) => {
 
     const [gridView, setGridView] = useState<boolean>(true)
 
+    const [newWLName, setNewWLName] = useState('')
+    async function postNewWatchlist() {
+        console.log(newWLName)
+        handleClose1()
+        const response = await fetch(
+            `http://127.0.0.1:8080/createWatchlist?user_ID=${cookies.get(
+                'user_id'
+            )}&watchlistName=${newWLName}`,
+            {}
+        ).then((response) => {
+            response.json().then((json) => {
+                console.log(json)
+            })
+        })
+    }
+
     return (
         <>
             <Box sx={{margin: 2}}>
@@ -103,9 +120,19 @@ const Watchlist = (props: WatchlistProps) => {
                         >
                             Create New Watchlist
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{mt: 2}}>
-                            Enter the name of your new watchlist
-                        </Typography>
+                        <Typography> </Typography>
+                        <TextField
+                            id="outlined-basic"
+                            label="New Watchlist Name"
+                            variant="outlined"
+                            onChange={(e) => setNewWLName(e.target.value)}
+                        />
+                        <Button
+                            sx={{backgroundColor: 'white', margin: 1}}
+                            onClick={() => postNewWatchlist()}
+                        >
+                            Submit
+                        </Button>
                     </Box>
                 </Modal>
                 <Button variant="contained" onClick={handleOpen2}>
