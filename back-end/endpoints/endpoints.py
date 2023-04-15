@@ -139,3 +139,11 @@ class alterUsername(Resource):
            return (UserService.alterUsername(request.args["originalUser"], request.args["user"])),200
         else:
             return  {"message": "Username already exists"},400
+        
+class checkPassword(Resource):
+    def get(self):
+        return UserService.checkPassword(request.args['user'],request.args['password'])
+
+class alterPassword(Resource):
+    def post(self):
+        return UserService.alterPassword(request.args['user'],request.args['password'])

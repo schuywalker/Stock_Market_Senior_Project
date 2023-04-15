@@ -60,7 +60,6 @@ const ConfirmationModal: React.FunctionComponent<ModalFieldProps>=({
                                             cookies.remove("user_id");
                                             loginFunction(false)
                                             axios.post(deleteUser(user))
-                                            console.log("delete the user confirmed")
                                             onClose()
                                         }}>Confirm</Button>
                         

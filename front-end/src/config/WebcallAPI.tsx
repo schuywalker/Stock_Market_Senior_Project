@@ -24,3 +24,9 @@ export function alterUserLastName(username:string){
 export function alterUserEmail(username:string){
     return backendBaseAddress+"/alterUserEmail?user="+ username + "&email="
 }
+export function isCorrectPassword(username:string){
+    return backendBaseAddress+"/verifyPassword?user="+ username + "&password="
+}
+export function alterPassword(username:string){
+    return backendBaseAddress+"/alterPassword?user="+ username + "&password="
+}
