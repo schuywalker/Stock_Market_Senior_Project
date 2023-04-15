@@ -15,11 +15,29 @@ const CustomModal = styled(Modal)({
       top: '0%',
       height: "100vh",
       width: "100vw",
-      backgroundColor: 'rgba(10,10,10,0.5)'//Grey backdrop with 20% opacity
+      backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
       
     }
   });
-
+  /*
+  Styled text field so the outline and text of the text field is visible when edited
+  */
+  const CustomTextField = styled(TextField)({
+    '& label.Mui-focused': {
+      color: 'white',
+    },
+    '& label.Mui-error': {
+      color: '#f43414',
+    },
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
+      },
+      '&.Mui-focused.Mui-error fieldset': {
+        borderColor: '#f43414',
+      },
+    },
+  });
   
 /*
     Props for the custom components(DONE Unless more props become necessary)
@@ -115,12 +133,12 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
             onClose={onClose}
             >
                     <Box sx={{display:'flex', flexDirection:'column', background:'black', width:'fit-content',padding:1, rowGap:1}}>
-                        <TextField required error = {showOldError} helperText={oldErrorText} InputProps={{
+                        <CustomTextField required error = {showOldError} helperText={oldErrorText} InputProps={{
                                   style: {fontSize:16}
                             }} FormHelperTextProps ={{style:{fontSize:10}}} label="Original Password" onChange={(event)=>{
                                 originalPassword = event.target.value;
                         }}/>
-                        <TextField required error = {showNewError} helperText={newErrorText} InputProps={{
+                        <CustomTextField required error = {showNewError} helperText={newErrorText} InputProps={{
                                   style: {fontSize:16}
                             }} FormHelperTextProps ={{style:{fontSize:10}}} label="New Password" onChange={(event)=>{
                                 newPassword = event.target.value;
@@ -130,6 +148,10 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
                                     },}}
                         onClick={async ()=>{
                             if(validationFunction(originalPassword)&&validationFunction(newPassword)){
+                                setOldErrorText("")
+                                setNewErrorText("")
+                                setShowOldError(false)
+                                setShowNewError(false)
                                 await axios.get(passwordEndpoint+originalPassword).then(async()=>{
                                 
                                     await axios.post(endpoint+newPassword).then((response)=>{

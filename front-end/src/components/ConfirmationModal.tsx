@@ -13,7 +13,7 @@ const CustomModal = styled(Modal)({
       top: '0%',
       height: "100vh",
       width: "100vw",
-      backgroundColor: 'rgba(125,125,125,0.2)'//Grey backdrop with 20% opacity
+      backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
     }
   });
 
@@ -47,10 +47,10 @@ const ConfirmationModal: React.FunctionComponent<ModalFieldProps>=({
                     <Box sx={{display:'inline-block', flexdirection:'row',border:'1px solid white', background:'black', width:'fit-content',padding:1,}}>
                         
                         <Typography sx={{fontSize: 40}}>BobbyMcBobson did this once? Will you?</Typography>
-                        <Button sx={{alignSelf: 'center', fontSize:20, alignContent:'center', display: 'flex', justifyContent:'center', margin: 'auto', background: 'black',
-                            color: 'white', '&:hover': {
-                                background: 'black',
-                                color: 'grey',
+                        <Button sx={{alignSelf: 'center', fontSize:20, alignContent:'center', display: 'flex', justifyContent:'center', margin: 'auto', backgroundColor: 'white',
+                             '&:hover': {
+                                backgroundColor: 'grey',
+                                color: 'white',
                             },
                                     }} onClick={() => {
                                             sidebarDisplay(false)
