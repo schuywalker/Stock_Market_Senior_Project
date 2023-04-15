@@ -5,11 +5,21 @@ import Cookies from 'universal-cookie';
 import {createUser} from '../config/WebcallAPI'
 import {tokens} from '../theme'
 
+const CustomModal = styled(Modal)({
+  '.MuiBackdrop-root': {
+    display: 'fixed',
+    top: '0%',
+    height: "100vh",
+    width: "100vw",
+    backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
+    
+  }
+});
+
 const style = {
     position: 'absolute' as 'absolute',
-    top: '45%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    top: '25%',
+    left: '37%',
     width: 450,
     p: 4,
 }
@@ -186,13 +196,13 @@ export default function SignUpForm(props: any){
     
   return (
     <div>
-      <Modal
+      <CustomModal
         sx = {style}
         open= {props.open}
         onClose={props.close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        hideBackdrop= {true}      >
+        >
         <Box sx={{
             display:'flex',
             flexDirection: 'column',
@@ -302,7 +312,7 @@ export default function SignUpForm(props: any){
             
           }}>Submit</Button>
         </Box>
-      </Modal>
+      </CustomModal>
     </div>
   );
 }

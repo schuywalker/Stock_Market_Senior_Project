@@ -5,11 +5,20 @@ import Cookies from 'universal-cookie'
 import {login} from '../config/WebcallAPI'
 import {tokens} from '../theme'
 
+const CustomModal = styled(Modal)({
+    '.MuiBackdrop-root': {
+      display: 'fixed',
+      top: '0%',
+      height: "100vh",
+      width: "100vw",
+      backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
+      
+    }
+  });
 const style = {
     position: 'absolute' as 'absolute',
-    top: '45%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    top: '35%',
+    left: '40%',  
     width: 450,
     p: 4,
 }
@@ -100,14 +109,14 @@ export default function LoginForm(props: any) {
     }
 
     return (
-        <div>
-            <Modal
+        <React.Fragment>
+            <CustomModal
                 sx={style}
                 open={props.open}
                 onClose={props.close}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                hideBackdrop={true}
+                
             >
                 <Box
                     sx={{
@@ -226,7 +235,7 @@ export default function LoginForm(props: any) {
                         
                       }}>Submit</Button>    
                 </Box>
-            </Modal>
-        </div>
+            </CustomModal>
+        </React.Fragment>
     )
 }
