@@ -11,10 +11,7 @@ import IsoIcon from '@mui/icons-material/Iso'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import PhoneIcon from '@mui/icons-material/Phone'
-import Cookies from 'universal-cookie'
-import axios from 'axios'
 import React from 'react'
-import {deleteUser} from '../../config/WebcallAPI'
 import ConfirmationModal from '../../components/ConfirmationModal'
 
 type itemProps = {
@@ -60,8 +57,6 @@ function truncateString(str: string) {
     return(str)
 }
 
-const cookies = new Cookies()
-
 const ProSidebar = (props: any) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
@@ -71,9 +66,6 @@ const ProSidebar = (props: any) => {
     const[showModal, setShowModal] = useState(false)
     const[userURL, setUserURL] = useState("/analyst-calls")
 
-    const handleClick = () =>{
-        setShowModal(true)
-    }
     React.useEffect(()=>{
         if(props.loggedIn){
             setLoggedIn(true)

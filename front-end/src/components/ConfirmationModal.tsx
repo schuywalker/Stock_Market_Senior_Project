@@ -1,10 +1,8 @@
 import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
-import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
-import {getUserData,alterUsername,alterUserFirstName,alterUserLastName,alterUserEmail} from '../config/WebcallAPI'
+import { Box, Button, Modal, Typography, styled } from '@mui/material';
 import {deleteUser} from '../config/WebcallAPI'
-import { Sidebar, sidebarClasses } from 'react-pro-sidebar';
 
 const cookies = new Cookies();
 const CustomModal = styled(Modal)({
