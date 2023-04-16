@@ -1,7 +1,7 @@
 import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
-import { Box, Button, Link, Modal, TextField, Typography, listItemAvatarClasses, styled, useTheme } from '@mui/material';
+import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
 import {getUserData,alterUsername,alterUserFirstName,alterUserLastName,alterUserEmail, isCorrectPassword, alterPassword} from '../config/WebcallAPI'
 
 const cookies = new Cookies();
