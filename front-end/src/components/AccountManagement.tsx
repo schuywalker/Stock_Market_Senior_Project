@@ -40,21 +40,36 @@ const CustomModal = styled(Modal)({
   });
   
 /*
-    Props for the custom components(DONE Unless more props become necessary)
+    FieldProps:
+            fieldName: The static name the field should display
 
-        FieldProps:
             endpoint: The endpoint starting with  /<endpoint_name> 
 
-            displayValue: The value displayed on the AccountManagement field and in the Modal
+            passwordEndpoint: Optional endpoint used by ModalPasswordField to check if the user's
+                              original password is correct
+            
+            password: Optional boolean to use a ModalPasswordField instead of a ModalField
 
-            displayedValueFunction: The state function to change the displayedValue
+            displayValue: Optional value that is dynamically displayed
+
+            displayedValueFunction: Optional state function to change the displayedValue
 
             validationFunction: The stateless function to validate if the new input is correct
 
             errorMessage: Optional string to display as an error message if the field is wrong. Defaults
                           to invalid if nothing is provided
-        
-
+*/
+type FieldProps={
+    fieldName: string
+    endpoint:string
+    passwordEndpoint?:string
+    displayValue?: string
+    displayedValueFunction?: (value:string)=>void
+    validationFunction: (value:string)=>boolean
+    errorMessage?: string 
+    password?:boolean
+}
+/*
         ModalFieldProps:
             open: Same as the MUI open prop, governs if the modal is displayed
 
@@ -70,16 +85,6 @@ const CustomModal = styled(Modal)({
 
             errorMessage: String to display as an error message if the field is wrong. 
 */
-type FieldProps={
-    fieldName: string
-    endpoint:string
-    passwordEndpoint?:string
-    displayValue?: string
-    displayedValueFunction?: (value:string)=>void
-    validationFunction: (value:string)=>boolean
-    errorMessage?: string 
-    password?:boolean
-}
 type ModalFieldProps={
     open: boolean
     onClose: VoidFunction
@@ -89,6 +94,19 @@ type ModalFieldProps={
     endpoint:string
     errorMessage: string
 }
+/*
+        ModalPasswordFieldProps:
+            open: Same as the MUI open prop, governs if the modal is displayed
+
+            onClose: State function that hides the modal
+
+            validationFunction: The stateless function to validate if the new input is correct 
+
+            endpoint: The endpoint to update the password starting with  /<endpoint_name> 
+
+            passwordEndpoint: The endpoint to check if the user's original password is correct starting
+                               with /<endpoint_name>. 
+*/
 type ModalPasswordFieldProps={
     open: boolean
     onClose: VoidFunction
@@ -201,73 +219,73 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
 }
 
 /*
-    Component to display a modal dialog for a user to change a given field
+    Component to display a modal dialog for a user to change a non-password field
 */
 
 const ModalField: React.FunctionComponent<ModalFieldProps>=({
     open,onClose,displayValue,displayedValueFunction,endpoint,validationFunction,errorMessage
 })=>{
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left:'40%',
-        pt: 2,
-        
-      };
-      const[errorText,setErrorText] = React.useState("")
-      const[showError,setShowError]= React.useState(false)
-    var newValue:string = displayValue;
-    React.useEffect(()=>{
-        if(open){
-            setErrorText("")
-            setShowError(false)
-        }
-    },[open])
-    return(
-        <React.Fragment>
-            <CustomModal
-            sx = {style}
-            open= {open}
-            onClose={onClose}
-            >
-                    <Box sx={{display:'flex', flexdirection:'row', background:'black', width:'fit-content',padding:1}}>
-                        <TextField error = {showError} helperText={errorText} InputProps={{
-                                  style: {fontSize:16}
-                            }} FormHelperTextProps ={{style:{fontSize:10}}} defaultValue={displayValue} onChange={(event)=>{
-                            newValue = event.target.value;
-                        }}/>
-                        <Button sx={{height: "100%",backgroundColor:"white", margin:1,marginTop:2,'&:hover': {
-                                    background: 'grey', color: 'white',
-                                    },}}
-                        onClick={async ()=>{
-                            if(validationFunction(newValue)){
-                                await axios.post(endpoint+newValue).then((response)=>{
-                                    setShowError(false)
-                                    setErrorText("")
-                                    displayedValueFunction(newValue)
-                                    onClose()
+        const style = {
+            position: 'absolute' as 'absolute',
+            top: '50%',
+            left:'40%',
+            pt: 2,
+            
+        };
+        const[errorText,setErrorText] = React.useState("")
+        const[showError,setShowError]= React.useState(false)
+        var newValue:string = displayValue;
+        React.useEffect(()=>{
+            if(open){
+                setErrorText("")
+                setShowError(false)
+            }
+        },[open])
+        return(
+            <React.Fragment>
+                <CustomModal
+                sx = {style}
+                open= {open}
+                onClose={onClose}
+                >
+                        <Box sx={{display:'flex', flexdirection:'row', background:'black', width:'fit-content',padding:1}}>
+                            <TextField error = {showError} helperText={errorText} InputProps={{
+                                    style: {fontSize:16}
+                                }} FormHelperTextProps ={{style:{fontSize:10}}} defaultValue={displayValue} onChange={(event)=>{
+                                newValue = event.target.value;
+                            }}/>
+                            <Button sx={{height: "100%",backgroundColor:"white", margin:1,marginTop:2,'&:hover': {
+                                        background: 'grey', color: 'white',
+                                        },}}
+                            onClick={async ()=>{
+                                if(validationFunction(newValue)){
+                                    await axios.post(endpoint+newValue).then((response)=>{
+                                        setShowError(false)
+                                        setErrorText("")
+                                        displayedValueFunction(newValue)
+                                        onClose()
+                                        
+                                    }).catch((error)=>{
+                                        if(error.response.request.status ===400){
+                                            setShowError(true)
+                                            setErrorText(error.response.data['message'])
+                                        }
+                                        else console.log(error)
+                                        
+                                    })
                                     
-                                }).catch((error)=>{
-                                    if(error.response.request.status ===400){
-                                        setShowError(true)
-                                        setErrorText(error.response.data['message'])
-                                    }
-                                    else console.log(error)
-                                    
-                                })
-                                
-                            }
-                            else{
-                                setShowError(true)
-                                setErrorText(errorMessage)
-                            }   
-                        }}>Submit</Button>
-                    </Box>
+                                }
+                                else{
+                                    setShowError(true)
+                                    setErrorText(errorMessage)
+                                }   
+                            }}>Submit</Button>
+                        </Box>
 
-            </CustomModal>
-        </React.Fragment>
-    )
-}
+                </CustomModal>
+            </React.Fragment>
+        )
+    }
 /*
     Component to display one part of a user's info
 */
