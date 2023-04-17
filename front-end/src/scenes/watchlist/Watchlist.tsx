@@ -47,25 +47,41 @@ const Watchlist = (props: WatchlistProps) => {
     const colorMode = useContext(ColorModeContext)
 
     const[watchlistAdd,setWatchlistAdd] = useState([])
+    const[watchlistDel, setWatchlistDel] = useState([])
+    const[stockList, setStockList] = useState<String[][]>([[]])
 
     const [stocks, setStocks] = useState<DisplayGroup[]>([])
     const [open1, setOpen1] = useState(false)
     const [open2, setOpen2] = useState(false)
     const [open3, setOpen3] = useState(false)
     const [open4, setOpen4] = useState(false)
+    const [open5, setOpen5] = useState(false)
     const handleOpen1 = () => setOpen1(true)
     const handleOpen2 = () => setOpen2(true)
     const handleOpen3 = () => setOpen3(true)
     const handleOpen4 = () => setOpen4(true)
+    const handleOpen5 = () => setOpen5(true)
     const handleClose1 = () => setOpen1(false)
     const handleClose2 = () => setOpen2(false)
     const handleClose3 = () => setOpen3(false)
     const handleClose4 = () => setOpen4(false)
+    const handleClose5 = () => setOpen5(false)
 
     useEffect(() => {
         fetchWatchlistAssets()
         console.log(props.wl_id, 'wl_id')
     }, [props.wl_id])
+
+    // useEffect(() =>{
+    //     if(stocks.length != 0){
+    //         var dataArray: any[][] = [[]]
+    //         for(let i = 0; i < stocks.length; i++){
+    //             let row = {ticker: stocks[i].ticker}
+    //             dataArray[i][0] = row
+    //         }
+    //         setStockList(dataArray)
+    //     }
+    // }, [stocks])
 
     async function fetchWatchlistAssets() {
         try {
@@ -89,9 +105,9 @@ const Watchlist = (props: WatchlistProps) => {
     const [gridView, setGridView] = useState<boolean>(true)
 
     const [newWLName, setNewWLName] = useState('')
+    const [newName, setNewName] = useState('')
 
     async function postNewWatchlist(wlUpdated: any) {
-        console.log(newWLName)
         handleClose1()
         const response = await fetch(
             `http://127.0.0.1:8080/createWatchlist?user_id=${cookies.get(
@@ -118,9 +134,33 @@ const Watchlist = (props: WatchlistProps) => {
         })
     }
 
-    async function delWatchlist(wlUpdated: any) {
-        console.log(newWLName)
+    async function delTickersFromWL(wlDelTickers: String) {
+        handleClose3()
+        const response = await fetch(
+            `http://127.0.0.1:8080/deleteTickersFromWatchlist?wl_id=${props.wl_id}&user_id=${cookies.get('user_id')}&returnWL=True&tickers=${wlDelTickers}`,
+            {}
+        ).then((response) => {
+            response.json().then((json) => {
+                console.log(json)
+            })
+        })
+    }
+
+    async function renameWatchlist(wlUpdated: any) {
         handleClose4()
+        const response = await fetch(
+            `http://127.0.0.1:8080/renameWatchlist?wl_id=${props.wl_id}&new_name=${newName}`,
+            {}
+        ).then((response) => {
+            response.json().then((json) => {
+                console.log(json)
+                wlUpdated()
+            })
+        })
+    }
+
+    async function delWatchlist(wlUpdated: any) {
+        handleClose5()
         const response = await fetch(
             `http://127.0.0.1:8080/deleteWatchlist?wl_id=${props.wl_id}`,
             {}
@@ -154,7 +194,6 @@ const Watchlist = (props: WatchlistProps) => {
                         >
                             Create New Watchlist
                         </Typography>
-                        <Typography> </Typography>
                         <TextField
                             id="outlined-basic"
                             label="New Watchlist Name"
@@ -189,15 +228,13 @@ const Watchlist = (props: WatchlistProps) => {
                             </Typography>
                         </Box>
                         <Box sx={{display: 'flex'}}>
-                            
-                            <Searchbar addValueFunction = {setWatchlistAdd}/>
+                            <Searchbar changeTickersInWL = {setWatchlistAdd}/>
                             <Button
                                 variant="contained"
                                 sx={{
                                     color: colors.green[400],
                                     m: 1,
                                 }}
-                                // onClick={() => {postAddTickers(watchlistAdditions)}}
                                 onClick={() => addTickersToWL(watchlistAdd.toString().toUpperCase())}
                             >
                                 Submit
@@ -230,28 +267,69 @@ const Watchlist = (props: WatchlistProps) => {
                             </Typography>
                         </Box>
                         <Box sx={{display: 'flex'}}>
-                            <Searchbar />
+                            <Searchbar changeTickersInWL = {setWatchlistDel} autoCompleteList = {stockList}/>
                             <Button
                                 variant="contained"
                                 sx={{
                                     color: colors.green[400],
                                     m: 1,
                                 }}
-                                // onClick={() => {delTickers(watchlistAdditions)}}
-                                onClick={() => handleClose3()}
+                                onClick={() => delTickersFromWL(watchlistDel.toString().toUpperCase())}
                             >
                                 Submit
                             </Button>
                         </Box>
                     </Box>
                 </Modal>
-                {/* DELETE WL */}
+                {/* RENAME WL */}
                 <Button variant="contained" onClick={handleOpen4}>
-                    Delete Watchlist
+                    Rename Watchlist
                 </Button>
                 <Modal
                     open={open4}
                     onClose={handleClose4}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        <Typography
+                            variant="h4"
+                            sx={{marginBottom: 1}}
+                        >
+                            Rename Watchlist
+                        </Typography>
+                        <TextField
+                            id="outlined-basic"
+                            label="New Name"
+                            variant="outlined"
+                            onChange={(e) => setNewName(e.target.value)}
+                        />
+                        <Typography
+                            fontSize="16px"
+                        >
+                            Are you sure you want to rename watchlist "{props.wl_name}"?
+                        </Typography>
+                        <Button
+                            sx={{backgroundColor: 'white', margin: 1}}
+                            onClick={() => renameWatchlist(props.wlUpdated)}
+                        >
+                            Yes
+                        </Button>
+                        <Button
+                            sx={{backgroundColor: 'white', margin: 1}}
+                            onClick={() => handleClose4()}
+                        >
+                            No
+                        </Button>
+                    </Box>
+                </Modal>
+                {/* DELETE WL */}
+                <Button variant="contained" onClick={handleOpen5}>
+                    Delete Watchlist
+                </Button>
+                <Modal
+                    open={open5}
+                    onClose={handleClose5}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                 >
@@ -275,7 +353,7 @@ const Watchlist = (props: WatchlistProps) => {
                         </Button>
                         <Button
                             sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => handleClose4()}
+                            onClick={() => handleClose5()}
                         >
                             No
                         </Button>

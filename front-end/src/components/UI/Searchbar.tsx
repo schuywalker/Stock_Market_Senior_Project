@@ -14,12 +14,19 @@ import {useEffect, useState} from 'react'
 
 const Searchbar = (props:any) => {
     const theme = useTheme()
-    const addToWatchlistFunction = props.addValueFunction
+    const changeTickersFunction = props.changeTickersInWL
+    // const tracked:any[] = props.autoCompleteList;
 
     const [watchlistAdditions, setWatchlistAdditions] = useState<string[]>([])
     useEffect(() => {
-        addToWatchlistFunction(watchlistAdditions)
+        changeTickersFunction(watchlistAdditions)
     }, [watchlistAdditions])
+    // useEffect(()=>{
+    //     if(tracked){
+    //         console.log(tracked)
+    //     }
+    // },[tracked])
+
 
     return (
         <>
@@ -42,7 +49,7 @@ const Searchbar = (props:any) => {
                     id="tickerAutofill"
                     sx={{flex: 1, border: 0}}
                     freeSolo
-                    options={sp100.map((option) => option.ticker)}
+                    options={/*tracked? tracked.map((option) => option.ticker) :*/ sp100.map((option) => option.ticker)}
                     onChange={(e, value) => {setWatchlistAdditions(value)
                     
                     }}

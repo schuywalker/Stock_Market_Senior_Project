@@ -120,7 +120,6 @@ class WatchlistService:
     def addTickersToWatchlist(wl_id, user_id, returnWL:bool = True, *tickers:str ):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
-        print("Connected")
         epochTime = datetime.datetime.now().timestamp()
         
         post_data = str(tickers)
@@ -132,15 +131,10 @@ class WatchlistService:
             post_data.remove('')
         try:
             for ticker in post_data:
-                print(ticker)
                 cursor.execute("""INSERT INTO WATCHLIST_TICKERS (wl_id, ticker, created, user_id) VALUES
                 (%s, %s, %s,%s)""", (wl_id, ticker,epochTime,user_id))
-                print("executed")
                 cnx.commit()
-                print("commited")
         except Error as e:
-            print(e)
-
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 return ("Error: Duplicate Entry",409)
             else:
@@ -149,7 +143,6 @@ class WatchlistService:
             WatchlistService.updateWLTime(wl_id, cnx, cursor)
             cursor.close()
             dbc.close()
-            print("Closed")
             if (returnWL):
                 return (WatchlistService.getTickersInWatchlist(wl_id)),200
             else:
@@ -169,22 +162,19 @@ class WatchlistService:
         while '' in post_data:
             post_data.remove('')
         try:
-            print(f'delete tickers post_data: {post_data}\n')
             for ticker in post_data:
-                print('deleting ticker: ', ticker, '\n')
                 cursor.execute("""DELETE FROM `WATCHLIST_TICKERS` WHERE wl_id = %s AND user_id = %s AND ticker = %s""",
                     (wl_id, user_id, ticker))
-                print(f'row count: {cursor.rowcount}\n')
                 cnx.commit()
-            if (returnWL):
-                return (WatchlistService.getTickersInWatchlist(wl_id)), 200
         except Error as e:
             return ("Error: ", 500)
         finally:
             WatchlistService.updateWLTime(wl_id, cnx, cursor)
             cursor.close()
             dbc.close()
-        return 200
+            if (returnWL):
+                return (WatchlistService.getTickersInWatchlist(wl_id)), 200
+            return 200
 
 # TODO: change from default list
     @staticmethod
