@@ -26,7 +26,7 @@ const Dashboard = () => {
     async function fetchUserWatchlists() {
         try {
             const response = await fetch(
-                `http://127.0.0.1:8080/getUserWatchlists?user_ID=${cookies.get(
+                `http://127.0.0.1:8080/getUserWatchlists?user_id=${cookies.get(
                     'user_id'
                 )}`,
                 {}
@@ -45,9 +45,9 @@ const Dashboard = () => {
 
     const [showWatchlist, setShowWatchlist] = useState(false)
 
-    function handleLoadingWatchlist(wl_ID: number, wl_name: string) {
+    function handleLoadingWatchlist(wl_id: number, wl_name: string) {
         setShowWatchlist(true)
-        setWatchlistSelected(wl_ID)
+        setWatchlistSelected(wl_id)
         console.log(wl_name)
         set_wl_name(wl_name)
     }
@@ -89,7 +89,7 @@ const Dashboard = () => {
                     )
                 })}
             </List>
-            <Watchlist wl_ID={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL}/>
+            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL}/>
         </Box>
     )
 }

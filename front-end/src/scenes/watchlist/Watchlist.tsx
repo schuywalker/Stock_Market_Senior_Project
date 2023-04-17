@@ -35,7 +35,7 @@ import Searchbar from '../../components/UI/Searchbar'
 
 type WatchlistProps = {
     wl_name: string
-    wl_ID: number
+    wl_id: number
     wlUpdated: any
 }
 
@@ -64,15 +64,15 @@ const Watchlist = (props: WatchlistProps) => {
 
     useEffect(() => {
         fetchWatchlistAssets()
-        console.log(props.wl_ID, 'wl_ID')
-    }, [props.wl_ID])
+        console.log(props.wl_id, 'wl_id')
+    }, [props.wl_id])
 
     async function fetchWatchlistAssets() {
         try {
             const response = await fetch(
-                `http://127.0.0.1:8080/populateWatchlist?user_ID=${cookies.get(
+                `http://127.0.0.1:8080/populateWatchlist?user_id=${cookies.get(
                     'user_id'
-                )}&wl_ID=${props.wl_ID}`,
+                )}&wl_id=${props.wl_id}`,
                 {}
             ).then((response) => {
                 response.json().then((json) => {
@@ -94,7 +94,7 @@ const Watchlist = (props: WatchlistProps) => {
         console.log(newWLName)
         handleClose1()
         const response = await fetch(
-            `http://127.0.0.1:8080/createWatchlist?user_ID=${cookies.get(
+            `http://127.0.0.1:8080/createWatchlist?user_id=${cookies.get(
                 'user_id'
             )}&watchlistName=${newWLName}`,
             {}
@@ -109,7 +109,7 @@ const Watchlist = (props: WatchlistProps) => {
     async function addTickersToWL(wlAddTickers: String) {
         handleClose2()
         const response = await fetch(
-            `http://127.0.0.1:8080/addTickersToWatchlist?wl_ID=${props.wl_ID}&&user_id=${cookies.get('user_id')}&&returnWL=True&&tickers=${wlAddTickers}`,
+            `http://127.0.0.1:8080/addTickersToWatchlist?wl_id=${props.wl_id}&user_id=${cookies.get('user_id')}&returnWL=True&tickers=${wlAddTickers}`,
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -122,7 +122,7 @@ const Watchlist = (props: WatchlistProps) => {
         console.log(newWLName)
         handleClose4()
         const response = await fetch(
-            `http://127.0.0.1:8080/deleteWatchlist?wl_ID=${props.wl_ID}`,
+            `http://127.0.0.1:8080/deleteWatchlist?wl_id=${props.wl_id}`,
             {}
         ).then((response) => {
             response.json().then((json) => {

@@ -20,38 +20,38 @@ class getQuote(Resource):
 # WATCHLISTS
 class getUserWatchlists(Resource):
     def get(self):
-        data = WatchlistService.getUserWatchlists(request.args.get('user_ID'), request.args.get('includeDeleted'))
+        data = WatchlistService.getUserWatchlists(request.args.get('user_id'), request.args.get('includeDeleted'))
         return (data, 200)
 
 class createWatchlist(Resource):
     def get(self):
-        returnCode = WatchlistService.createWatchlists(request.args.get('user_ID'), request.args.get('watchlistName'), request.args.get('tickers'))
+        returnCode = WatchlistService.createWatchlists(request.args.get('user_id'), request.args.get('watchlistName'), request.args.get('tickers'))
         return returnCode
 
 class deleteWatchlist(Resource):
     def get(self):
-        data = WatchlistService.deleteWatchlist(request.args.get('wl_ID'))
+        data = WatchlistService.deleteWatchlist(request.args.get('wl_id'))
         return (data, 200)
 
 class renameWatchlist(Resource):
     def get(self):
-        data = WatchlistService.renameWatchlist(request.args.get('wl_ID'), request.args.get('new_name'))
+        data = WatchlistService.renameWatchlist(request.args.get('wl_id'), request.args.get('new_name'))
         return (data, 200)
 
 # WATCHLIST_TICKERS
 class getWatchlistTickers(Resource):
     def get(self):
-        data = WatchlistService.getTickersInWatchlist(request.args.get('wl_ID'))
+        data = WatchlistService.getTickersInWatchlist(request.args.get('wl_id'))
         return (data, 200)
     
 class addTickersToWatchlist(Resource):
     def get(self):
-        data = WatchlistService.addTickersToWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
+        data = WatchlistService.addTickersToWatchlist(request.args.get('wl_id'),request.args.get('user_id'),request.args.get('returnWL'),request.args.get('tickers'))
         return (data, 200)
 
 class deleteTickersFromWatchlist(Resource):
     def get(self):
-        data = WatchlistService.deleteTickersFromWatchlist(request.args.get('wl_ID'),request.args.get('user_ID'),request.args.get('returnWL'),request.args.get('tickers'))
+        data = WatchlistService.deleteTickersFromWatchlist(request.args.get('wl_id'),request.args.get('user_id'),request.args.get('returnWL'),request.args.get('tickers'))
         return (data, 200)
 
 class getAnalystCallsDefaultList(Resource):
@@ -83,7 +83,7 @@ class ReturnString(Resource):
 
 class populateWatchlist(Resource):
     def get(self):
-        data = WatchlistService.populateWatchlist(request.args.get('user_ID'), request.args.get('wl_ID'))
+        data = WatchlistService.populateWatchlist(request.args.get('user_id'), request.args.get('wl_id'))
         return data, 200
         
 class getSymbolInfo(Resource):

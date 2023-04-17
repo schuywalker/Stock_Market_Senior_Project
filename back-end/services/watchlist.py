@@ -12,13 +12,13 @@ class WatchlistService:
 
     # WATCHLIST - done
     @staticmethod
-    def getUserWatchlists(user_ID, includeDeleted:bool = False):
+    def getUserWatchlists(user_id, includeDeleted:bool = False):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
         if (includeDeleted == True):
-            cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s""", (user_ID,))
+            cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s""", (user_id,))
         else:
-            cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s and deleted IS NULL""", (user_ID,))
+            cursor.execute("""SELECT * FROM WATCHLISTS WHERE user_id = %s and deleted IS NULL""", (user_id,))
         result = cursor.fetchall()
         
         cursor.close()
@@ -29,7 +29,7 @@ class WatchlistService:
             return result, 404
     
     @staticmethod
-    def createWatchlists(user_ID, watchlistName:str, *tickers):
+    def createWatchlists(user_id, watchlistName:str, *tickers):
         ret = None
         dbc = db_controller()
         try:
@@ -37,16 +37,16 @@ class WatchlistService:
             nullWrapper = None
             createdTime = datetime.datetime.now().timestamp()
             cursor.execute("""INSERT INTO `WATCHLISTS` ( `user_id`, `wl_name`, `created`, `updated`,`deleted`) VALUES
-            (%s, %s, %s, %s,%s)""", (user_ID, watchlistName,createdTime,createdTime,nullWrapper))
+            (%s, %s, %s, %s,%s)""", (user_id, watchlistName,createdTime,createdTime,nullWrapper))
             cnx.commit()
             cursor = cnx.cursor(buffered=True)
-            cursor.execute("""SELECT wl_id FROM WATCHLISTS WHERE user_id = %s and wl_name = %s and deleted is null""", (user_ID, watchlistName))
+            cursor.execute("""SELECT wl_id FROM WATCHLISTS WHERE user_id = %s and wl_name = %s and deleted is null""", (user_id, watchlistName))
             wl_id = cursor.fetchone()[0]
             
             ret = wl_id
 
             if (len(tickers) > 0):
-                WatchlistService.addTickersToWatchlist(wl_id, user_ID, True, *tickers)
+                WatchlistService.addTickersToWatchlist(wl_id, user_id, True, *tickers)
                 ret = wl_id
 
         except Error as e:
@@ -63,31 +63,31 @@ class WatchlistService:
         return ret,200
 
     @staticmethod
-    def renameWatchlist(wl_ID, new_name):
+    def renameWatchlist(wl_id, new_name):
         dbc = db_controller()
         try:
             cnx, cursor = dbc.connect()
             updatedTime = datetime.datetime.now().timestamp()
-            cursor.execute("""UPDATE WATCHLISTS SET wl_name = %s, updated = %s WHERE wl_id = %s""", (new_name, updatedTime, wl_ID,))
+            cursor.execute("""UPDATE WATCHLISTS SET wl_name = %s, updated = %s WHERE wl_id = %s""", (new_name, updatedTime, wl_id,))
             cnx.commit()
         except Error as e:
             print("Error: ",e)
             return ("Error: ",500)
         finally:
-            WatchlistService.updateWLTime(wl_ID, cnx, cursor)
+            WatchlistService.updateWLTime(wl_id, cnx, cursor)
             cursor.close()
             dbc.close()
         
         return 200
     
     @staticmethod
-    def deleteWatchlist(wl_ID):
+    def deleteWatchlist(wl_id):
         dbc = db_controller()
-        print("wl_ID: ",wl_ID)
+        print("wl_id: ",wl_id)
         try:
             cnx, cursor = dbc.connect()
             deletedTime = datetime.datetime.now().timestamp()
-            cursor.execute("""UPDATE WATCHLISTS SET deleted = %s WHERE wl_id = %s""", (deletedTime, wl_ID,))
+            cursor.execute("""UPDATE WATCHLISTS SET deleted = %s WHERE wl_id = %s""", (deletedTime, wl_id,))
             cnx.commit()
         except Error as e:
             return ("Error: ",e,500)
@@ -108,22 +108,23 @@ class WatchlistService:
     
     # TICKERS
     @staticmethod
-    def getTickersInWatchlist(wl_ID):
+    def getTickersInWatchlist(wl_id):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
         
-        cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = %s""", (wl_ID,))
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = %s""", (wl_id,))
         result = cursor.fetchall()
         
-        cursor.execute("""SELECT wl_name FROM WATCHLISTS WHERE wl_id = %s""", (wl_ID,))
+        cursor.execute("""SELECT wl_name FROM WATCHLISTS WHERE wl_id = %s""", (wl_id,))
         name = cursor.fetchone()
         dbc.close()
         return result, name, 200
     
     @staticmethod
-    def addTickersToWatchlist(wl_ID, user_ID, returnWL:bool = True, *tickers:str ):
+    def addTickersToWatchlist(wl_id, user_id, returnWL:bool = True, *tickers:str ):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
+        print("Connected")
         epochTime = datetime.datetime.now().timestamp()
         
         post_data = str(tickers)
@@ -135,26 +136,32 @@ class WatchlistService:
             post_data.remove('')
         try:
             for ticker in post_data:
-                cursor.execute("""INSERT INTO `WATCHLIST_TICKERS` ( `wl_id`, `ticker`, `created`, `user_id`) VALUES
-                (%s, %s, %s,%s)""", (wl_ID, ticker,epochTime,user_ID))
+                print(ticker)
+                cursor.execute("""INSERT INTO WATCHLIST_TICKERS (wl_id, ticker, created, user_id) VALUES
+                (%s, %s, %s,%s)""", (wl_id, ticker,epochTime,user_id))
+                print("executed")
                 cnx.commit()
-            
-            if (returnWL):
-                return (WatchlistService.getTickersInWatchlist(wl_ID)),200
+                print("commited")
         except Error as e:
+            print(e)
+
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 return ("Error: Duplicate Entry",409)
             else:
                 return ("Error: ",e,400)
         finally:
-            WatchlistService.updateWLTime(wl_ID, cnx, cursor)
+            WatchlistService.updateWLTime(wl_id, cnx, cursor)
             cursor.close()
             dbc.close()
-
-        return 200
+            print("Closed")
+            if (returnWL):
+                return (WatchlistService.getTickersInWatchlist(wl_id)),200
+            else:
+                return 200
+            
 
     @staticmethod
-    def deleteTickersFromWatchlist(wl_ID, user_ID, returnWL: bool = True, *tickers: str):
+    def deleteTickersFromWatchlist(wl_id, user_id, returnWL: bool = True, *tickers: str):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
 
@@ -170,25 +177,25 @@ class WatchlistService:
             for ticker in post_data:
                 print('deleting ticker: ', ticker, '\n')
                 cursor.execute("""DELETE FROM `WATCHLIST_TICKERS` WHERE wl_id = %s AND user_id = %s AND ticker = %s""",
-                    (wl_ID, user_ID, ticker))
+                    (wl_id, user_id, ticker))
                 print(f'row count: {cursor.rowcount}\n')
                 cnx.commit()
             if (returnWL):
-                return (WatchlistService.getTickersInWatchlist(wl_ID)), 200
+                return (WatchlistService.getTickersInWatchlist(wl_id)), 200
         except Error as e:
             return ("Error: ", 500)
         finally:
-            WatchlistService.updateWLTime(wl_ID, cnx, cursor)
+            WatchlistService.updateWLTime(wl_id, cnx, cursor)
             cursor.close()
             dbc.close()
         return 200
 
 # TODO: change from default list
     @staticmethod
-    def populateWatchlist(user_ID, wl_ID):
+    def populateWatchlist(user_id, wl_id):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
-        cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_ID, wl_ID))
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
         responseFromDB = cursor.fetchall()
         #needs userID and watchlist name
         #ticker = request.args.get('ticker')
