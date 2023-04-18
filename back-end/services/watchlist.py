@@ -36,7 +36,7 @@ class WatchlistService:
             cnx, cursor = dbc.connect()
             nullWrapper = None
             createdTime = datetime.datetime.now().timestamp()
-            cursor.execute("""INSERT INTO `WATCHLISTS` ( `user_id`, `wl_name`, `created`, `updated`,`deleted`) VALUES
+            cursor.execute("""INSERT INTO WATCHLISTS (user_id, wl_name, created, updated, deleted) VALUES
             (%s, %s, %s, %s,%s)""", (user_id, watchlistName,createdTime,createdTime,nullWrapper))
             cnx.commit()
             cursor = cnx.cursor(buffered=True)
@@ -49,14 +49,12 @@ class WatchlistService:
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 ret = ("Error: Duplicate Entry",409)
             else:
-                ret = ("Error: ",e,400)
-            
-            
+                ret = ("Error: ",e,400)   
         finally:
             cursor.close()
             dbc.close()
+            return ret,200
 
-        return ret,200
 
     @staticmethod
     def renameWatchlist(wl_id, new_name):
