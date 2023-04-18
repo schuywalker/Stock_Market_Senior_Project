@@ -12,21 +12,14 @@ import SearchIcon from '@mui/icons-material/Search'
 import sp100 from '../../assets/sp100'
 import {useEffect, useState} from 'react'
 
-const Searchbar = (props:any) => {
+const Searchbar = (props: any) => {
     const theme = useTheme()
     const changeTickersFunction = props.changeTickersInWL
-    // const tracked:any[] = props.autoCompleteList;
 
     const [watchlistAdditions, setWatchlistAdditions] = useState<string[]>([])
     useEffect(() => {
         changeTickersFunction(watchlistAdditions)
     }, [watchlistAdditions])
-    // useEffect(()=>{
-    //     if(tracked){
-    //         console.log(tracked)
-    //     }
-    // },[tracked])
-
 
     return (
         <>
@@ -49,9 +42,13 @@ const Searchbar = (props:any) => {
                     id="tickerAutofill"
                     sx={{flex: 1, border: 0}}
                     freeSolo
-                    options={/*tracked? tracked.map((option) => option.ticker) :*/ sp100.map((option) => option.ticker)}
-                    onChange={(e, value) => {setWatchlistAdditions(value)
-                    
+                    options={
+                        /*tracked? tracked.map((option) => option.ticker) :*/ sp100.map(
+                            (option) => option.ticker
+                        )
+                    }
+                    onChange={(e, value) => {
+                        setWatchlistAdditions(value)
                     }}
                     renderInput={(params) => (
                         <TextField
@@ -62,9 +59,7 @@ const Searchbar = (props:any) => {
                                 borderColor: 'transparent',
                             }}
                             label="Enter Tickers to Add"
-                            onChange={(event)=>{
-                                
-                            }}
+                            onChange={(event) => {}}
                         />
                     )}
                 />
