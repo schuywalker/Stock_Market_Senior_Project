@@ -144,7 +144,7 @@ class UserService:
             else:
                 response = {"message": "Username already exists"}
                 cnx.close()
-                return response, 200
+                return response, 400
          
         except Error as e:
             print("Error while connecting to MySQL", e)
