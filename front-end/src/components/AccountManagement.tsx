@@ -160,12 +160,12 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
             onClose={onClose}
             >
                     <Box sx={{display:'flex', flexDirection:'column', background:'black', width:'fit-content',padding:1, rowGap:1}}>
-                        <CustomTextField required error = {showOldError} helperText={oldErrorText} InputProps={{
+                        <CustomTextField type='password' required error = {showOldError} helperText={oldErrorText} InputProps={{
                                   style: {fontSize:16}
                             }} FormHelperTextProps ={{style:{fontSize:10}}} label="Original Password" onChange={(event)=>{
                                 originalPassword = event.target.value;
                         }}/>
-                        <CustomTextField required error = {showNewError} helperText={newErrorText} InputProps={{
+                        <CustomTextField type='password' required error = {showNewError} helperText={newErrorText} InputProps={{
                                   style: {fontSize:16}
                             }} FormHelperTextProps ={{style:{fontSize:10}}} label="New Password" onChange={(event)=>{
                                 newPassword = event.target.value;
