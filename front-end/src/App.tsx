@@ -1,4 +1,4 @@
-import {Route, Routes, useNavigate} from 'react-router-dom'
+import {Navigate, Route, Routes, useNavigate} from 'react-router-dom'
 import './App.css'
 import ResponsiveAppBar from './scenes/global/AppBar'
 import ResponsiveSideBar from './scenes/global/sidebar'
@@ -40,6 +40,13 @@ function App() {
         setInitialLogin(true)
     },[])
 
+    useEffect(()=>{
+        let url = window.location.href
+        let parts = url.split('/')
+        let route = parts.filter(elm=>elm)
+        if(!loggedIn && route.length > 2)navigate("/")
+    },[window.location.href])
+
     return (
         <>
             {/* <ColorModeContext.Provider value = {{toggleColorMode}}> */}
@@ -62,17 +69,20 @@ function App() {
                                     />
                                     <Route
                                         path="/watchlist"
-                                        element={<Watchlist />}
+                                        element={(loggedIn?<Watchlist />:<></>)}
                                     />
                                     <Route
                                         path="/analyst-calls"
-                                        element={<AnalystCalls />}
+                                        element={(loggedIn?<AnalystCalls />:<></>)}
                                     />
                                     <Route
                                         path="/account"
-                                        element={<AccountManagement updateUsername = {(val:string)=>setUsername(val)} />}
+                                        element={(loggedIn?<AccountManagement updateUsername = {(val:string)=>setUsername(val)}/>:<></>)}
                                     />
-                                    {/* <Route path="*" element={<NotFound />} /> */}
+                                    <Route
+                                        path="*"
+                                        element={<Navigate to="/"/>}
+                                    />
                                 </Routes>
                             </Box>
                         </div>
