@@ -40,13 +40,6 @@ function App() {
         setInitialLogin(true)
     },[])
 
-    useEffect(()=>{
-        let url = window.location.href
-        let parts = url.split('/')
-        let route = parts.filter(elm=>elm)
-        if(!loggedIn && route.length > 2)navigate("/")
-    },[window.location.href])
-
     return (
         <>
             {/* <ColorModeContext.Provider value = {{toggleColorMode}}> */}
@@ -69,15 +62,15 @@ function App() {
                                     />
                                     <Route
                                         path="/watchlist"
-                                        element={(loggedIn?<Watchlist />:<></>)}
+                                        element={(loggedIn?<Watchlist />:<Navigate to="/"/>)}
                                     />
                                     <Route
                                         path="/analyst-calls"
-                                        element={(loggedIn?<AnalystCalls />:<></>)}
+                                        element={(loggedIn?<AnalystCalls />:<Navigate to="/"/>)}
                                     />
                                     <Route
                                         path="/account"
-                                        element={(loggedIn?<AccountManagement updateUsername = {(val:string)=>setUsername(val)}/>:<></>)}
+                                        element={(loggedIn?<AccountManagement updateUsername = {(val:string)=>setUsername(val)}/>:<Navigate to="/"/>)}
                                     />
                                     <Route
                                         path="*"
