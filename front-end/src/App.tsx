@@ -13,12 +13,12 @@ import {
     ThemeProvider,
 } from '@mui/material'
 import {useEffect, useState} from 'react'
-import Stock from './components/stock/Stock'
 import {ProSidebarProvider} from 'react-pro-sidebar'
 import Cookies from 'universal-cookie'
 import AccountManagement from './components/AccountManagement'
 import LandingPage from './scenes/LandingPage'
 import Dashboard from './scenes/dashboard/Dashboard'
+import Sandbox from './components/Sandbox'
 
 const cookies = new Cookies()
 
@@ -74,6 +74,10 @@ function App() {
                                     <Route
                                         path="/account"
                                         element={<AccountManagement />}
+                                    />
+                                    <Route
+                                        path="/sandbox"
+                                        element={<Sandbox />}
                                     />
 
                                     {/* <Route path="*" element={<NotFound />} /> */}
