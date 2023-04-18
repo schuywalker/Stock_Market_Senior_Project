@@ -62,7 +62,7 @@ const CustomModal = styled(Modal)({
 type FieldProps={
     fieldName: string
     endpoint:[{(val:{[key:string]:string}):string;},{[key:string]:string}] 
-    passwordEndpoint?:( [{(val:{[key:string]:string}):string;},{[key:string]:string}] | undefined ) 
+    passwordEndpoint?:( [{(val:{[key:string]:string}):string;},{[key:string]:string}] | undefined ) //union type
     displayValue?: string
     displayedValueFunction?: (value:string)=>void
     validationFunction: (value:string)=>boolean
@@ -121,7 +121,7 @@ type ModalPasswordFieldProps={
 */
 
 function passwordError(){
-    throw new Error("passwordEnpoint is undefined!");
+    throw new Error("passwordEndpoint is undefined!");
 }
 
 const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
