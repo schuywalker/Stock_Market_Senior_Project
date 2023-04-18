@@ -16,7 +16,6 @@ const CustomModal = styled(Modal)({
       height: "100vh",
       width: "100vw",
       backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
-      
     }
   });
   /*
@@ -43,12 +42,13 @@ const CustomModal = styled(Modal)({
     FieldProps:
             fieldName: The static name the field should display
 
-            endpoint: The endpoint starting with  /<endpoint_name> 
+            endpoint: An array containing a function to get the endpoint which updates the user's information and 
+                      an indexed array containing parameters that are needed for the function. 
 
-            passwordEndpoint: Optional endpoint used by ModalPasswordField to check if the user's
-                              original password is correct
+            passwordEndpoint: Optional array containing a function to get the endpoint which checks the user's original password and 
+                              an indexed array containing parameters that are needed for the function.
             
-            password: Optional boolean to use a ModalPasswordField instead of a ModalField
+            password: Optional boolean to use a ModalPasswordField instead of a ModalField. passwordEndpoint is required
 
             displayValue: Optional value that is dynamically displayed
 
@@ -61,8 +61,8 @@ const CustomModal = styled(Modal)({
 */
 type FieldProps={
     fieldName: string
-    endpoint:string
-    passwordEndpoint?:string
+    endpoint:[{(val:{[key:string]:string}):string;},{[key:string]:string}] 
+    passwordEndpoint?:( [{(val:{[key:string]:string}):string;},{[key:string]:string}] | undefined ) 
     displayValue?: string
     displayedValueFunction?: (value:string)=>void
     validationFunction: (value:string)=>boolean
@@ -81,7 +81,8 @@ type FieldProps={
 
             validationFunction: The stateless function to validate if the new input is correct 
 
-            endpoint: The endpoint starting with  /<endpoint_name> 
+            endpoint: An array containing a function to get the endpoint which updates the user's information and 
+                      an indexed array containing parameters that are needed for the function. 
 
             errorMessage: String to display as an error message if the field is wrong. 
 */
@@ -91,7 +92,7 @@ type ModalFieldProps={
     displayValue: string
     displayedValueFunction: (value:string)=>void
     validationFunction: (value:string)=>boolean
-    endpoint:string
+    endpoint:[{(val:{[key:string]:string}):string;},{[key:string]:string}] 
     errorMessage: string
 }
 /*
@@ -102,21 +103,26 @@ type ModalFieldProps={
 
             validationFunction: The stateless function to validate if the new input is correct 
 
-            endpoint: The endpoint to update the password starting with  /<endpoint_name> 
+            endpoint: An array containing a function to get the endpoint which updates the user's password and 
+                      an indexed array containing parameters that are needed for the function. 
 
-            passwordEndpoint: The endpoint to check if the user's original password is correct starting
-                               with /<endpoint_name>. 
+            passwordEndpoint: An array containing a function to get the endpoint which checks the user's original password and 
+                              an indexed array containing parameters that are needed for the function.
 */
 type ModalPasswordFieldProps={
     open: boolean
     onClose: VoidFunction
-    endpoint:string
-    passwordEndpoint: string
+    endpoint:[{(val:{[key:string]:string}):string;},{[key:string]:string}] 
+    passwordEndpoint: [{(val:{[key:string]:string}):string;},{[key:string]:string}]|undefined
     validationFunction: (value:string)=>boolean
 }
 /*
     Modal for changing a user's password
 */
+
+function passwordError(){
+    throw new Error("passwordEnpoint is undefined!");
+}
 
 const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
     open,onClose,endpoint,validationFunction,passwordEndpoint
@@ -127,12 +133,15 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
         left:'50%',
         pt: 2,
         
-      };
-      const[oldErrorText,setOldErrorText] = React.useState("")
-      const[showOldError,setShowOldError]= React.useState(false)
+    };
+    const[oldErrorText,setOldErrorText] = React.useState("")
+    const[showOldError,setShowOldError]= React.useState(false)
 
-      const[newErrorText,setNewErrorText] = React.useState("")
-      const[showNewError,setShowNewError]= React.useState(false)
+    const[newErrorText,setNewErrorText] = React.useState("")
+    const[showNewError,setShowNewError]= React.useState(false)
+    const checkOldPasswordFunction = passwordEndpoint?.[0]as (val:{[key:string]:string})=>string??passwordError();//? means only execute if not undefined/null, ?? causes passwordError() to run if is undefined/null
+    let endpointFunction = endpoint[0] as (val:{[key:string]:string})=>string
+    let parameters:{[key:string]:string} =endpoint[1] as {[key:string]:string} 
     var originalPassword:string = "";
     var newPassword:string = "";
     React.useEffect(()=>{
@@ -170,9 +179,10 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
                                 setNewErrorText("")
                                 setShowOldError(false)
                                 setShowNewError(false)
-                                await axios.get(passwordEndpoint+originalPassword).then(async()=>{
-                                
-                                    await axios.post(endpoint+newPassword).then((response)=>{
+                                parameters['originalPassword'] = originalPassword
+                                await axios.get(checkOldPasswordFunction(parameters)).then(async()=>{
+                                    parameters['newPassword'] = newPassword
+                                    await axios.post(endpointFunction(parameters)).then((response)=>{
                                         setOldErrorText("")
                                         setNewErrorText("")
                                         setShowOldError(false)
@@ -225,67 +235,70 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps>=({
 const ModalField: React.FunctionComponent<ModalFieldProps>=({
     open,onClose,displayValue,displayedValueFunction,endpoint,validationFunction,errorMessage
 })=>{
-        const style = {
-            position: 'absolute' as 'absolute',
-            top: '50%',
-            left:'40%',
-            pt: 2,
-            
-        };
-        const[errorText,setErrorText] = React.useState("")
-        const[showError,setShowError]= React.useState(false)
-        var newValue:string = displayValue;
-        React.useEffect(()=>{
-            if(open){
-                setErrorText("")
-                setShowError(false)
-            }
-        },[open])
-        return(
-            <React.Fragment>
-                <CustomModal
-                sx = {style}
-                open= {open}
-                onClose={onClose}
-                >
-                        <Box sx={{display:'flex', flexdirection:'row', background:'black', width:'fit-content',padding:1}}>
-                            <TextField error = {showError} helperText={errorText} InputProps={{
-                                    style: {fontSize:16}
-                                }} FormHelperTextProps ={{style:{fontSize:10}}} defaultValue={displayValue} onChange={(event)=>{
-                                newValue = event.target.value;
-                            }}/>
-                            <Button sx={{height: "100%",backgroundColor:"white", margin:1,marginTop:2,'&:hover': {
-                                        background: 'grey', color: 'white',
-                                        },}}
-                            onClick={async ()=>{
-                                if(validationFunction(newValue)){
-                                    await axios.post(endpoint+newValue).then((response)=>{
-                                        setShowError(false)
-                                        setErrorText("")
-                                        displayedValueFunction(newValue)
-                                        onClose()
-                                        
-                                    }).catch((error)=>{
-                                        if(error.response.request.status ===400){
-                                            setShowError(true)
-                                            setErrorText(error.response.data['message'])
-                                        }
-                                        else console.log(error)
-                                        
-                                    })
+    const style = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left:'40%',
+        pt: 2,
+        
+    };
+    const[errorText,setErrorText] = React.useState("")
+    const[showError,setShowError]= React.useState(false)
+    var newValue:string = displayValue;
+    let endpointFunction = endpoint[0] as (val:{[key:string]:string})=>string
+    let parameters:{[key:string]:string} =endpoint[1] as {[key:string]:string}  
+    React.useEffect(()=>{
+        if(open){
+            setErrorText("")
+            setShowError(false)
+        }
+    },[open])
+    return(
+        <React.Fragment>
+            <CustomModal
+            sx = {style}
+            open= {open}
+            onClose={onClose}
+            >
+                    <Box sx={{display:'flex', flexdirection:'row', background:'black', width:'fit-content',padding:1}}>
+                        <TextField error = {showError} helperText={errorText} InputProps={{
+                                style: {fontSize:16}
+                            }} FormHelperTextProps ={{style:{fontSize:10}}} defaultValue={displayValue} onChange={(event)=>{
+                            newValue = event.target.value;
+                        }}/>
+                        <Button sx={{height: "100%",backgroundColor:"white", margin:1,marginTop:2,'&:hover': {
+                                    background: 'grey', color: 'white',
+                                    },}}
+                        onClick={async ()=>{
+                            if(validationFunction(newValue)){
+                                parameters['newValue'] = newValue
+                                await axios.post(endpointFunction(parameters)).then((response)=>{
+                                    setShowError(false)
+                                    setErrorText("")
+                                    displayedValueFunction(newValue)
+                                    onClose()
                                     
-                                }
-                                else{
-                                    setShowError(true)
-                                    setErrorText(errorMessage)
-                                }   
-                            }}>Submit</Button>
-                        </Box>
+                                }).catch((error)=>{
+                                    if(error.response.request.status ===400){
+                                        setShowError(true)
+                                        setErrorText(error.response.data['message'])
+                                    }
+                                    else console.log(error)
+                                    
+                                })
+                                
+                            }
+                            else{
+                                setShowError(true)
+                                setErrorText(errorMessage)
+                            }   
+                        }}>Submit</Button>
+                    </Box>
 
-                </CustomModal>
-            </React.Fragment>
-        )
-    }
+            </CustomModal>
+        </React.Fragment>
+    )
+}
 /*
     Component to display one part of a user's info
 */
@@ -308,7 +321,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
     if(!errorMessage)errorMessage = "Invalid"
     if(!displayValue)displayValue=""
     if(!displayedValueFunction)displayedValueFunction = ()=>{}
-    if(!passwordEndpoint)passwordEndpoint = ""
+    //if(!passwordEndpoint)passwordEndpoint = []
 
     if(password){
         return(
@@ -428,11 +441,11 @@ export default function AccountManagement(props:any){
         return(
             <div>
                 <Box sx={AccountManagementStyle}>
-                    <Field errorMessage='Invalid Username' fieldName='Username' endpoint={alterUsername(username)} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
-                    <Field fieldName='First Name' endpoint={alterUserFirstName(username)} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
-                    <Field fieldName = 'Last Name' endpoint={alterUserLastName(username)} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
-                    <Field errorMessage='Invalid Email' fieldName = 'Email' endpoint={alterUserEmail(username)} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
-                    <Field password fieldName = 'Change Password' passwordEndpoint={isCorrectPassword(username)} endpoint = {alterPassword(username)} validationFunction={validatePassword}/>
+                    <Field errorMessage='Invalid Username' fieldName='Username' endpoint={[alterUsername,{"originalUsername":username}]} displayValue={username} displayedValueFunction={(val:string)=>{setUserName(val)}} validationFunction={validateUsername}/>
+                    <Field fieldName='First Name' endpoint={[alterUserFirstName,{'username':username}]} displayValue={firstName} displayedValueFunction={(val:string)=>{setFirstName(val)}} validationFunction={validateFirstName}/>
+                    <Field fieldName = 'Last Name' endpoint={[alterUserLastName,{'username':username}]} displayValue={lastName} displayedValueFunction={(val:string)=>{setLastName(val)}} validationFunction={validateLastName}/>
+                    <Field errorMessage='Invalid Email' fieldName = 'Email' endpoint={[alterUserEmail,{'username':username}]} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
+                    <Field password fieldName = 'Change Password' passwordEndpoint={[isCorrectPassword,{'username':username}]} endpoint = {[alterPassword,{'username':username}]} validationFunction={validatePassword}/>
                 </Box>
             </div>
 

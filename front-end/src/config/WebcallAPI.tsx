@@ -12,21 +12,21 @@ export function deleteUser(username:string){
 export function getUserData(username:string){
     return backendBaseAddress+"/getUserData?user="+username
 }
-export function alterUsername(originalUsername:string){
-    return backendBaseAddress+"/alterUsername?originalUser=" + originalUsername +"&user="
+export function alterUsername(parameters:{[key:string]:string}){
+    return backendBaseAddress+"/alterUsername?originalUser=" + parameters['originalUsername'] +"&user="+parameters['newValue']
 }
-export function alterUserFirstName(username:string){
-    return backendBaseAddress+"/alterUserFirstName?user="+ username + "&firstName="
+export function alterUserFirstName(parameters:{[key:string]:string}){
+    return backendBaseAddress+"/alterUserFirstName?user="+ parameters['username'] + "&firstName="+parameters['newValue']
 }
-export function alterUserLastName(username:string){
-    return backendBaseAddress+"/alterUserLastName?user="+ username + "&lastName="
+export function alterUserLastName(parameters:{[key:string]:string}){
+    return backendBaseAddress+"/alterUserLastName?user="+ parameters['username'] + "&lastName="+parameters['newValue']
 }
-export function alterUserEmail(username:string){
-    return backendBaseAddress+"/alterUserEmail?user="+ username + "&email="
+export function alterUserEmail(parameters:{[key:string]:string}){
+    return backendBaseAddress+"/alterUserEmail?user="+ parameters['username'] + "&email="+parameters['newValue']
 }
-export function isCorrectPassword(username:string){
-    return backendBaseAddress+"/verifyPassword?user="+ username + "&password="
+export function isCorrectPassword(parameters:{[key:string]:string}){
+    return backendBaseAddress+"/verifyPassword?user="+ parameters['username'] + "&password="+parameters['originalPassword']
 }
-export function alterPassword(username:string){
-    return backendBaseAddress+"/alterPassword?user="+ username + "&password="
+export function alterPassword(parameters:{[key:string]:string}){
+    return backendBaseAddress+"/alterPassword?user="+ parameters['username'] + "&password="+parameters['newPassword']
 }
