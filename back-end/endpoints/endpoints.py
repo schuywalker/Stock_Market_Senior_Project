@@ -68,13 +68,17 @@ class getAnalystCalls(Resource):
 #class for Login
 class Login(Resource):
     def post(self):
+       
         data = UserService.login(request.args.get('username'), request.args.get('password'))
-        return data, 200         
+        return data, 200        
 
 class CreateUser(Resource):
     def post(self):
-        data = UserService.createUser(request.args.get('username'), request.args.get('password'), request.args.get('email'), request.args.get('first'), request.args.get('last'))
-        return data, 200
+        if(UserService.isUserNameAvailable(request.args.get('username'))):
+            data = UserService.createUser(request.args.get('username'), request.args.get('password'), request.args.get('email'), request.args.get('first'), request.args.get('last'))
+            return data, 200
+        else:
+            return {"message": "Username already exists"},400
 
 class ReturnString(Resource):
     def get(self):
@@ -118,25 +122,25 @@ class deleteUser(Resource):
 
 class getUserData(Resource):
     def get(self):
-        return (UserService.getUserData(request.args["user"])),200
+        return (UserService.getUserData(request.args["user"])), 200
 
 
 class alterUserFirstName(Resource):
     def post(self):
-        return (UserService.alterUserFirstName(request.args["firstName"], request.args["user"])),200
+        return (UserService.alterUserFirstName(request.args["firstName"], request.args["user"]))
 
 class alterUserLastName(Resource):
     def post(self):
-        return (UserService.alterUserLastName(request.args["lastName"], request.args["user"])),200
+        return (UserService.alterUserLastName(request.args["lastName"], request.args["user"]))
 
 class alterUserEmail(Resource):
     def post(self):
-        return (UserService.alterUserEmail(request.args["email"], request.args["user"])),200
+        return (UserService.alterUserEmail(request.args["email"], request.args["user"]))
 
 class alterUsername(Resource):
     def post(self):
         if(UserService.isUserNameAvailable(request.args["user"])):
-           return (UserService.alterUsername(request.args["originalUser"], request.args["user"])),200
+           return (UserService.alterUsername(request.args["originalUser"], request.args["user"]))
         else:
             return  {"message": "Username already exists"},400
         
