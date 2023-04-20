@@ -48,6 +48,9 @@ class WatchlistService:
             
             ret = wl_id
 
+            if (len(tickers) > 0):
+                WatchlistService.addTickersToWatchlist(wl_id, user_id, True, *tickers)
+
         except Error as e:
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 ret = ("Error: Duplicate Entry",409)

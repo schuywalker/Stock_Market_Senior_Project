@@ -216,7 +216,7 @@ export default function LoginForm(props: any) {
                                         setPasswordHelperText('')
 
                                         if (
-                                            response.data[0]['message'] ===
+                                            response.data['message'] ===
                                             'Invalid credentials'
                                         ) {
                                             setUsernameValidated(false)
@@ -234,7 +234,7 @@ export default function LoginForm(props: any) {
                                             })
                                             cookies.set(
                                                 'user_id',
-                                                response.data[0]['user_id']
+                                                response.data['user_id']
                                             )
                                             console.log(response.data)
                                             props.close()
