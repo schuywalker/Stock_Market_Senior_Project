@@ -2,17 +2,23 @@ import { Box, Button, Modal, TextField, Typography, styled } from '@mui/material
 import * as React from 'react';
 import axios from "axios";
 import Cookies from 'universal-cookie';
-import {backendBaseAddress} from '../config/globalVariables'
+import {createUser} from '../config/WebcallAPI'
 
-const userEndPointConnection = axios.create({
-    baseURL: backendBaseAddress,
-})
+const CustomModal = styled(Modal)({
+  '.MuiBackdrop-root': {
+    display: 'fixed',
+    top: '0%',
+    height: "100vh",
+    width: "100vw",
+    backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
+    
+  }
+});
 
 const style = {
     position: 'absolute' as 'absolute',
-    top: '45%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    top: '25%',
+    left: '37%',
     width: 450,
     p: 4,
 }
@@ -78,7 +84,7 @@ export default function SignUpForm(props: any){
           }
           else{
             setUserTextFieldError(true)
-            if(usernameHelperText =="")setUsernameHelperText("Invalid Username Entered")
+            if(usernameHelperText ==="")setUsernameHelperText("Invalid Username Entered")
           }
           if(passwordValidated){
             setPasswordTextFieldError(false)
@@ -136,8 +142,8 @@ export default function SignUpForm(props: any){
         
     }
     const validateEmail = (email:string)=>{
-      
-      if(email.length > 0){
+      let reg = /[a-zA-Z0-9].*@..*\.com/
+      if(email.length > 0 && reg.test(email)){
         setEmailValidated(true);
       }
       else{
@@ -189,13 +195,13 @@ export default function SignUpForm(props: any){
     
   return (
     <div>
-      <Modal
+      <CustomModal
         sx = {style}
         open= {props.open}
         onClose={props.close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        hideBackdrop= {true}      >
+        >
         <Box sx={{
             display:'flex',
             flexDirection: 'column',
@@ -231,8 +237,7 @@ export default function SignUpForm(props: any){
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="username_field" label="Username" variant="outlined" required error = {userTextFieldError} helperText = {usernameHelperText}
            onChange = {(event)=>{
             validateUserName(event.target.value)
-            if(userValidated){
-              setUsername(event.target.value)}
+            setUsername(event.target.value)
             }
             } 
             
@@ -240,32 +245,28 @@ export default function SignUpForm(props: any){
           <CustomTextField type='password' InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="password_field" label="Password" variant="outlined" required 
           error = {passwordTextFieldError} helperText = {passwordHelperText} onChange = {(event)=>{
             validatePassword(event.target.value)
-            if(passwordValidated){
-              setPass(event.target.value)}
+            setPass(event.target.value)
             }
             
             }/>
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="email_field" label="Email" variant="outlined" required 
          error = {emailTextFieldError} helperText = {emailHelperText} onChange = {(event)=>{
             validateEmail(event.target.value)
-            if(emailValidated){
-              setEmail(event.target.value)}
+            setEmail(event.target.value)   
             }
             
             }/>
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="firstname_field" label="First Name" variant="outlined" required 
           error = {firstNameTextFieldError} helperText = {firstNameHelperText} onChange = {(event)=>{
             validateFirstName(event.target.value)
-            if(firstNameValidated){
-              setFirst(event.target.value)}
-            }
+            setFirst(event.target.value)
+          }
             
             }/>
           <CustomTextField InputProps={{sx: textfieldStyle}} InputLabelProps={{sx: textfieldStyle}} FormHelperTextProps={{sx: helperTextStyle}} id="lastname_field" label="Last Name" variant="outlined" required 
           error = {lastNameTextFieldError} helperText = {lastNameHelperText} onChange = {(event)=>{
             validateLastName(event.target.value)
-            if(lastNameValidated){
-              setLast(event.target.value)}
+            setLast(event.target.value)
             }
             
             }/>
@@ -278,7 +279,7 @@ export default function SignUpForm(props: any){
           }}
            onClick={async()=>{
             if(canSubmit()){
-              await userEndPointConnection.post("/createUser?username="+username+"&password="+password+"&email="+email+"&first="+first+"&last="+last).then((response)=>{
+              await axios.post(createUser(username,password,email,first,last)).then((response)=>{
                 setUserTextFieldError(false)
                 setUsernameHelperText("")
                 setPasswordTextFieldError(false)
@@ -290,14 +291,13 @@ export default function SignUpForm(props: any){
                 setLastNameTextFieldError(false)
                 setLastNameHelperText("")
 
-                if(response.data['message']=='Username already exists'){
+                if(response.data['message']==='Username already exists'){
                   setUserValidated(false)
                   setUserTextFieldError(true)
                   setUsernameHelperText("Username already exists")
                 }
                 else{
                   //login
-                  console.log(response.data[0]['user_id'])
                   cookies.set("user",username,{ path: '/' })
                   cookies.set("password",password,{ path: '/' })
                   cookies.set("user_id",response.data[0]['user_id']);
@@ -311,7 +311,7 @@ export default function SignUpForm(props: any){
             
           }}>Submit</Button>
         </Box>
-      </Modal>
+      </CustomModal>
     </div>
   );
 }

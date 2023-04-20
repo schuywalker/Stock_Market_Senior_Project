@@ -14,6 +14,8 @@ import PhoneIcon from '@mui/icons-material/Phone'
 import Cookies from 'universal-cookie'
 import axios from 'axios'
 import {ShowChart} from '@mui/icons-material'
+import React from 'react'
+import ConfirmationModal from '../../components/ConfirmationModal'
 
 type itemProps = {
     title: string
@@ -58,220 +60,271 @@ function truncateString(str: string) {
     return str
 }
 
-const cookies = new Cookies()
-
 const ProSidebar = (props: any) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [selected, setSelected] = useState('Dashboard')
+    const [loggedIn, setLoggedIn] = useState(props.loggedIn)
+    const [showModal, setShowModal] = useState(false)
+    const [userURL, setUserURL] = useState('/analyst-calls')
 
-    return (
-        <>
-            <Box
-                sx={{
-                    '&.pro-sidebar-inner': {
-                        background: `${colors.primary[400]} !important`,
-                    },
-                    '&.pro-icon-wrapper': {
-                        backgroundColor: 'transparent !important',
-                    },
-                    '&.pro-inner-item': {
-                        padding: '5px 35px 5px 20px !important',
-                    },
-                    '&.pro-inner-item:hover': {
-                        color: '#868dfb !important',
-                    },
-                    '&.pro-menu-item:active': {
-                        color: '#868dfb !important',
-                    },
-                    display: props.loggedIn ? '' : 'none',
-                }}
-            >
-                <Sidebar defaultCollapsed={isCollapsed}>
-                    <Menu>
-                        <MenuItem
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            icon={
-                                isCollapsed ? <MenuOutlinedIcon /> : undefined
-                            }
-                            rootStyles={{
-                                m: '10px 0 20px 0',
-                                color: colors.grey[100],
-                            }}
-                        >
-                            {!isCollapsed && (
-                                <Box
-                                    display="flex"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                    ml="15px"
-                                >
-                                    <Typography
-                                        variant="h5"
-                                        color={colors.blue[500]}
-                                    >
-                                        NVST
-                                    </Typography>
-                                    <IconButton
-                                        onClick={() =>
-                                            setIsCollapsed(!isCollapsed)
-                                        }
-                                    >
+    React.useEffect(() => {
+        if (props.loggedIn) {
+            setLoggedIn(true)
+        } else setLoggedIn(false)
+    }, [props.loggedIn])
+
+    if (!loggedIn) {
+        return <></>
+    } else
+        return (
+            <>
+                <Box
+                    sx={{
+                        '&.pro-sidebar-inner': {
+                            background: `${colors.primary[400]} !important`,
+                        },
+                        '&.pro-icon-wrapper': {
+                            backgroundColor: 'transparent !important',
+                        },
+                        '&.pro-inner-item': {
+                            padding: '5px 35px 5px 20px !important',
+                        },
+                        '&.pro-inner-item:hover': {
+                            color: '#868dfb !important',
+                        },
+                        '&.pro-menu-item:active': {
+                            color: '#868dfb !important',
+                        },
+                    }}
+                >
+                    <Sidebar defaultCollapsed={isCollapsed}>
+                        <Menu>
+                            <MenuItem
+                                onClick={() => setIsCollapsed(!isCollapsed)}
+                                icon={
+                                    isCollapsed ? (
                                         <MenuOutlinedIcon />
-                                    </IconButton>
-                                </Box>
-                            )}
-                        </MenuItem>
-
-                        {/* User */}
-                        {!isCollapsed && (
-                            <Box mb="25px">
-                                <Box textAlign="center">
+                                    ) : undefined
+                                }
+                                rootStyles={{
+                                    m: '10px 0 20px 0',
+                                    color: colors.grey[100],
+                                }}
+                            >
+                                {!isCollapsed && (
                                     <Box
-                                        display="inline-block"
-                                        borderRadius="50%"
-                                        sx={{
-                                            width: 100,
-                                            height: 100,
-                                            backgroundColor: 'primary.main',
-                                        }}
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        ml="15px"
                                     >
                                         <Typography
-                                            variant="h1"
-                                            color={colors.grey[100]}
-                                            marginTop="10px"
+                                            variant="h5"
+                                            color={colors.blue[500]}
+                                        >
+                                            NVST
+                                        </Typography>
+                                        <IconButton
+                                            onClick={() =>
+                                                setIsCollapsed(!isCollapsed)
+                                            }
+                                        >
+                                            <MenuOutlinedIcon />
+                                        </IconButton>
+                                    </Box>
+                                )}
+                            </MenuItem>
+
+                            {/* User */}
+                            {!isCollapsed && (
+                                <Box mb="25px">
+                                    <Box textAlign="center">
+                                        <Box
+                                            display="inline-block"
+                                            borderRadius="50%"
+                                            sx={{
+                                                width: 100,
+                                                height: 100,
+                                                backgroundColor: 'primary.main',
+                                            }}
+                                        >
+                                            <Typography
+                                                variant="h1"
+                                                color={colors.grey[100]}
+                                                marginTop="10px"
+                                            >
+                                                {props.loggedIn
+                                                    ? truncateString(
+                                                          props.username
+                                                      )
+                                                          .slice(0, 1)
+                                                          .toUpperCase()
+                                                    : ''}
+                                            </Typography>
+                                        </Box>
+                                        <Typography
+                                            variant="h3"
+                                            color={colors.blue[500]}
+                                            fontWeight="bold"
+                                            sx={{m: '10px 0 0 0'}}
                                         >
                                             {props.loggedIn
-                                                ? truncateString(
-                                                      cookies.get('user')
-                                                  )
-                                                      .slice(0, 1)
-                                                      .toUpperCase()
+                                                ? truncateString(props.username)
                                                 : ''}
                                         </Typography>
                                     </Box>
-                                    <Typography
-                                        variant="h3"
-                                        color={colors.blue[500]}
-                                        fontWeight="bold"
-                                        sx={{m: '10px 0 0 0'}}
-                                    >
-                                        {props.loggedIn
-                                            ? truncateString(
-                                                  cookies.get('user')
-                                              )
-                                            : ''}
-                                    </Typography>
                                 </Box>
-                            </Box>
-                        )}
+                            )}
 
-                        {/* Menu Items */}
-                        <Box paddingLeft={isCollapsed ? undefined : '10%'}>
-                            <Item
-                                title="Dashboard"
-                                link={<Link to="/Dashboard" />}
-                                icon={<ShowChart sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Typography
-                                variant="h6"
-                                color={colors.grey[400]}
-                                sx={{fontsize: 50, m: 1.5}}
-                            >
-                                Tools
-                            </Typography>
-                            <Item
-                                title="Analyst Calls"
-                                link={<Link to="/analystCalls" />}
-                                icon={<PhoneIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Typography
-                                variant="h6"
-                                color={colors.grey[400]}
-                                sx={{fontsize: 50, m: 1.5}}
-                            >
-                                {isCollapsed ? 'Lists' : 'Watchlists'}
-                            </Typography>
-                            <Item
-                                title="View Watchlists"
-                                link={<Link to="/watchlist" />}
-                                icon={<VisibilityIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            {/* <Select>Watchlists</Select> */}
-                            <Item
-                                title="Create Watchlist"
-                                link={<Link to="/watchlist" />}
-                                icon={<CreateIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="Edit Watchlist"
-                                link={<Link to="/watchlist" />}
-                                icon={<IsoIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="Delete Watchlist"
-                                link={<Link to="/watchlist" />}
-                                icon={<ClearIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Typography
-                                variant="h6"
-                                color={colors.grey[400]}
-                                sx={{fontsize: 50, m: 1.5}}
-                            >
-                                {isCollapsed ? 'Acct' : 'Account'}
-                            </Typography>
-                            <Item
-                                title="Manage Account"
-                                link={<Link to="/account" />}
-                                icon={
-                                    <ManageAccountsIcon sx={{fontSize: 20}} />
-                                }
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                            <Item
-                                title="Delete Account"
-                                link={
-                                    <Link
-                                        to=""
-                                        onClick={async () => {
-                                            await axios
-                                                .post(
-                                                    'http://127.0.0.1:8080/deleteUser?user=' +
-                                                        cookies.get('user')
-                                                )
-                                                .then(() => {
-                                                    cookies.remove('user')
-                                                    cookies.remove('password')
-                                                    cookies.remove('user_id')
-                                                    window.location.reload()
-                                                })
-                                        }}
-                                    ></Link>
-                                }
-                                icon={<DeleteIcon sx={{fontSize: 20}} />}
-                                selected={selected}
-                                setSelected={setSelected}
-                            />
-                        </Box>
-                    </Menu>
-                </Sidebar>
-            </Box>
-        </>
-    )
+                            {/* Menu Items */}
+                            <Box paddingLeft={isCollapsed ? undefined : '10%'}>
+                                <Item
+                                    title="Dashboard"
+                                    link={<Link to="/Dashboard" />}
+                                    icon={<ShowChart sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                <Typography
+                                    variant="h6"
+                                    color={colors.grey[400]}
+                                    sx={{fontsize: 50, m: 1.5}}
+                                >
+                                    Tools
+                                </Typography>
+                                <Item
+                                    title="Analyst Calls"
+                                    link={
+                                        <Link
+                                            to="/analyst-calls"
+                                            onClick={() =>
+                                                setUserURL('/analyst-calls')
+                                            }
+                                        />
+                                    }
+                                    icon={<PhoneIcon sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                <Typography
+                                    variant="h6"
+                                    color={colors.grey[400]}
+                                    sx={{fontsize: 50, m: 1.5}}
+                                >
+                                    {isCollapsed ? 'Lists' : 'Watchlists'}
+                                </Typography>
+                                <Item
+                                    title="View Watchlists"
+                                    link={
+                                        <Link
+                                            to="/watchlist"
+                                            onClick={() =>
+                                                setUserURL('/watchlist')
+                                            }
+                                        />
+                                    }
+                                    icon={
+                                        <VisibilityIcon sx={{fontSize: 20}} />
+                                    }
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                {/* <Select>Watchlists</Select> */}
+                                <Item
+                                    title="Create Watchlist"
+                                    link={
+                                        <Link
+                                            to="/watchlist"
+                                            onClick={() =>
+                                                setUserURL('/watchlist')
+                                            }
+                                        />
+                                    }
+                                    icon={<CreateIcon sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                <Item
+                                    title="Edit Watchlist"
+                                    link={
+                                        <Link
+                                            to="/watchlist"
+                                            onClick={() =>
+                                                setUserURL('/watchlist')
+                                            }
+                                        />
+                                    }
+                                    icon={<IsoIcon sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                <Item
+                                    title="Delete Watchlist"
+                                    link={
+                                        <Link
+                                            to="/watchlist"
+                                            onClick={() =>
+                                                setUserURL('/watchlist')
+                                            }
+                                        />
+                                    }
+                                    icon={<ClearIcon sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                <Typography
+                                    variant="h6"
+                                    color={colors.grey[400]}
+                                    sx={{fontsize: 50, m: 1.5}}
+                                >
+                                    {isCollapsed ? 'Acct' : 'Account'}
+                                </Typography>
+                                <Item
+                                    title="Manage Account"
+                                    link={
+                                        <Link
+                                            to="/account"
+                                            onClick={() =>
+                                                setUserURL('/account')
+                                            }
+                                        />
+                                    }
+                                    icon={
+                                        <ManageAccountsIcon
+                                            sx={{fontSize: 20}}
+                                        />
+                                    }
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                                <Item
+                                    title="Delete Account"
+                                    link={
+                                        <Link
+                                            to={userURL}
+                                            onClick={() => {
+                                                setShowModal(!showModal)
+                                            }}
+                                        ></Link>
+                                    }
+                                    icon={<DeleteIcon sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
+                            </Box>
+                        </Menu>
+                    </Sidebar>
+                    <ConfirmationModal
+                        open={showModal}
+                        onClose={() => setShowModal(false)}
+                        sidebarDisplay={(value: boolean) => setLoggedIn(value)}
+                        loginFunction={props.loginFunction}
+                    />
+                </Box>
+            </>
+        )
 }
 
 export default ProSidebar

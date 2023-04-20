@@ -40,6 +40,10 @@ api.add_resource(alterUserFirstName, '/alterUserFirstName')
 api.add_resource(alterUserLastName, '/alterUserLastName')
 api.add_resource(alterUserEmail, '/alterUserEmail')
 api.add_resource(alterUsername, '/alterUsername')
+api.add_resource(checkPassword, '/verifyPassword')
+api.add_resource(alterPassword, '/alterPassword')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
