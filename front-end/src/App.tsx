@@ -1,13 +1,12 @@
-import {Route, Routes, useNavigate} from 'react-router-dom'
+import {Navigate, Route, Routes, useNavigate} from 'react-router-dom'
 import './App.css'
 import ResponsiveAppBar from './scenes/global/AppBar'
 import ResponsiveSideBar from './scenes/global/sidebar'
 import AnalystCalls from './scenes/dashboard/AnalystCalls'
 import Watchlist from './scenes/watchlist/Watchlist'
 import {ColorModeContext, useMode} from './theme'
-import {Box, Button, CssBaseline, PaletteMode, ThemeProvider} from '@mui/material'
+import {Box, CssBaseline, ThemeProvider} from '@mui/material'
 import {useEffect, useState} from 'react'
-import Stock from './components/stock/Stock'
 import {ProSidebarProvider} from 'react-pro-sidebar'
 import Cookies from 'universal-cookie';
 import AccountManagement from './components/AccountManagement'
@@ -19,20 +18,24 @@ function App() {
     const {theme, colorMode} = useMode()
     const[initialLogin, setInitialLogin] = useState(false);
     const [loggedIn,setLoggedIn] = useState((cookies.get("user")?true:false));//Need to check if cookie is valid and user/password is correct
+    const [username,setUsername] = useState("")
 
     const navigate = useNavigate();
     const handleLogin = (value: boolean)=>{
         if(!value){
             navigate("/")
+            setUsername("")
         }
         else{
             navigate("/analyst-calls")
+            setUsername(cookies.get('user'))
         }
         setLoggedIn(value)
     }
     useEffect(()=>{
         if(!initialLogin && loggedIn){
             navigate("/analyst-calls")
+            setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
     },[])
@@ -48,7 +51,7 @@ function App() {
                             <ResponsiveAppBar loginFunction={(value:boolean)=>handleLogin(value)} loggedIn = {loggedIn}/>
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
-                                    <ResponsiveSideBar loggedIn = {loggedIn} />
+                                    <ResponsiveSideBar loggedIn = {loggedIn} loginFunction = {(value:boolean)=>{handleLogin(value)}} username={username}/>
                                 </ProSidebarProvider>
 
                                 <Routes>
@@ -59,17 +62,20 @@ function App() {
                                     />
                                     <Route
                                         path="/watchlist"
-                                        element={<Watchlist />}
+                                        element={(loggedIn?<Watchlist />:<Navigate to="/"/>)}
                                     />
                                     <Route
                                         path="/analyst-calls"
-                                        element={<AnalystCalls />}
+                                        element={(loggedIn?<AnalystCalls />:<Navigate to="/"/>)}
                                     />
                                     <Route
                                         path="/account"
-                                        element={<AccountManagement />}
+                                        element={(loggedIn?<AccountManagement updateUsername = {(val:string)=>setUsername(val)}/>:<Navigate to="/"/>)}
                                     />
-                                    {/* <Route path="*" element={<NotFound />} /> */}
+                                    <Route
+                                        path="*"
+                                        element={<Navigate to="/"/>}
+                                    />
                                 </Routes>
                             </Box>
                         </div>

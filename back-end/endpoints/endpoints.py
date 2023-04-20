@@ -68,13 +68,17 @@ class getAnalystCalls(Resource):
 #class for Login
 class Login(Resource):
     def post(self):
+       
         data = UserService.login(request.args.get('username'), request.args.get('password'))
-        return data, 200         
+        return data, 200        
 
 class CreateUser(Resource):
     def post(self):
-        data = UserService.createUser(request.args.get('username'), request.args.get('password'), request.args.get('email'), request.args.get('first'), request.args.get('last'))
-        return data, 200
+        if(UserService.isUserNameAvailable(request.args.get('username'))):
+            data = UserService.createUser(request.args.get('username'), request.args.get('password'), request.args.get('email'), request.args.get('first'), request.args.get('last'))
+            return data, 200
+        else:
+            return {"message": "Username already exists"},400
 
 class ReturnString(Resource):
     def get(self):
@@ -118,12 +122,11 @@ class deleteUser(Resource):
 
 class getUserData(Resource):
     def get(self):
-        return (UserService.getUserData(request.args["user"]))
+        return (UserService.getUserData(request.args["user"])), 200
 
 
 class alterUserFirstName(Resource):
     def post(self):
-        print("reached it")
         return (UserService.alterUserFirstName(request.args["firstName"], request.args["user"]))
 
 class alterUserLastName(Resource):
@@ -136,5 +139,15 @@ class alterUserEmail(Resource):
 
 class alterUsername(Resource):
     def post(self):
-        print("reached it")
-        return (UserService.alterUsername(request.args["originalUser"], request.args["user"]))
+        if(UserService.isUserNameAvailable(request.args["user"])):
+           return (UserService.alterUsername(request.args["originalUser"], request.args["user"]))
+        else:
+            return  {"message": "Username already exists"},400
+        
+class checkPassword(Resource):
+    def get(self):
+        return UserService.checkPassword(request.args['user'],request.args['password'])
+
+class alterPassword(Resource):
+    def post(self):
+        return UserService.alterPassword(request.args['user'],request.args['password'])
