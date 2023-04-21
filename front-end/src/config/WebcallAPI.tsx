@@ -46,22 +46,26 @@ export function addTickersToWL(tickersToAdd: String, wl_id: number, user_id: str
     return `${backendBaseAddress}/addTickersToWatchlist?wl_id=${wl_id}&user_id=${user_id}&returnWL=True&tickers=${tickersToAdd}`
 }
 
-export function createWatchlist(user_id: string, wl_name: string) {
+export function createWL(user_id: string, wl_name: string) {
     return `${backendBaseAddress}/createWatchlist?user_id=${user_id}&wl_name=${wl_name}`
 }
 
-export function deleteWatchlist(wl_id: number, user_id: string) {
+export function deleteWL(wl_id: number, user_id: string) {
     return `${backendBaseAddress}/deleteWatchlist?wl_id=${wl_id}&user_id=${user_id}`
 }
 
-export function getUserWatchlists(user_id: string) {
+export function getUserWL(user_id: string) {
     return `${backendBaseAddress}/getUserWatchlists?user_id=${user_id}`
 }
 
-export function getWatchlist(wl_id: number, user_id: string) {
+export function getWL(wl_id: number, user_id: string) {
     return `${backendBaseAddress}/getWatchlist?wl_id=${wl_id}&user_id=${user_id}`
 }
 
-export function renameWatchlist(wl_id: number, user_id: string, wl_name: string) {
+export function renameWL(wl_id: number, user_id: string, wl_name: string) {
     return `${backendBaseAddress}/alterWatchlistName?wl_id=${wl_id}&user_id=${user_id}&wl_name=${wl_name}`
+}
+
+export function getWLAssets(user_id: string, wl_id: number) {
+    return `${backendBaseAddress}/populateWatchlist?user_id=${user_id}&wl_id=${wl_id}`
 }

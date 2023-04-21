@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react'
 import Cookies from 'universal-cookie'
 import Watchlist from '../watchlist/Watchlist'
 import Searchbar from '../../components/UI/Searchbar'
+import {getUserWL} from '../../config/WebcallAPI'
 
 const Dashboard = () => {
     const theme = useTheme()
@@ -26,9 +27,7 @@ const Dashboard = () => {
     async function fetchUserWatchlists() {
         try {
             const response = await fetch(
-                `http://127.0.0.1:8080/getUserWatchlists?user_id=${cookies.get(
-                    'user_id'
-                )}`,
+                getUserWL(cookies.get('user_id')),
                 {}
             ).then((response) => {
                 response.json().then((json) => {

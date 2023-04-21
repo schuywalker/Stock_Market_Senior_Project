@@ -24,6 +24,14 @@ import DisplayGroup from './DisplayGroup'
 import Cookies from 'universal-cookie'
 import modalStyle from './WatchlistStyles'
 import Searchbar from '../../components/UI/Searchbar'
+import {
+    addTickersToWL,
+    createWL,
+    delTickersFromWL,
+    deleteWL,
+    getWLAssets,
+    renameWL,
+} from '../../config/WebcallAPI'
 
 // TODO:
 // more info button (noGutter?)
@@ -75,9 +83,7 @@ const Watchlist = (props: WatchlistProps) => {
     async function fetchWatchlistAssets() {
         try {
             const response = await fetch(
-                `http://127.0.0.1:8080/populateWatchlist?user_id=${cookies.get(
-                    'user_id'
-                )}&wl_id=${props.wl_id}`,
+                getWLAssets(cookies.get('user_id'), props.wl_id),
                 {}
             ).then((response) => {
                 response.json().then((json) => {
@@ -98,12 +104,10 @@ const Watchlist = (props: WatchlistProps) => {
     const [newWLName, setNewWLName] = useState('')
     const [newName, setNewName] = useState('')
 
-    async function postNewWatchlist(wlUpdated: any) {
+    async function createWatchlist(wlUpdated: any) {
         handleClose1()
         const response = await fetch(
-            `http://127.0.0.1:8080/createWatchlist?user_id=${cookies.get(
-                'user_id'
-            )}&watchlistName=${newWLName}`,
+            createWL(cookies.get('user_id'), newWLName),
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -112,14 +116,10 @@ const Watchlist = (props: WatchlistProps) => {
         })
     }
 
-    async function addTickersToWL(wlAddTickers: String) {
+    async function addTickersToWatchlist(wlAddTickers: String) {
         handleClose2()
         const response = await fetch(
-            `http://127.0.0.1:8080/addTickersToWatchlist?wl_id=${
-                props.wl_id
-            }&user_id=${cookies.get(
-                'user_id'
-            )}&returnWL=True&tickers=${wlAddTickers}`,
+            addTickersToWL(wlAddTickers, props.wl_id, cookies.get('user_id')),
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -128,14 +128,10 @@ const Watchlist = (props: WatchlistProps) => {
         })
     }
 
-    async function delTickersFromWL(wlDelTickers: String) {
+    async function delTickersFromWatchlist(wlDelTickers: String) {
         handleClose3()
         const response = await fetch(
-            `http://127.0.0.1:8080/deleteTickersFromWatchlist?wl_id=${
-                props.wl_id
-            }&user_id=${cookies.get(
-                'user_id'
-            )}&returnWL=True&tickers=${wlDelTickers}`,
+            delTickersFromWL(wlDelTickers, props.wl_id, cookies.get('user_id')),
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -147,7 +143,7 @@ const Watchlist = (props: WatchlistProps) => {
     async function renameWatchlist(wlUpdated: any) {
         handleClose4()
         const response = await fetch(
-            `http://127.0.0.1:8080/renameWatchlist?wl_id=${props.wl_id}&new_name=${newName}`,
+            renameWL(props.wl_id, cookies.get('user_id'), newName),
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -160,7 +156,7 @@ const Watchlist = (props: WatchlistProps) => {
     async function delWatchlist(wlUpdated: any) {
         handleClose5()
         const response = await fetch(
-            `http://127.0.0.1:8080/deleteWatchlist?wl_id=${props.wl_id}`,
+            deleteWL(props.wl_id, cookies.get('user_id')),
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -201,9 +197,7 @@ const Watchlist = (props: WatchlistProps) => {
                             />
                             <Button
                                 sx={{backgroundColor: 'white', margin: 1}}
-                                onClick={() =>
-                                    postNewWatchlist(props.wlUpdated)
-                                }
+                                onClick={() => createWatchlist(props.wlUpdated)}
                             >
                                 Submit
                             </Button>
@@ -234,7 +228,7 @@ const Watchlist = (props: WatchlistProps) => {
                                         m: 1,
                                     }}
                                     onClick={() =>
-                                        addTickersToWL(
+                                        addTickersToWatchlist(
                                             watchlistAdd
                                                 .toString()
                                                 .toUpperCase()
@@ -277,7 +271,7 @@ const Watchlist = (props: WatchlistProps) => {
                                         m: 1,
                                     }}
                                     onClick={() =>
-                                        delTickersFromWL(
+                                        delTickersFromWatchlist(
                                             watchlistDel
                                                 .toString()
                                                 .toUpperCase()
