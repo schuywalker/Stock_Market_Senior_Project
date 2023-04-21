@@ -13,9 +13,9 @@ const Dashboard = () => {
 
     const [wlUpdated, setWLUpdated] = useState(false)
 
-    const handleUpdateWL = () =>{
+    const handleUpdateWL = () => {
         setWLUpdated(!wlUpdated)
-    } 
+    }
 
     const cookies = new Cookies()
 
@@ -33,13 +33,13 @@ const Dashboard = () => {
             ).then((response) => {
                 response.json().then((json) => {
                     setUserWatchlists(json[0])
+                    console.log(json[0])
                 })
             })
         } catch (err) {
             console.log(err)
         }
     }
-
 
     const [watchlistSelected, setWatchlistSelected] = useState(0)
 
@@ -48,7 +48,8 @@ const Dashboard = () => {
     function handleLoadingWatchlist(wl_id: number, wl_name: string) {
         setShowWatchlist(true)
         setWatchlistSelected(wl_id)
-        console.log(wl_name)
+        console.log('dash handleLoading', wl_id)
+        console.log('dash handleLoading', wl_name)
         set_wl_name(wl_name)
     }
 
@@ -89,7 +90,11 @@ const Dashboard = () => {
                     )
                 })}
             </List>
-            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL}/>
+            <Watchlist
+                wl_id={watchlistSelected}
+                wl_name={wl_name}
+                wlUpdated={handleUpdateWL}
+            />
         </Box>
     )
 }

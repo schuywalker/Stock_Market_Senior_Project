@@ -72,17 +72,6 @@ const Watchlist = (props: WatchlistProps) => {
         console.log(props.wl_id, 'wl_id')
     }, [props.wl_id])
 
-    // useEffect(() =>{
-    //     if(stocks.length != 0){
-    //         var dataArray: any[][] = [[]]
-    //         for(let i = 0; i < stocks.length; i++){
-    //             let row = {ticker: stocks[i].ticker}
-    //             dataArray[i][0] = row
-    //         }
-    //         setStockList(dataArray)
-    //     }
-    // }, [stocks])
-
     async function fetchWatchlistAssets() {
         try {
             const response = await fetch(
@@ -92,11 +81,13 @@ const Watchlist = (props: WatchlistProps) => {
                 {}
             ).then((response) => {
                 response.json().then((json) => {
-                    setStocks(json)
+                    console.log(json)
+                    if (json.length > 0) {
+                        setStocks(json)
+                    } else setStocks([])
                 })
             })
             cookies.get('user_id')
-            console.log(cookies.get('user_id'))
         } catch (err) {
             console.log(err)
         }
@@ -116,7 +107,6 @@ const Watchlist = (props: WatchlistProps) => {
             {}
         ).then((response) => {
             response.json().then((json) => {
-                console.log(json)
                 wlUpdated()
             })
         })
@@ -183,184 +173,195 @@ const Watchlist = (props: WatchlistProps) => {
     return (
         <>
             <Box sx={{margin: 2}}>
-                {/* CREATE WL */}
-                <Button variant="contained" onClick={handleOpen1}>
-                    Create Watchlist
-                </Button>
-                <Modal
-                    open={open1}
-                    onClose={handleClose1}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={modalStyle}>
-                        <Typography
-                            id="modal-modal-title"
-                            variant="h4"
-                            component="h2"
-                            sx={{marginBottom: 1}}
-                        >
-                            Create New Watchlist
-                        </Typography>
-                        <TextField
-                            id="outlined-basic"
-                            label="New Watchlist Name"
-                            variant="outlined"
-                            onChange={(e) => setNewWLName(e.target.value)}
-                        />
-                        <Button
-                            sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => postNewWatchlist(props.wlUpdated)}
-                        >
-                            Submit
-                        </Button>
-                    </Box>
-                </Modal>
-                {/* ADD TICKERS */}
-                <Button variant="contained" onClick={handleOpen2}>
-                    Add Tickers
-                </Button>
-                <Modal open={open2} onClose={handleClose2}>
-                    <Box sx={modalStyle}>
-                        <Box sx={{m: 1}}>
-                            <Typography variant="h4" sx={{marginBottom: 1}}>
-                                Add Tickers
-                            </Typography>
-                            <Typography fontSize="16px">
-                                Add tickers to "{props.wl_name}"
-                            </Typography>
-                        </Box>
-                        <Box sx={{display: 'flex'}}>
-                            <Searchbar changeTickersInWL={setWatchlistAdd} />
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    color: colors.green[400],
-                                    m: 1,
-                                }}
-                                onClick={() =>
-                                    addTickersToWL(
-                                        watchlistAdd.toString().toUpperCase()
-                                    )
-                                }
+                <>
+                    {/* CREATE WL */}
+                    <Button variant="contained" onClick={handleOpen1}>
+                        Create Watchlist
+                    </Button>
+                    <Modal
+                        open={open1}
+                        onClose={handleClose1}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={modalStyle}>
+                            <Typography
+                                id="modal-modal-title"
+                                variant="h4"
+                                component="h2"
+                                sx={{marginBottom: 1}}
                             >
-                                Submit
-                            </Button>
-                        </Box>
-                    </Box>
-                </Modal>
-                {/* DELETE TICKERS */}
-                <Button variant="contained" onClick={handleOpen3}>
-                    Delete Tickers
-                </Button>
-                <Modal
-                    open={open3}
-                    onClose={handleClose3}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={modalStyle}>
-                        <Box sx={{m: 1}}>
-                            <Typography variant="h4" sx={{marginBottom: 1}}>
-                                Delete Tickers
+                                Create New Watchlist
                             </Typography>
-                            <Typography fontSize="16px">
-                                Delete tickers from "{props.wl_name}"
-                            </Typography>
-                        </Box>
-                        <Box sx={{display: 'flex'}}>
-                            <Searchbar
-                                changeTickersInWL={setWatchlistDel}
-                                autoCompleteList={stockList}
+                            <TextField
+                                id="outlined-basic"
+                                label="New Watchlist Name"
+                                variant="outlined"
+                                onChange={(e) => setNewWLName(e.target.value)}
                             />
                             <Button
-                                variant="contained"
-                                sx={{
-                                    color: colors.green[400],
-                                    m: 1,
-                                }}
+                                sx={{backgroundColor: 'white', margin: 1}}
                                 onClick={() =>
-                                    delTickersFromWL(
-                                        watchlistDel.toString().toUpperCase()
-                                    )
+                                    postNewWatchlist(props.wlUpdated)
                                 }
                             >
                                 Submit
                             </Button>
                         </Box>
-                    </Box>
-                </Modal>
-                {/* RENAME WL */}
-                <Button variant="contained" onClick={handleOpen4}>
-                    Rename Watchlist
-                </Button>
-                <Modal
-                    open={open4}
-                    onClose={handleClose4}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={modalStyle}>
-                        <Typography variant="h4" sx={{marginBottom: 1}}>
-                            Rename Watchlist
-                        </Typography>
-                        <TextField
-                            id="outlined-basic"
-                            label="New Name"
-                            variant="outlined"
-                            onChange={(e) => setNewName(e.target.value)}
-                        />
-                        <Typography fontSize="16px">
-                            Are you sure you want to rename watchlist "
-                            {props.wl_name}"?
-                        </Typography>
-                        <Button
-                            sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => renameWatchlist(props.wlUpdated)}
-                        >
-                            Yes
-                        </Button>
-                        <Button
-                            sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => handleClose4()}
-                        >
-                            No
-                        </Button>
-                    </Box>
-                </Modal>
-                {/* DELETE WL */}
-                <Button variant="contained" onClick={handleOpen5}>
-                    Delete Watchlist
-                </Button>
-                <Modal
-                    open={open5}
-                    onClose={handleClose5}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={modalStyle}>
-                        <Typography variant="h4" sx={{marginBottom: 1}}>
-                            Delete Watchlist
-                        </Typography>
-                        <Typography fontSize="16px">
-                            Are you sure you want to delete watchlist "
-                            {props.wl_name}"?
-                        </Typography>
-                        <Button
-                            sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => delWatchlist(props.wlUpdated)}
-                        >
-                            Yes
-                        </Button>
-                        <Button
-                            sx={{backgroundColor: 'white', margin: 1}}
-                            onClick={() => handleClose5()}
-                        >
-                            No
-                        </Button>
-                    </Box>
-                </Modal>
+                    </Modal>
+                    {/* ADD TICKERS */}
+                    <Button variant="contained" onClick={handleOpen2}>
+                        Add Tickers
+                    </Button>
+                    <Modal open={open2} onClose={handleClose2}>
+                        <Box sx={modalStyle}>
+                            <Box sx={{m: 1}}>
+                                <Typography variant="h4" sx={{marginBottom: 1}}>
+                                    Add Tickers
+                                </Typography>
+                                <Typography fontSize="16px">
+                                    Add tickers to "{props.wl_name}"
+                                </Typography>
+                            </Box>
+                            <Box sx={{display: 'flex'}}>
+                                <Searchbar
+                                    changeTickersInWL={setWatchlistAdd}
+                                />
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        color: colors.green[400],
+                                        m: 1,
+                                    }}
+                                    onClick={() =>
+                                        addTickersToWL(
+                                            watchlistAdd
+                                                .toString()
+                                                .toUpperCase()
+                                        )
+                                    }
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                    {/* DELETE TICKERS */}
+                    <Button variant="contained" onClick={handleOpen3}>
+                        Delete Tickers
+                    </Button>
+                    <Modal
+                        open={open3}
+                        onClose={handleClose3}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={modalStyle}>
+                            <Box sx={{m: 1}}>
+                                <Typography variant="h4" sx={{marginBottom: 1}}>
+                                    Delete Tickers
+                                </Typography>
+                                <Typography fontSize="16px">
+                                    Delete tickers from "{props.wl_name}"
+                                </Typography>
+                            </Box>
+                            <Box sx={{display: 'flex'}}>
+                                <Searchbar
+                                    changeTickersInWL={setWatchlistDel}
+                                    autoCompleteList={stockList}
+                                />
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        color: colors.green[400],
+                                        m: 1,
+                                    }}
+                                    onClick={() =>
+                                        delTickersFromWL(
+                                            watchlistDel
+                                                .toString()
+                                                .toUpperCase()
+                                        )
+                                    }
+                                >
+                                    Submit
+                                </Button>
+                            </Box>
+                        </Box>
+                    </Modal>
+                    {/* RENAME WL */}
+                    <Button variant="contained" onClick={handleOpen4}>
+                        Rename Watchlist
+                    </Button>
+                    <Modal
+                        open={open4}
+                        onClose={handleClose4}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={modalStyle}>
+                            <Typography variant="h4" sx={{marginBottom: 1}}>
+                                Rename Watchlist
+                            </Typography>
+                            <TextField
+                                id="outlined-basic"
+                                label="New Name"
+                                variant="outlined"
+                                onChange={(e) => setNewName(e.target.value)}
+                            />
+                            <Typography fontSize="16px">
+                                Are you sure you want to rename watchlist "
+                                {props.wl_name}"?
+                            </Typography>
+                            <Button
+                                sx={{backgroundColor: 'white', margin: 1}}
+                                onClick={() => renameWatchlist(props.wlUpdated)}
+                            >
+                                Yes
+                            </Button>
+                            <Button
+                                sx={{backgroundColor: 'white', margin: 1}}
+                                onClick={() => handleClose4()}
+                            >
+                                No
+                            </Button>
+                        </Box>
+                    </Modal>
+                    {/* DELETE WL */}
+                    <Button variant="contained" onClick={handleOpen5}>
+                        Delete Watchlist
+                    </Button>
+                    <Modal
+                        open={open5}
+                        onClose={handleClose5}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={modalStyle}>
+                            <Typography variant="h4" sx={{marginBottom: 1}}>
+                                Delete Watchlist
+                            </Typography>
+                            <Typography fontSize="16px">
+                                Are you sure you want to delete watchlist "
+                                {props.wl_name}"?
+                            </Typography>
+                            <Button
+                                sx={{backgroundColor: 'white', margin: 1}}
+                                onClick={() => delWatchlist(props.wlUpdated)}
+                            >
+                                Yes
+                            </Button>
+                            <Button
+                                sx={{backgroundColor: 'white', margin: 1}}
+                                onClick={() => handleClose5()}
+                            >
+                                No
+                            </Button>
+                        </Box>
+                    </Modal>
+                </>
             </Box>
+
             <Box sx={{mx: '3%'}}>
                 <Box display="flex" sx={{my: 2}}>
                     <Typography

@@ -48,9 +48,6 @@ class WatchlistService:
             
             ret = wl_id
 
-            if (len(tickers) > 0):
-                WatchlistService.addTickersToWatchlist(wl_id, user_id, True, *tickers)
-
         except Error as e:
             if (e.errno == errorcode.ER_DUP_ENTRY):
                 ret = ("Error: Duplicate Entry",409)
@@ -123,6 +120,7 @@ class WatchlistService:
             
             cursor.execute("""select ticker from WATCHLIST_TICKERS where wl_id = %s""", (wl_id,))
             result = cursor.fetchall()
+            
             
             cursor.execute("""SELECT wl_name FROM WATCHLISTS WHERE wl_id = %s""", (wl_id,))
             name = cursor.fetchone()
@@ -210,6 +208,9 @@ class WatchlistService:
         cnx, cursor = dbc.connect()
         cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
         responseFromDB = cursor.fetchall()
+        if (responseFromDB[0][0]=='None'):
+            return []
+        
         #needs userID and watchlist name
         #ticker = request.args.get('ticker')
         ret = []
