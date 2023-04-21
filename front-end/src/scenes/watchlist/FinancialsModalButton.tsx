@@ -11,11 +11,11 @@ const FinancialsModalButton = (props: {ticker: string}) => {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        bgcolor: colors.primary[400],
+        bgcolor: colors.primary[800],
         border: '2px solid #000',
         boxShadow: 24,
-        p: 4,
-        display: 'flex',
+        p: 1,
+        // display: 'flex',
     }
 
     const [financialInfo, setFinancialInfo] = useState('')
@@ -45,11 +45,9 @@ const FinancialsModalButton = (props: {ticker: string}) => {
 
     return (
         <>
-            <Box sx={{display: 'flex', alignItems: 'flex-end'}}>
-                <Button onClick={handleOpen} sx={{bgcolor: colors.blue[300]}}>
-                    More Info
-                </Button>
-            </Box>
+            <Button onClick={handleOpen} sx={{bgcolor: colors.grey[400]}}>
+                More Info
+            </Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -57,7 +55,6 @@ const FinancialsModalButton = (props: {ticker: string}) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={{...modalStyle}}>
-                    <Button onClick={handleClose}>Close</Button>
                     <Typography id="modal-modal-title">Financials:</Typography>
                     <Typography
                         id="modal-modal-description"
@@ -69,6 +66,7 @@ const FinancialsModalButton = (props: {ticker: string}) => {
                     >
                         {financialInfo ? financialInfo : <p>loading...</p>}
                     </Typography>
+                    <Button onClick={handleClose}>Close</Button>
                 </Box>
             </Modal>
         </>

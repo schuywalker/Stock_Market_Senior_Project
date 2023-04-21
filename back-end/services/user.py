@@ -106,7 +106,7 @@ class UserService:
                 cnx.close()
                 return response, 400      
             else:
-                response = {"message": "Logged in"}, 200
+                response = {"message": "Logged in","user_id":result[0][0]}
                 cnx.close()   
                 return response, 200   
         except Error as e:

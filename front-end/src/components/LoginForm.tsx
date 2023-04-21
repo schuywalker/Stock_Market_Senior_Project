@@ -6,18 +6,17 @@ import {login} from '../config/WebcallAPI'
 
 const CustomModal = styled(Modal)({
     '.MuiBackdrop-root': {
-      display: 'fixed',
-      top: '0%',
-      height: "100vh",
-      width: "100vw",
-      backgroundColor: 'rgba(10,10,10,0.5)'//Dark backdrop with 50% opacity
-      
-    }
-  });
+        display: 'fixed',
+        top: '0%',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: 'rgba(10,10,10,0.5)', //Dark backdrop with 50% opacity
+    },
+})
 const style = {
     position: 'absolute' as 'absolute',
     top: '35%',
-    left: '40%',  
+    left: '40%',
     width: 450,
     p: 4,
 }
@@ -62,24 +61,24 @@ export default function LoginForm(props: any) {
     const canSubmit = () => {
         if (usernameValidated && passwordValidated) {
             return true
-        }  else{
-                if(usernameValidated){
-                    setUsernameTextFieldError(false)
-                    setUsernameHelperText("")
-                }
-                else{
-                    setUsernameTextFieldError(true)
-                    if(usernameHelperText === "")setUsernameHelperText("Invalid Username Entered")
-                }
-                if(passwordValidated){
-                    setPasswordTextFieldError(false)
-                    setPasswordHelperText("")
-                }
-                else{
-                    setPasswordTextFieldError(true)
-                    if(passwordHelperText === "")setPasswordHelperText("Invalid Password Entered")
-                }
+        } else {
+            if (usernameValidated) {
+                setUsernameTextFieldError(false)
+                setUsernameHelperText('')
+            } else {
+                setUsernameTextFieldError(true)
+                if (usernameHelperText === '')
+                    setUsernameHelperText('Invalid Username Entered')
             }
+            if (passwordValidated) {
+                setPasswordTextFieldError(false)
+                setPasswordHelperText('')
+            } else {
+                setPasswordTextFieldError(true)
+                if (passwordHelperText === '')
+                    setPasswordHelperText('Invalid Password Entered')
+            }
+        }
         return false
     }
     const validateUsername = (name: string) => {
@@ -115,7 +114,6 @@ export default function LoginForm(props: any) {
                 onClose={props.close}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                
             >
                 <Box
                     sx={{
@@ -197,42 +195,60 @@ export default function LoginForm(props: any) {
                             if (passwordValidated) {
                                 setPassword(event.target.value)
                             }
-                            
-                    }}/>
-                    <Button sx={{
-                        background: 'white',
-                        '&:hover':{
-                            background: 'grey',
-                            color:'white'
-                        }
-                    }}
-                    onClick={async()=>{
-                        if(canSubmit()){
-                          await axios.post(login(username,password)).then((response)=>{
-                            setUsernameTextFieldError(false)
-                            setUsernameHelperText("")
-                            setPasswordTextFieldError(false)
-                            setPasswordHelperText("")
-            
-                            if(response.data[0]['message']==='Invalid credentials'){
-                              setUsernameValidated(false)
-                              setUsernameTextFieldError(true)
-                              setUsernameHelperText("Username doesn't exist")
+                        }}
+                    />
+                    <Button
+                        sx={{
+                            background: 'white',
+                            '&:hover': {
+                                background: 'grey',
+                                color: 'white',
+                            },
+                        }}
+                        onClick={async () => {
+                            if (canSubmit()) {
+                                await axios
+                                    .post(login(username, password))
+                                    .then((response) => {
+                                        setUsernameTextFieldError(false)
+                                        setUsernameHelperText('')
+                                        setPasswordTextFieldError(false)
+                                        setPasswordHelperText('')
+
+                                        if (
+                                            response.data['message'] ===
+                                            'Invalid credentials'
+                                        ) {
+                                            setUsernameValidated(false)
+                                            setUsernameTextFieldError(true)
+                                            setUsernameHelperText(
+                                                "Username doesn't exist"
+                                            )
+                                        } else {
+                                            //login
+                                            cookies.set('user', username, {
+                                                path: '/',
+                                            })
+                                            cookies.set('password', password, {
+                                                path: '/',
+                                            })
+                                            cookies.set(
+                                                'user_id',
+                                                response.data['user_id']
+                                            )
+                                            console.log(response.data)
+                                            props.close()
+                                            props.login()
+                                        }
+                                    })
+                                    .catch((e) => {
+                                        console.log(e)
+                                    })
                             }
-                            else{
-                              //login
-                              cookies.set("user",username,{ path: '/' })
-                              cookies.set("password",password,{ path: '/' })
-                              cookies.set("user_id",response.data[0]['user_id']);
-                              props.close()
-                              props.login()
-                            } 
-                          }).catch(e=>{
-                            console.log(e);
-                          })
-                        }
-                        
-                      }}>Submit</Button>    
+                        }}
+                    >
+                        Submit
+                    </Button>
                 </Box>
             </CustomModal>
         </React.Fragment>

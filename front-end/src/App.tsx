@@ -8,73 +8,106 @@ import {ColorModeContext, useMode} from './theme'
 import {Box, CssBaseline, ThemeProvider} from '@mui/material'
 import {useEffect, useState} from 'react'
 import {ProSidebarProvider} from 'react-pro-sidebar'
-import Cookies from 'universal-cookie';
+import Cookies from 'universal-cookie'
 import AccountManagement from './components/AccountManagement'
 import LandingPage from './scenes/LandingPage'
+import Dashboard from './scenes/dashboard/Dashboard'
+import Sandbox from './components/Sandbox'
 
-const cookies = new Cookies();
+const cookies = new Cookies()
 
 function App() {
     const {theme, colorMode} = useMode()
-    const[initialLogin, setInitialLogin] = useState(false);
-    const [loggedIn,setLoggedIn] = useState((cookies.get("user")?true:false));//Need to check if cookie is valid and user/password is correct
-    const [username,setUsername] = useState("")
+    const [initialLogin, setInitialLogin] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(cookies.get('user') ? true : false) //Need to check if cookie is valid and user/password is correct
+    const [username, setUsername] = useState('')
 
-    const navigate = useNavigate();
-    const handleLogin = (value: boolean)=>{
-        if(!value){
-            navigate("/")
-            setUsername("")
-        }
-        else{
-            navigate("/analyst-calls")
+    const navigate = useNavigate()
+    const handleLogin = (value: boolean) => {
+        if (!value) {
+            navigate('/')
+            setUsername('')
+        } else {
+            navigate('/dashboard')
             setUsername(cookies.get('user'))
         }
         setLoggedIn(value)
     }
-    useEffect(()=>{
-        if(!initialLogin && loggedIn){
-            navigate("/analyst-calls")
+    useEffect(() => {
+        if (!initialLogin && loggedIn) {
+            navigate('/dashboard')
             setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
-    },[])
+    }, [])
 
     return (
         <>
-            {/* <ColorModeContext.Provider value = {{toggleColorMode}}> */}
             <ColorModeContext.Provider value={colorMode}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <div className="App">
                         <div className="content">
-                            <ResponsiveAppBar loginFunction={(value:boolean)=>handleLogin(value)} loggedIn = {loggedIn}/>
+                            <ResponsiveAppBar
+                                loginFunction={(value: boolean) =>
+                                    handleLogin(value)
+                                }
+                                loggedIn={loggedIn}
+                            />
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
-                                    <ResponsiveSideBar loggedIn = {loggedIn} loginFunction = {(value:boolean)=>{handleLogin(value)}} username={username}/>
+                                    <ResponsiveSideBar
+                                        loggedIn={loggedIn}
+                                        loginFunction={(value: boolean) => {
+                                            handleLogin(value)
+                                        }}
+                                        username={username}
+                                    />
                                 </ProSidebarProvider>
 
                                 <Routes>
-                                    {/* <Route path="/" element={<Home />}/> */}
+                                    <Route path="/" element={<LandingPage />} />
                                     <Route
-                                        path="/"
-                                        element={<LandingPage />}
-                                    />
-                                    <Route
-                                        path="/watchlist"
-                                        element={(loggedIn?<Watchlist />:<Navigate to="/"/>)}
+                                        path="/dashboard"
+                                        element={
+                                            loggedIn ? (
+                                                <Dashboard />
+                                            ) : (
+                                                <Navigate to="/" />
+                                            )
+                                        }
                                     />
                                     <Route
                                         path="/analyst-calls"
-                                        element={(loggedIn?<AnalystCalls />:<Navigate to="/"/>)}
+                                        element={
+                                            loggedIn ? (
+                                                <AnalystCalls />
+                                            ) : (
+                                                <Navigate to="/" />
+                                            )
+                                        }
                                     />
                                     <Route
                                         path="/account"
-                                        element={(loggedIn?<AccountManagement updateUsername = {(val:string)=>setUsername(val)}/>:<Navigate to="/"/>)}
+                                        element={
+                                            loggedIn ? (
+                                                <AccountManagement
+                                                    updateUsername={(
+                                                        val: string
+                                                    ) => setUsername(val)}
+                                                />
+                                            ) : (
+                                                <Navigate to="/" />
+                                            )
+                                        }
+                                    />
+                                    <Route
+                                        path="/sandbox"
+                                        element={<Sandbox />}
                                     />
                                     <Route
                                         path="*"
-                                        element={<Navigate to="/"/>}
+                                        element={<Navigate to="/" />}
                                     />
                                 </Routes>
                             </Box>
