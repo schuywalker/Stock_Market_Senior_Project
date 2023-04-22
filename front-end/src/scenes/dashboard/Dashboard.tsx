@@ -16,8 +16,6 @@ const Dashboard = () => {
 
     const handleUpdateWL = () => {
         setWLUpdated(!wlUpdatedToggle)
-        // if (wlUpdatedToggle === false) setWLUpdated(true)
-        console.log('dash handleUpdate', wlUpdatedToggle)
     }
 
     const cookies = new Cookies()
@@ -34,7 +32,6 @@ const Dashboard = () => {
             ).then((response) => {
                 response.json().then((json) => {
                     setUserWatchlists(json[0])
-                    console.log(json[0])
                 })
             })
         } catch (err) {
@@ -49,8 +46,6 @@ const Dashboard = () => {
     function handleLoadingWatchlist(wl_id: number, wl_name: string) {
         setShowWatchlist(true)
         setWatchlistSelected(wl_id)
-        console.log('dash handleLoading', wl_id)
-        console.log('dash handleLoading', wl_name)
         set_wl_name(wl_name)
     }
 

@@ -81,12 +81,10 @@ const Watchlist = (props: WatchlistProps) => {
 
     useEffect(() => {
         fetchWatchlistAssets()
-        console.log(props.wl_id, 'wl_id')
     }, [props.wl_id])
 
     async function fetchWatchlistAssets() {
         if (props.wl_id === 0) {
-            console.log('Watchlist.tsx fetchWLAssets: no wl_id')
             setStocks([])
             return
         }
@@ -96,7 +94,6 @@ const Watchlist = (props: WatchlistProps) => {
                 {}
             ).then((response) => {
                 response.json().then((json) => {
-                    console.log(json)
                     if (json.length > 0) {
                         setStocks(json)
                     } else setStocks([])
