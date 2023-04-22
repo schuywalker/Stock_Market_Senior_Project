@@ -54,23 +54,16 @@ const Watchlist = (props: WatchlistProps) => {
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
 
-    const [watchlistAdd, setWatchlistAdd] = useState([])
     const [watchlistDel, setWatchlistDel] = useState([])
     const [stockList, setStockList] = useState<String[][]>([[]])
 
     const [stocks, setStocks] = useState<DisplayGroup[]>([])
-    const [open1, setOpen1] = useState(false)
-    const [open2, setOpen2] = useState(false)
     const [open3, setOpen3] = useState(false)
     const [open4, setOpen4] = useState(false)
     const [open5, setOpen5] = useState(false)
-    const handleOpen1 = () => setOpen1(true)
-    const handleOpen2 = () => setOpen2(true)
     const handleOpen3 = () => setOpen3(true)
     const handleOpen4 = () => setOpen4(true)
     const handleOpen5 = () => setOpen5(true)
-    const handleClose1 = () => setOpen1(false)
-    const handleClose2 = () => setOpen2(false)
     const handleClose3 = () => setOpen3(false)
     const handleClose4 = () => setOpen4(false)
     const handleClose5 = () => setOpen5(false)
@@ -101,32 +94,7 @@ const Watchlist = (props: WatchlistProps) => {
 
     const [gridView, setGridView] = useState<boolean>(true)
 
-    const [newWLName, setNewWLName] = useState('')
     const [newName, setNewName] = useState('')
-
-    async function createWatchlist(wlUpdated: any) {
-        handleClose1()
-        const response = await fetch(
-            createWL(cookies.get('user_id'), newWLName),
-            {}
-        ).then((response) => {
-            response.json().then((json) => {
-                wlUpdated()
-            })
-        })
-    }
-
-    async function addTickersToWatchlist(wlAddTickers: String) {
-        handleClose2()
-        const response = await fetch(
-            addTickersToWL(wlAddTickers, props.wl_id, cookies.get('user_id')),
-            {}
-        ).then((response) => {
-            response.json().then((json) => {
-                console.log(json)
-            })
-        })
-    }
 
     async function delTickersFromWatchlist(wlDelTickers: String) {
         handleClose3()
@@ -170,76 +138,6 @@ const Watchlist = (props: WatchlistProps) => {
         <>
             <Box sx={{margin: 2}}>
                 <>
-                    {/* CREATE WL */}
-                    <Button variant="contained" onClick={handleOpen1}>
-                        Create Watchlist
-                    </Button>
-                    <Modal
-                        open={open1}
-                        onClose={handleClose1}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={modalStyle}>
-                            <Typography
-                                id="modal-modal-title"
-                                variant="h4"
-                                component="h2"
-                                sx={{marginBottom: 1}}
-                            >
-                                Create New Watchlist
-                            </Typography>
-                            <TextField
-                                id="outlined-basic"
-                                label="New Watchlist Name"
-                                variant="outlined"
-                                onChange={(e) => setNewWLName(e.target.value)}
-                            />
-                            <Button
-                                sx={{backgroundColor: 'white', margin: 1}}
-                                onClick={() => createWatchlist(props.wlUpdated)}
-                            >
-                                Submit
-                            </Button>
-                        </Box>
-                    </Modal>
-                    {/* ADD TICKERS */}
-                    <Button variant="contained" onClick={handleOpen2}>
-                        Add Tickers
-                    </Button>
-                    <Modal open={open2} onClose={handleClose2}>
-                        <Box sx={modalStyle}>
-                            <Box sx={{m: 1}}>
-                                <Typography variant="h4" sx={{marginBottom: 1}}>
-                                    Add Tickers
-                                </Typography>
-                                <Typography fontSize="16px">
-                                    Add tickers to "{props.wl_name}"
-                                </Typography>
-                            </Box>
-                            <Box sx={{display: 'flex'}}>
-                                <Searchbar
-                                    changeTickersInWL={setWatchlistAdd}
-                                />
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        color: colors.green[400],
-                                        m: 1,
-                                    }}
-                                    onClick={() =>
-                                        addTickersToWatchlist(
-                                            watchlistAdd
-                                                .toString()
-                                                .toUpperCase()
-                                        )
-                                    }
-                                >
-                                    Submit
-                                </Button>
-                            </Box>
-                        </Box>
-                    </Modal>
                     {/* DELETE TICKERS */}
                     <Button variant="contained" onClick={handleOpen3}>
                         Delete Tickers
