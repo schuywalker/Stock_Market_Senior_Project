@@ -12,17 +12,19 @@ const Dashboard = () => {
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
-    const [wlUpdated, setWLUpdated] = useState(false)
+    const [wlUpdatedToggle, setWLUpdated] = useState(false)
 
     const handleUpdateWL = () => {
-        setWLUpdated(!wlUpdated)
+        setWLUpdated(!wlUpdatedToggle)
+        // if (wlUpdatedToggle === false) setWLUpdated(true)
+        console.log('dash handleUpdate', wlUpdatedToggle)
     }
 
     const cookies = new Cookies()
 
     useEffect(() => {
         fetchUserWatchlists()
-    }, [wlUpdated])
+    }, [wlUpdatedToggle])
 
     async function fetchUserWatchlists() {
         try {

@@ -208,8 +208,11 @@ class WatchlistService:
         cnx, cursor = dbc.connect()
         cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
         responseFromDB = cursor.fetchall()
-        if (responseFromDB[0][0]=='None'):
+        print(f'\n\npopulateWatchlist response is {responseFromDB} \n\n')
+        if (responseFromDB == []):
             return []
+        # if (responseFromDB[0][0]=='None'):
+        #     return []
         
         #needs userID and watchlist name
         #ticker = request.args.get('ticker')

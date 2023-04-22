@@ -92,7 +92,9 @@ const Stock = (props: DisplayGroup) => {
                                 fontSize: theme.typography.h5,
                             }}
                         >
-                            {(perChange as number).toFixed(2) + ' %'}
+                            {perChange === null
+                                ? 'Bad Data'
+                                : (perChange as number).toFixed(2) + ' %'}
                         </Typography>
                     </Box>
                     <Box

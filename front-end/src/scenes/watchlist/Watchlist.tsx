@@ -74,6 +74,10 @@ const Watchlist = (props: WatchlistProps) => {
     const handleClose3 = () => setOpen3(false)
     const handleClose4 = () => setOpen4(false)
     const handleClose5 = () => setOpen5(false)
+    const [gridView, setGridView] = useState<boolean>(true)
+
+    const [newWLName, setNewWLName] = useState('')
+    const [newName, setNewName] = useState('')
 
     useEffect(() => {
         fetchWatchlistAssets()
@@ -81,6 +85,11 @@ const Watchlist = (props: WatchlistProps) => {
     }, [props.wl_id])
 
     async function fetchWatchlistAssets() {
+        if (props.wl_id === 0) {
+            console.log('Watchlist.tsx fetchWLAssets: no wl_id')
+            setStocks([])
+            return
+        }
         try {
             const response = await fetch(
                 getWLAssets(cookies.get('user_id'), props.wl_id),
@@ -98,11 +107,6 @@ const Watchlist = (props: WatchlistProps) => {
             console.log(err)
         }
     }
-
-    const [gridView, setGridView] = useState<boolean>(true)
-
-    const [newWLName, setNewWLName] = useState('')
-    const [newName, setNewName] = useState('')
 
     async function createWatchlist(wlUpdated: any) {
         handleClose1()
@@ -170,6 +174,7 @@ const Watchlist = (props: WatchlistProps) => {
         <>
             <Box sx={{margin: 2}}>
                 <>
+                    {/* 
                     {/* CREATE WL */}
                     <Button variant="contained" onClick={handleOpen1}>
                         Create Watchlist
