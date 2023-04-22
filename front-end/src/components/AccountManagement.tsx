@@ -3,6 +3,8 @@ import axios from "axios";
 import Cookies from 'universal-cookie';
 import { Box, Button, Link, Modal, TextField, Typography, styled } from '@mui/material';
 import {getUserData,alterUsername,alterUserFirstName,alterUserLastName,alterUserEmail, isCorrectPassword, alterPassword} from '../config/WebcallAPI'
+import { gracefulify } from 'graceful-fs';
+import ConfirmationModal from './ConfirmationModal';
 
 const cookies = new Cookies();
 
@@ -374,7 +376,9 @@ export default function AccountManagement(props:any){
    const[firstName,setFirstName] = React.useState("");
    const[lastName,setLastName] = React.useState("");
    const[email,setEmail] = React.useState("");
+   const[showDeleteModal,setShowDeleteModal] = React.useState(false);
    const updateSiteUsernameFunction = props.updateUsername;
+   const setLoggedInFunction = props.loggedInFunction;
    
    React.useEffect(() => {
             axios.get(getUserData(cookies.get('user'))).then((response)=>{
@@ -447,6 +451,18 @@ export default function AccountManagement(props:any){
                     <Field errorMessage='Invalid Email' fieldName = 'Email' endpoint={[alterUserEmail,{'username':username}]} displayValue={email} displayedValueFunction={(val:string)=>{setEmail(val)}} validationFunction={validateEmail}/>
                     <Field password fieldName = 'Change Password' passwordEndpoint={[isCorrectPassword,{'username':username}]} endpoint = {[alterPassword,{'username':username}]} validationFunction={validatePassword}/>
                 </Box>
+                <Box sx={{textAlign:'right',marginRight:5}}>
+                    <Button sx={{background: 'white', '&:hover': {background:'grey',color:'white'}}}
+                    onClick={()=>{
+                        setShowDeleteModal(true)
+                    }}>Delete Account</Button>
+                </Box>
+                <ConfirmationModal
+                        open={showDeleteModal}
+                        onClose={() => setShowDeleteModal(false)}
+                        sidebarDisplay={(value: boolean) => setLoggedInFunction(value)}
+                        loginFunction={setLoggedInFunction}
+                />
             </div>
 
         );
