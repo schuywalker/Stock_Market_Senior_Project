@@ -1,26 +1,27 @@
 import {useState} from 'react'
-import {addTickersToWL} from '../../../config/WebcallAPI'
+import {delTickersFromWL} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
 import Searchbar from '../../../components/UI/Searchbar'
 
-type AddTickersButtonProps = {
+type DeleteTickersButtonProps = {
     user_id: string
     wl_id: number
     wl_name: string
 }
 
-const AddTickersButton = (props: AddTickersButtonProps) => {
-    const [watchlistAdd, setWatchlistAdd] = useState([])
+const DeleteTickersButton = (props: DeleteTickersButtonProps) => {
+    const [watchlistDel, setWatchlistDel] = useState([])
+    const [stockList, setStockList] = useState<String[][]>([[]])
 
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
 
-    async function addTickers(wlAddTickers: string) {
+    async function delTickersFromWatchlist(wlDelTickers: string) {
         handleClose()
         const response = await fetch(
-            addTickersToWL(wlAddTickers, props.wl_id, props.user_id),
+            delTickersFromWL(wlDelTickers, props.wl_id, props.user_id),
             {}
         ).then((response) => {
             response.json().then((json) => {
@@ -31,22 +32,30 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
 
     return (
         <>
-            {/* ADD TICKERS */}
+            {/* DELETE TICKERS */}
             <Button variant="contained" onClick={handleOpen}>
-                Add Tickers
+                Delete Tickers
             </Button>
-            <Modal open={open} onClose={handleClose}>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
                 <Box sx={modalStyle}>
                     <Box sx={{m: 1}}>
                         <Typography variant="h4" sx={{marginBottom: 1}}>
-                            Add Tickers
+                            Delete Tickers
                         </Typography>
                         <Typography fontSize="16px">
-                            Add tickers to "{props.wl_name}"
+                            Delete tickers from "{props.wl_name}"
                         </Typography>
                     </Box>
                     <Box sx={{display: 'flex'}}>
-                        <Searchbar changeTickersInWL={setWatchlistAdd} />
+                        <Searchbar
+                            changeTickersInWL={setWatchlistDel}
+                            autoCompleteList={stockList}
+                        />
                         <Button
                             variant="contained"
                             sx={{
@@ -54,8 +63,8 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
                                 m: 1,
                             }}
                             onClick={() =>
-                                addTickers(
-                                    watchlistAdd.toString().toUpperCase()
+                                delTickersFromWatchlist(
+                                    watchlistDel.toString().toUpperCase()
                                 )
                             }
                         >
@@ -67,4 +76,4 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
         </>
     )
 }
-export default AddTickersButton
+export default DeleteTickersButton

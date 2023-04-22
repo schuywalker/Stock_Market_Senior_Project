@@ -7,6 +7,7 @@ import Searchbar from '../../components/UI/Searchbar'
 import {getUserWL} from '../../config/WebcallAPI'
 import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import AddTickersButton from '../watchlist/WL_Action_Buttons/Add_Tickers_Button'
+import DeleteTickersButton from '../watchlist/WL_Action_Buttons/Delete_Tickers_Button'
 
 const Dashboard = () => {
     const theme = useTheme()
@@ -94,6 +95,11 @@ const Dashboard = () => {
             <Box sx={{margin: 2}}>
                 <CreateWLButton user_id={cookies.get('user_id')} />
                 <AddTickersButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                />
+                <DeleteTickersButton
                     user_id={cookies.get('user_id')}
                     wl_id={watchlistSelected}
                     wl_name={wl_name}

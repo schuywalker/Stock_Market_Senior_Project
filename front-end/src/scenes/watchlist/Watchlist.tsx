@@ -25,8 +25,6 @@ import Cookies from 'universal-cookie'
 import modalStyle from './WatchlistStyles'
 import Searchbar from '../../components/UI/Searchbar'
 import {
-    addTickersToWL,
-    createWL,
     delTickersFromWL,
     deleteWL,
     getWLAssets,
@@ -54,17 +52,11 @@ const Watchlist = (props: WatchlistProps) => {
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
 
-    const [watchlistDel, setWatchlistDel] = useState([])
-    const [stockList, setStockList] = useState<String[][]>([[]])
-
     const [stocks, setStocks] = useState<DisplayGroup[]>([])
-    const [open3, setOpen3] = useState(false)
     const [open4, setOpen4] = useState(false)
     const [open5, setOpen5] = useState(false)
-    const handleOpen3 = () => setOpen3(true)
     const handleOpen4 = () => setOpen4(true)
     const handleOpen5 = () => setOpen5(true)
-    const handleClose3 = () => setOpen3(false)
     const handleClose4 = () => setOpen4(false)
     const handleClose5 = () => setOpen5(false)
 
@@ -96,18 +88,6 @@ const Watchlist = (props: WatchlistProps) => {
 
     const [newName, setNewName] = useState('')
 
-    async function delTickersFromWatchlist(wlDelTickers: String) {
-        handleClose3()
-        const response = await fetch(
-            delTickersFromWL(wlDelTickers, props.wl_id, cookies.get('user_id')),
-            {}
-        ).then((response) => {
-            response.json().then((json) => {
-                console.log(json)
-            })
-        })
-    }
-
     async function renameWatchlist(wlUpdated: any) {
         handleClose4()
         const response = await fetch(
@@ -138,49 +118,6 @@ const Watchlist = (props: WatchlistProps) => {
         <>
             <Box sx={{margin: 2}}>
                 <>
-                    {/* DELETE TICKERS */}
-                    <Button variant="contained" onClick={handleOpen3}>
-                        Delete Tickers
-                    </Button>
-                    <Modal
-                        open={open3}
-                        onClose={handleClose3}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={modalStyle}>
-                            <Box sx={{m: 1}}>
-                                <Typography variant="h4" sx={{marginBottom: 1}}>
-                                    Delete Tickers
-                                </Typography>
-                                <Typography fontSize="16px">
-                                    Delete tickers from "{props.wl_name}"
-                                </Typography>
-                            </Box>
-                            <Box sx={{display: 'flex'}}>
-                                <Searchbar
-                                    changeTickersInWL={setWatchlistDel}
-                                    autoCompleteList={stockList}
-                                />
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        color: colors.green[400],
-                                        m: 1,
-                                    }}
-                                    onClick={() =>
-                                        delTickersFromWatchlist(
-                                            watchlistDel
-                                                .toString()
-                                                .toUpperCase()
-                                        )
-                                    }
-                                >
-                                    Submit
-                                </Button>
-                            </Box>
-                        </Box>
-                    </Modal>
                     {/* RENAME WL */}
                     <Button variant="contained" onClick={handleOpen4}>
                         Rename Watchlist
