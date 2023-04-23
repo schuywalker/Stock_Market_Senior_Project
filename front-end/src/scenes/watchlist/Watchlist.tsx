@@ -45,6 +45,7 @@ type WatchlistProps = {
     wl_name: string
     wl_id: number
     wlUpdated: any
+    controller: AbortController
 }
 
 // const Watchlist = (props:WatchlistProps) => {
@@ -74,21 +75,27 @@ const Watchlist = (props: WatchlistProps) => {
     const handleClose3 = () => setOpen3(false)
     const handleClose4 = () => setOpen4(false)
     const handleClose5 = () => setOpen5(false)
-    const [gridView, setGridView] = useState<boolean>(true)
 
+    const [gridView, setGridView] = useState<boolean>(true)
     const [newWLName, setNewWLName] = useState('')
     const [newName, setNewName] = useState('')
+    let fetchAssetsInProgress = false
 
     useEffect(() => {
+        if (fetchAssetsInProgress === true) {
+            props.controller.abort()
+        }
         fetchWatchlistAssets()
     }, [props.wl_id])
 
+    // potentially add atmoicity to fetchAssetsInProgress? still have problems with latency of differently sized watchlists
     async function fetchWatchlistAssets() {
         if (props.wl_id === 0) {
             setStocks([])
             return
         }
         try {
+            fetchAssetsInProgress = true
             const response = await fetch(
                 getWLAssets(cookies.get('user_id'), props.wl_id),
                 {}
@@ -102,6 +109,8 @@ const Watchlist = (props: WatchlistProps) => {
             cookies.get('user_id')
         } catch (err) {
             console.log(err)
+        } finally {
+            fetchAssetsInProgress = false
         }
     }
 

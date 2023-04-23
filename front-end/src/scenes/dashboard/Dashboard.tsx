@@ -9,6 +9,8 @@ import {getUserWL} from '../../config/WebcallAPI'
 const Dashboard = () => {
     const theme = useTheme()
 
+    const controller = new AbortController()
+
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
@@ -25,11 +27,11 @@ const Dashboard = () => {
     }, [wlUpdatedToggle])
 
     async function fetchUserWatchlists() {
+        const signal = controller.signal
         try {
-            const response = await fetch(
-                getUserWL(cookies.get('user_id')),
-                {}
-            ).then((response) => {
+            const response = await fetch(getUserWL(cookies.get('user_id')), {
+                signal,
+            }).then((response) => {
                 response.json().then((json) => {
                     setUserWatchlists(json[0])
                 })
@@ -90,6 +92,7 @@ const Dashboard = () => {
                 wl_id={watchlistSelected}
                 wl_name={wl_name}
                 wlUpdated={handleUpdateWL}
+                controller={controller}
             />
         </Box>
     )
