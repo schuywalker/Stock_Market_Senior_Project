@@ -66,8 +66,8 @@ const ConfirmationModal: React.FunctionComponent<ModalFieldProps> = ({
                             },
                         }}
                         onClick={() => {
-                            sidebarDisplay(false)
-                            let user = cookies.get('user_id')
+                            //sidebarDisplay(false)
+                            let user = cookies.get('user')
                             cookies.remove('user')
                             cookies.remove('password')
                             cookies.remove('user_id')

@@ -95,6 +95,8 @@ function App() {
                                                     updateUsername={(
                                                         val: string
                                                     ) => setUsername(val)}
+                                                    loggedInFunction ={(val:boolean)=>setLoggedIn(val)
+                                                    }
                                                 />
                                             ) : (
                                                 <Navigate to="/" />

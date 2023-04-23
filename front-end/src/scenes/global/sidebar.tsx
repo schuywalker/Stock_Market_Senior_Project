@@ -208,72 +208,7 @@ const ProSidebar = (props: any) => {
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
-                                <Typography
-                                    variant="h6"
-                                    color={colors.grey[400]}
-                                    sx={{fontsize: 50, m: 1.5}}
-                                >
-                                    {isCollapsed ? 'Lists' : 'Watchlists'}
-                                </Typography>
-                                <Item
-                                    title="View Watchlists"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={
-                                        <VisibilityIcon sx={{fontSize: 20}} />
-                                    }
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                {/* <Select>Watchlists</Select> */}
-                                <Item
-                                    title="Create Watchlist"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={<CreateIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                <Item
-                                    title="Edit Watchlist"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={<IsoIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                <Item
-                                    title="Delete Watchlist"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={<ClearIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
+
                                 <Typography
                                     variant="h6"
                                     color={colors.grey[400]}
@@ -299,29 +234,9 @@ const ProSidebar = (props: any) => {
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
-                                <Item
-                                    title="Delete Account"
-                                    link={
-                                        <Link
-                                            to={userURL}
-                                            onClick={() => {
-                                                setShowModal(!showModal)
-                                            }}
-                                        ></Link>
-                                    }
-                                    icon={<DeleteIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
                             </Box>
                         </Menu>
                     </Sidebar>
-                    <ConfirmationModal
-                        open={showModal}
-                        onClose={() => setShowModal(false)}
-                        sidebarDisplay={(value: boolean) => setLoggedIn(value)}
-                        loginFunction={props.loginFunction}
-                    />
                 </Box>
             </>
         )

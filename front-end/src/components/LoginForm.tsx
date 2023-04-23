@@ -221,8 +221,9 @@ export default function LoginForm(props: any) {
                                         ) {
                                             setUsernameValidated(false)
                                             setUsernameTextFieldError(true)
+                                            setPasswordTextFieldError(true)
                                             setUsernameHelperText(
-                                                "Username doesn't exist"
+                                                "Invalid Credentials Entered"
                                             )
                                         } else {
                                             //login
