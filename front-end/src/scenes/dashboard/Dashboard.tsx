@@ -9,30 +9,31 @@ import {getUserWL} from '../../config/WebcallAPI'
 const Dashboard = () => {
     const theme = useTheme()
 
+    const controller = new AbortController()
+
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
-    const [wlUpdated, setWLUpdated] = useState(false)
+    const [wlUpdatedToggle, setWLUpdated] = useState(false)
 
     const handleUpdateWL = () => {
-        setWLUpdated(!wlUpdated)
+        setWLUpdated(!wlUpdatedToggle)
     }
 
     const cookies = new Cookies()
 
     useEffect(() => {
         fetchUserWatchlists()
-    }, [wlUpdated])
+    }, [wlUpdatedToggle])
 
     async function fetchUserWatchlists() {
+        const signal = controller.signal
         try {
-            const response = await fetch(
-                getUserWL(cookies.get('user_id')),
-                {}
-            ).then((response) => {
+            const response = await fetch(getUserWL(cookies.get('user_id')), {
+                signal,
+            }).then((response) => {
                 response.json().then((json) => {
                     setUserWatchlists(json[0])
-                    console.log(json[0])
                 })
             })
         } catch (err) {
@@ -47,8 +48,6 @@ const Dashboard = () => {
     function handleLoadingWatchlist(wl_id: number, wl_name: string) {
         setShowWatchlist(true)
         setWatchlistSelected(wl_id)
-        console.log('dash handleLoading', wl_id)
-        console.log('dash handleLoading', wl_name)
         set_wl_name(wl_name)
     }
 
@@ -93,6 +92,7 @@ const Dashboard = () => {
                 wl_id={watchlistSelected}
                 wl_name={wl_name}
                 wlUpdated={handleUpdateWL}
+                controller={controller}
             />
         </Box>
     )

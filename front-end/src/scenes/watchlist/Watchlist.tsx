@@ -45,6 +45,7 @@ type WatchlistProps = {
     wl_name: string
     wl_id: number
     wlUpdated: any
+    controller: AbortController
 }
 
 // const Watchlist = (props:WatchlistProps) => {
@@ -75,19 +76,31 @@ const Watchlist = (props: WatchlistProps) => {
     const handleClose4 = () => setOpen4(false)
     const handleClose5 = () => setOpen5(false)
 
+    const [gridView, setGridView] = useState<boolean>(true)
+    const [newWLName, setNewWLName] = useState('')
+    const [newName, setNewName] = useState('')
+    let fetchAssetsInProgress = false
+
     useEffect(() => {
+        if (fetchAssetsInProgress === true) {
+            props.controller.abort()
+        }
         fetchWatchlistAssets()
-        console.log(props.wl_id, 'wl_id')
     }, [props.wl_id])
 
+    // potentially add atmoicity to fetchAssetsInProgress? still have problems with latency of differently sized watchlists
     async function fetchWatchlistAssets() {
+        if (props.wl_id === 0) {
+            setStocks([])
+            return
+        }
         try {
+            fetchAssetsInProgress = true
             const response = await fetch(
                 getWLAssets(cookies.get('user_id'), props.wl_id),
                 {}
             ).then((response) => {
                 response.json().then((json) => {
-                    console.log(json)
                     if (json.length > 0) {
                         setStocks(json)
                     } else setStocks([])
@@ -96,13 +109,10 @@ const Watchlist = (props: WatchlistProps) => {
             cookies.get('user_id')
         } catch (err) {
             console.log(err)
+        } finally {
+            fetchAssetsInProgress = false
         }
     }
-
-    const [gridView, setGridView] = useState<boolean>(true)
-
-    const [newWLName, setNewWLName] = useState('')
-    const [newName, setNewName] = useState('')
 
     async function createWatchlist(wlUpdated: any) {
         handleClose1()
@@ -170,6 +180,7 @@ const Watchlist = (props: WatchlistProps) => {
         <>
             <Box sx={{margin: 2}}>
                 <>
+                    {/* 
                     {/* CREATE WL */}
                     <Button variant="contained" onClick={handleOpen1}>
                         Create Watchlist
