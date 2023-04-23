@@ -70,30 +70,15 @@ const Dashboard = () => {
             >
                 {userWatchlists.map((_userWatchlists, key) => {
                     return (
-                        <ListItem
-                            sx={{fontSize: theme.typography.h4}}
-                            key={key}
-                        >
-                            <ListItemButton
-                                onClick={() =>
-                                    handleLoadingWatchlist(
-                                        Number(userWatchlists[key][0]),
-                                        userWatchlists[key][2]
-                                    )
-                                }
-                            >
+                        <ListItem sx={{fontSize: theme.typography.h4}} key={key}>
+                            <ListItemButton onClick={() => handleLoadingWatchlist(Number(userWatchlists[key][0]), userWatchlists[key][2])}>
                                 {userWatchlists[key][2]}
                             </ListItemButton>
                         </ListItem>
                     )
                 })}
             </List>
-            <Watchlist
-                wl_id={watchlistSelected}
-                wl_name={wl_name}
-                wlUpdated={handleUpdateWL}
-                controller={controller}
-            />
+            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL} controller={controller} />
         </Box>
     )
 }
