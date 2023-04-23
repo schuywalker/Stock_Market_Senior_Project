@@ -31,13 +31,9 @@ const FinancialsModalButton = (props: {ticker: string}) => {
 
     const getDetailedFinancialInfo = async () => {
         try {
-            const response = await fetch(
-                `http://127.0.0.1:8080/basicFinancials?ticker=${props.ticker}`
-            ).then((response) => response.json())
+            const response = await fetch(`http://127.0.0.1:8080/basicFinancials?ticker=${props.ticker}`).then((response) => response.json())
             // console.log(response);
-            setFinancialInfo(
-                JSON.stringify(response, null, 4) as unknown as string
-            )
+            setFinancialInfo(JSON.stringify(response, null, 4) as unknown as string)
         } catch (err) {
             console.log(err)
         }
@@ -48,12 +44,7 @@ const FinancialsModalButton = (props: {ticker: string}) => {
             <Button onClick={handleOpen} sx={{bgcolor: colors.grey[400]}}>
                 More Info
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={{...modalStyle}}>
                     <Typography id="modal-modal-title">Financials:</Typography>
                     <Typography
@@ -72,4 +63,5 @@ const FinancialsModalButton = (props: {ticker: string}) => {
         </>
     )
 }
+
 export default FinancialsModalButton

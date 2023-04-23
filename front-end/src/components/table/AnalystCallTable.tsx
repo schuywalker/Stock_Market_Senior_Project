@@ -7,15 +7,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
-function createData(
-    symbol: string,
-    buy: number,
-    hold: number,
-    period: string,
-    sell: number,
-    strongBuy: number,
-    strongSell: number
-) {
+function createData(symbol: string, buy: number, hold: number, period: string, sell: number, strongBuy: number, strongSell: number) {
     return {symbol, buy, hold, period, sell, strongBuy, strongSell}
 }
 
@@ -62,12 +54,8 @@ export default function AnalystCallTable() {
                             <TableCell align="right">{row['hold']}</TableCell>
                             <TableCell align="right">{row['period']}</TableCell>
                             <TableCell align="right">{row['sell']}</TableCell>
-                            <TableCell align="right">
-                                {row['strongBuy']}
-                            </TableCell>
-                            <TableCell align="right">
-                                {row['strongSell']}
-                            </TableCell>
+                            <TableCell align="right">{row['strongBuy']}</TableCell>
+                            <TableCell align="right">{row['strongSell']}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
