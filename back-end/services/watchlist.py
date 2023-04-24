@@ -32,7 +32,7 @@ class WatchlistService:
             return result, response
     
     @staticmethod
-    def createWatchlists(user_id, watchlistName:str, *tickers):
+    def createWatchlists(user_id, wl_name:str, *tickers):
         ret = None
         dbc = db_controller()
         try:
@@ -40,10 +40,10 @@ class WatchlistService:
             nullWrapper = None
             createdTime = datetime.datetime.now().timestamp()
             cursor.execute("""INSERT INTO WATCHLISTS (user_id, wl_name, created, updated, deleted) VALUES
-            (%s, %s, %s, %s,%s)""", (user_id, watchlistName,createdTime,createdTime,nullWrapper))
+            (%s, %s, %s, %s,%s)""", (user_id, wl_name,createdTime,createdTime,nullWrapper))
             cnx.commit()
             cursor = cnx.cursor(buffered=True)
-            cursor.execute("""SELECT wl_id FROM WATCHLISTS WHERE user_id = %s and wl_name = %s and deleted is null""", (user_id, watchlistName))
+            cursor.execute("""SELECT wl_id FROM WATCHLISTS WHERE user_id = %s and wl_name = %s and deleted is null""", (user_id, wl_name))
             wl_id = cursor.fetchone()[0]
             
             ret = wl_id
@@ -208,8 +208,11 @@ class WatchlistService:
         cnx, cursor = dbc.connect()
         cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
         responseFromDB = cursor.fetchall()
-        if (responseFromDB[0][0]=='None'):
+        print(f'\n\npopulateWatchlist response is {responseFromDB} \n\n')
+        if (responseFromDB == []):
             return []
+        # if (responseFromDB[0][0]=='None'):
+        #     return []
         
         #needs userID and watchlist name
         #ticker = request.args.get('ticker')

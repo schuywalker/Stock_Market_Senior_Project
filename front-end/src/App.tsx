@@ -1,18 +1,17 @@
-import {Navigate, Route, Routes, useNavigate} from 'react-router-dom'
-import './App.css'
-import ResponsiveAppBar from './scenes/global/AppBar'
-import ResponsiveSideBar from './scenes/global/sidebar'
-import AnalystCalls from './scenes/dashboard/AnalystCalls'
-import Watchlist from './scenes/watchlist/Watchlist'
-import {ColorModeContext, useMode} from './theme'
 import {Box, CssBaseline, ThemeProvider} from '@mui/material'
 import {useEffect, useState} from 'react'
 import {ProSidebarProvider} from 'react-pro-sidebar'
+import {Navigate, Route, Routes, useNavigate} from 'react-router-dom'
 import Cookies from 'universal-cookie'
+import './App.css'
 import AccountManagement from './components/AccountManagement'
-import LandingPage from './scenes/LandingPage'
-import Dashboard from './scenes/dashboard/Dashboard'
 import Sandbox from './components/Sandbox'
+import LandingPage from './scenes/LandingPage'
+import AnalystCalls from './scenes/dashboard/AnalystCalls'
+import Dashboard from './scenes/dashboard/Dashboard'
+import ResponsiveAppBar from './scenes/global/AppBar'
+import ResponsiveSideBar from './scenes/global/sidebar'
+import {ColorModeContext, useMode} from './theme'
 
 const cookies = new Cookies()
 
@@ -48,12 +47,7 @@ function App() {
                     <CssBaseline />
                     <div className="App">
                         <div className="content">
-                            <ResponsiveAppBar
-                                loginFunction={(value: boolean) =>
-                                    handleLogin(value)
-                                }
-                                loggedIn={loggedIn}
-                            />
+                            <ResponsiveAppBar loginFunction={(value: boolean) => handleLogin(value)} loggedIn={loggedIn} />
                             <Box sx={{display: 'flex', position: 'relative'}}>
                                 <ProSidebarProvider>
                                     <ResponsiveSideBar
@@ -67,48 +61,23 @@ function App() {
 
                                 <Routes>
                                     <Route path="/" element={<LandingPage />} />
-                                    <Route
-                                        path="/dashboard"
-                                        element={
-                                            loggedIn ? (
-                                                <Dashboard />
-                                            ) : (
-                                                <Navigate to="/" />
-                                            )
-                                        }
-                                    />
-                                    <Route
-                                        path="/analyst-calls"
-                                        element={
-                                            loggedIn ? (
-                                                <AnalystCalls />
-                                            ) : (
-                                                <Navigate to="/" />
-                                            )
-                                        }
-                                    />
+                                    <Route path="/dashboard" element={loggedIn ? <Dashboard /> : <Navigate to="/" />} />
+                                    <Route path="/analyst-calls" element={loggedIn ? <AnalystCalls /> : <Navigate to="/" />} />
                                     <Route
                                         path="/account"
                                         element={
                                             loggedIn ? (
                                                 <AccountManagement
-                                                    updateUsername={(
-                                                        val: string
-                                                    ) => setUsername(val)}
+                                                    updateUsername={(val: string) => setUsername(val)}
+                                                    loggedInFunction={(val: boolean) => setLoggedIn(val)}
                                                 />
                                             ) : (
                                                 <Navigate to="/" />
                                             )
                                         }
                                     />
-                                    <Route
-                                        path="/sandbox"
-                                        element={<Sandbox />}
-                                    />
-                                    <Route
-                                        path="*"
-                                        element={<Navigate to="/" />}
-                                    />
+                                    <Route path="/sandbox" element={<Sandbox />} />
+                                    <Route path="*" element={<Navigate to="/" />} />
                                 </Routes>
                             </Box>
                         </div>

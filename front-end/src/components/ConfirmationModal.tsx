@@ -21,12 +21,7 @@ type ModalFieldProps = {
     sidebarDisplay: (value: boolean) => void
     loginFunction: (value: boolean) => void
 }
-const ConfirmationModal: React.FunctionComponent<ModalFieldProps> = ({
-    open,
-    onClose,
-    sidebarDisplay,
-    loginFunction,
-}) => {
+const ConfirmationModal: React.FunctionComponent<ModalFieldProps> = ({open, onClose, sidebarDisplay, loginFunction}) => {
     const style = {
         position: 'absolute' as 'absolute',
         top: '40%',
@@ -48,9 +43,7 @@ const ConfirmationModal: React.FunctionComponent<ModalFieldProps> = ({
                         padding: 1,
                     }}
                 >
-                    <Typography sx={{fontSize: 40}}>
-                        BobbyMcBobson did this once? Will you?
-                    </Typography>
+                    <Typography sx={{fontSize: 40}}>BobbyMcBobson did this once? Will you?</Typography>
                     <Button
                         sx={{
                             alignSelf: 'center',
@@ -66,8 +59,8 @@ const ConfirmationModal: React.FunctionComponent<ModalFieldProps> = ({
                             },
                         }}
                         onClick={() => {
-                            sidebarDisplay(false)
-                            let user = cookies.get('user_id')
+                            //sidebarDisplay(false)
+                            let user = cookies.get('user')
                             cookies.remove('user')
                             cookies.remove('password')
                             cookies.remove('user_id')

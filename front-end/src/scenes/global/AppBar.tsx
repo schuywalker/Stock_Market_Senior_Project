@@ -34,10 +34,7 @@ function ResponsiveAppBar(props: any) {
                 <Toolbar disableGutters sx={{justifyContent: 'right'}}>
                     <Box sx={{display: 'flex', columnGap: 2}}>
                         <div style={{display: props.loggedIn ? 'none' : ''}}>
-                            <Button
-                                sx={buttonStyle}
-                                onClick={() => setShowAccountCreation(true)}
-                            >
+                            <Button sx={buttonStyle} onClick={() => setShowAccountCreation(true)}>
                                 Create Account
                             </Button>
                             <SignUpForm
@@ -54,7 +51,7 @@ function ResponsiveAppBar(props: any) {
                                 if (props.loggedIn) {
                                     cookies.remove('user')
                                     cookies.remove('password')
-                                    cookies.remove("user_id");
+                                    cookies.remove('user_id')
                                     setLoggedIn(false)
                                 } else {
                                     setShowAccountLogin(true)

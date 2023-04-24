@@ -7,10 +7,7 @@ const Sandbox = () => {
     return (
         <>
             <Box>
-                <Typography>
-                    Use this area to test, prototype, or show examples of your
-                    components
-                </Typography>
+                <Typography>Use this area to test, prototype, or show examples of your components</Typography>
             </Box>
         </>
     )

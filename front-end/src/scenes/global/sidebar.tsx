@@ -25,23 +25,11 @@ type itemProps = {
     setSelected: any
 }
 
-const Item: React.FunctionComponent<itemProps> = ({
-    title,
-    link,
-    icon,
-    selected,
-    setSelected,
-}) => {
+const Item: React.FunctionComponent<itemProps> = ({title, link, icon, selected, setSelected}) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     return (
-        <MenuItem
-            active={selected === title}
-            style={{color: colors.grey[600]}}
-            onClick={() => setSelected(title)}
-            icon={icon}
-            component={link}
-        >
+        <MenuItem active={selected === title} style={{color: colors.grey[600]}} onClick={() => setSelected(title)} icon={icon} component={link}>
             <Typography sx={{fontsize: 25}}>{title}</Typography>
         </MenuItem>
     )
@@ -103,34 +91,18 @@ const ProSidebar = (props: any) => {
                         <Menu>
                             <MenuItem
                                 onClick={() => setIsCollapsed(!isCollapsed)}
-                                icon={
-                                    isCollapsed ? (
-                                        <MenuOutlinedIcon />
-                                    ) : undefined
-                                }
+                                icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
                                 rootStyles={{
                                     m: '10px 0 20px 0',
                                     color: colors.grey[100],
                                 }}
                             >
                                 {!isCollapsed && (
-                                    <Box
-                                        display="flex"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        ml="15px"
-                                    >
-                                        <Typography
-                                            variant="h5"
-                                            color={colors.blue[500]}
-                                        >
+                                    <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
+                                        <Typography variant="h5" color={colors.blue[500]}>
                                             NVST
                                         </Typography>
-                                        <IconButton
-                                            onClick={() =>
-                                                setIsCollapsed(!isCollapsed)
-                                            }
-                                        >
+                                        <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                                             <MenuOutlinedIcon />
                                         </IconButton>
                                     </Box>
@@ -150,29 +122,12 @@ const ProSidebar = (props: any) => {
                                                 backgroundColor: 'primary.main',
                                             }}
                                         >
-                                            <Typography
-                                                variant="h1"
-                                                color={colors.grey[100]}
-                                                marginTop="10px"
-                                            >
-                                                {props.loggedIn
-                                                    ? truncateString(
-                                                          props.username
-                                                      )
-                                                          .slice(0, 1)
-                                                          .toUpperCase()
-                                                    : ''}
+                                            <Typography variant="h1" color={colors.grey[100]} marginTop="10px">
+                                                {props.loggedIn ? truncateString(props.username).slice(0, 1).toUpperCase() : ''}
                                             </Typography>
                                         </Box>
-                                        <Typography
-                                            variant="h3"
-                                            color={colors.blue[500]}
-                                            fontWeight="bold"
-                                            sx={{m: '10px 0 0 0'}}
-                                        >
-                                            {props.loggedIn
-                                                ? truncateString(props.username)
-                                                : ''}
+                                        <Typography variant="h3" color={colors.blue[500]} fontWeight="bold" sx={{m: '10px 0 0 0'}}>
+                                            {props.loggedIn ? truncateString(props.username) : ''}
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -187,141 +142,30 @@ const ProSidebar = (props: any) => {
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
-                                <Typography
-                                    variant="h6"
-                                    color={colors.grey[400]}
-                                    sx={{fontsize: 50, m: 1.5}}
-                                >
+                                <Typography variant="h6" color={colors.grey[400]} sx={{fontsize: 50, m: 1.5}}>
                                     Tools
                                 </Typography>
                                 <Item
                                     title="Analyst Calls"
-                                    link={
-                                        <Link
-                                            to="/analyst-calls"
-                                            onClick={() =>
-                                                setUserURL('/analyst-calls')
-                                            }
-                                        />
-                                    }
+                                    link={<Link to="/analyst-calls" onClick={() => setUserURL('/analyst-calls')} />}
                                     icon={<PhoneIcon sx={{fontSize: 20}} />}
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
-                                <Typography
-                                    variant="h6"
-                                    color={colors.grey[400]}
-                                    sx={{fontsize: 50, m: 1.5}}
-                                >
-                                    {isCollapsed ? 'Lists' : 'Watchlists'}
-                                </Typography>
-                                <Item
-                                    title="View Watchlists"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={
-                                        <VisibilityIcon sx={{fontSize: 20}} />
-                                    }
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                {/* <Select>Watchlists</Select> */}
-                                <Item
-                                    title="Create Watchlist"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={<CreateIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                <Item
-                                    title="Edit Watchlist"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={<IsoIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                <Item
-                                    title="Delete Watchlist"
-                                    link={
-                                        <Link
-                                            to="/watchlist"
-                                            onClick={() =>
-                                                setUserURL('/watchlist')
-                                            }
-                                        />
-                                    }
-                                    icon={<ClearIcon sx={{fontSize: 20}} />}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                <Typography
-                                    variant="h6"
-                                    color={colors.grey[400]}
-                                    sx={{fontsize: 50, m: 1.5}}
-                                >
+
+                                <Typography variant="h6" color={colors.grey[400]} sx={{fontsize: 50, m: 1.5}}>
                                     {isCollapsed ? 'Acct' : 'Account'}
                                 </Typography>
                                 <Item
                                     title="Manage Account"
-                                    link={
-                                        <Link
-                                            to="/account"
-                                            onClick={() =>
-                                                setUserURL('/account')
-                                            }
-                                        />
-                                    }
-                                    icon={
-                                        <ManageAccountsIcon
-                                            sx={{fontSize: 20}}
-                                        />
-                                    }
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                />
-                                <Item
-                                    title="Delete Account"
-                                    link={
-                                        <Link
-                                            to={userURL}
-                                            onClick={() => {
-                                                setShowModal(!showModal)
-                                            }}
-                                        ></Link>
-                                    }
-                                    icon={<DeleteIcon sx={{fontSize: 20}} />}
+                                    link={<Link to="/account" onClick={() => setUserURL('/account')} />}
+                                    icon={<ManageAccountsIcon sx={{fontSize: 20}} />}
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
                             </Box>
                         </Menu>
                     </Sidebar>
-                    <ConfirmationModal
-                        open={showModal}
-                        onClose={() => setShowModal(false)}
-                        sidebarDisplay={(value: boolean) => setLoggedIn(value)}
-                        loginFunction={props.loginFunction}
-                    />
                 </Box>
             </>
         )

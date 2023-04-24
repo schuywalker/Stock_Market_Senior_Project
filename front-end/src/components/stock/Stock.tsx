@@ -9,28 +9,12 @@ import FinancialsModalButton from '../../scenes/watchlist/FinancialsModalButton'
 import {ColorModeContext, tokens} from '../../theme'
 
 const Stock = (props: DisplayGroup) => {
-    const {
-        name,
-        ticker,
-        price,
-        perChange,
-        earnings,
-        threeArticles,
-        marketCap,
-        peRatio,
-        peRatioTTM,
-        dividendYield,
-    } = props
+    const {name, ticker, price, perChange, earnings, threeArticles, marketCap, peRatio, peRatioTTM, dividendYield} = props
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
 
-    const dailyChangeStatus: string =
-        perChange > 0
-            ? colors.green[400]
-            : perChange === 0
-            ? colors.grey[100]
-            : colors.red[300]
+    const dailyChangeStatus: string = perChange > 0 ? colors.green[400] : perChange === 0 ? colors.grey[100] : colors.red[300]
 
     return (
         <>
@@ -92,7 +76,7 @@ const Stock = (props: DisplayGroup) => {
                                 fontSize: theme.typography.h5,
                             }}
                         >
-                            {(perChange as number).toFixed(2) + ' %'}
+                            {perChange === null ? 'Bad Data' : (perChange as number).toFixed(2) + ' %'}
                         </Typography>
                     </Box>
                     <Box
@@ -131,29 +115,13 @@ const Stock = (props: DisplayGroup) => {
                                     $
                                     {!marketCap
                                         ? 'N/A'
-                                        : (marketCap as number).toLocaleString(
-                                              undefined,
-                                              {
-                                                  maximumFractionDigits: 0,
-                                              }
-                                          )}
+                                        : (marketCap as number).toLocaleString(undefined, {
+                                              maximumFractionDigits: 0,
+                                          })}
                                 </Typography>
-                                <Typography>
-                                    {!peRatio
-                                        ? 'N/A'
-                                        : (peRatio as number).toFixed(2)}
-                                </Typography>
-                                <Typography>
-                                    {!peRatioTTM
-                                        ? 'N/A'
-                                        : (peRatioTTM as number).toFixed(2)}
-                                </Typography>
-                                <Typography>
-                                    {!dividendYield
-                                        ? 'None'
-                                        : (dividendYield as number).toFixed(2) +
-                                          ' %'}
-                                </Typography>
+                                <Typography>{!peRatio ? 'N/A' : (peRatio as number).toFixed(2)}</Typography>
+                                <Typography>{!peRatioTTM ? 'N/A' : (peRatioTTM as number).toFixed(2)}</Typography>
+                                <Typography>{!dividendYield ? 'None' : (dividendYield as number).toFixed(2) + ' %'}</Typography>
                             </Box>
                         </Box>
                     </Box>

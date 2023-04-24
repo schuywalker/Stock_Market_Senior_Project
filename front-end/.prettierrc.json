@@ -5,5 +5,5 @@
     "singleQuote": true,
     "bracketSpacing": false,
     "bracketSameLine": false,
-    "overrides": [{"files": "WebcallAPI.tsx", "options": {"printWidth": 160}}]
+    "printWidth": 160
 }

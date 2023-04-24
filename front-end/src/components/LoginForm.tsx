@@ -48,14 +48,12 @@ const cookies = new Cookies()
 export default function LoginForm(props: any) {
     const [username, setUsername] = React.useState('')
     const [usernameValidated, setUsernameValidated] = React.useState(false)
-    const [usernameTextFieldError, setUsernameTextFieldError] =
-        React.useState(false)
+    const [usernameTextFieldError, setUsernameTextFieldError] = React.useState(false)
     const [usernameHelperText, setUsernameHelperText] = React.useState('')
 
     const [password, setPassword] = React.useState('')
     const [passwordValidated, setPasswordValidated] = React.useState(false)
-    const [passwordTextFieldError, setPasswordTextFieldError] =
-        React.useState(false)
+    const [passwordTextFieldError, setPasswordTextFieldError] = React.useState(false)
     const [passwordHelperText, setPasswordHelperText] = React.useState('')
 
     const canSubmit = () => {
@@ -67,16 +65,14 @@ export default function LoginForm(props: any) {
                 setUsernameHelperText('')
             } else {
                 setUsernameTextFieldError(true)
-                if (usernameHelperText === '')
-                    setUsernameHelperText('Invalid Username Entered')
+                if (usernameHelperText === '') setUsernameHelperText('Invalid Username Entered')
             }
             if (passwordValidated) {
                 setPasswordTextFieldError(false)
                 setPasswordHelperText('')
             } else {
                 setPasswordTextFieldError(true)
-                if (passwordHelperText === '')
-                    setPasswordHelperText('Invalid Password Entered')
+                if (passwordHelperText === '') setPasswordHelperText('Invalid Password Entered')
             }
         }
         return false
@@ -108,13 +104,7 @@ export default function LoginForm(props: any) {
 
     return (
         <React.Fragment>
-            <CustomModal
-                sx={style}
-                open={props.open}
-                onClose={props.close}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <CustomModal sx={style} open={props.open} onClose={props.close} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box
                     sx={{
                         display: 'flex',
@@ -135,12 +125,7 @@ export default function LoginForm(props: any) {
                             alignItems: 'center',
                         }}
                     >
-                        <Typography
-                            id="modal-modal-title"
-                            variant="h6"
-                            component="h2"
-                            sx={{fontSize: 18}}
-                        >
+                        <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontSize: 18}}>
                             Login
                         </Typography>
                         <Button
@@ -215,15 +200,11 @@ export default function LoginForm(props: any) {
                                         setPasswordTextFieldError(false)
                                         setPasswordHelperText('')
 
-                                        if (
-                                            response.data['message'] ===
-                                            'Invalid credentials'
-                                        ) {
+                                        if (response.data['message'] === 'Invalid credentials') {
                                             setUsernameValidated(false)
                                             setUsernameTextFieldError(true)
-                                            setUsernameHelperText(
-                                                "Username doesn't exist"
-                                            )
+                                            setPasswordTextFieldError(true)
+                                            setUsernameHelperText('Invalid Credentials Entered')
                                         } else {
                                             //login
                                             cookies.set('user', username, {
@@ -232,10 +213,7 @@ export default function LoginForm(props: any) {
                                             cookies.set('password', password, {
                                                 path: '/',
                                             })
-                                            cookies.set(
-                                                'user_id',
-                                                response.data['user_id']
-                                            )
+                                            cookies.set('user_id', response.data['user_id'])
                                             console.log(response.data)
                                             props.close()
                                             props.login()
