@@ -16,12 +16,9 @@ const CreateWLButton = (props: CreateWLButtonProps) => {
 
     async function createWatchlist(wlUpdated: any) {
         handleClose()
-        const response = await fetch(
-            createWL(props.user_id, newWLName),
-            {}
-        ).then((response) => {
+        const response = await fetch(createWL(props.user_id, newWLName), {}).then((response) => {
             response.json().then((json) => {
-                wlUpdated()
+                console.log(json)
             })
         })
     }
@@ -32,31 +29,13 @@ const CreateWLButton = (props: CreateWLButtonProps) => {
             <Button variant="contained" onClick={handleOpen}>
                 Create Watchlist
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={modalStyle}>
-                    <Typography
-                        id="modal-modal-title"
-                        variant="h4"
-                        component="h2"
-                        sx={{marginBottom: 1}}
-                    >
+                    <Typography id="modal-modal-title" variant="h4" component="h2" sx={{marginBottom: 1}}>
                         Create New Watchlist
                     </Typography>
-                    <TextField
-                        id="outlined-basic"
-                        label="New Watchlist Name"
-                        variant="outlined"
-                        onChange={(e) => setNewWLName(e.target.value)}
-                    />
-                    <Button
-                        sx={{backgroundColor: 'white', margin: 1}}
-                        onClick={() => createWatchlist(true)}
-                    >
+                    <TextField id="outlined-basic" label="New Watchlist Name" variant="outlined" onChange={(e) => setNewWLName(e.target.value)} />
+                    <Button sx={{backgroundColor: 'white', margin: 1}} onClick={() => createWatchlist(true)}>
                         Submit
                     </Button>
                 </Box>

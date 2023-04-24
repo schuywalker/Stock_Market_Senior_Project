@@ -20,10 +20,7 @@ const DeleteTickersButton = (props: DeleteTickersButtonProps) => {
 
     async function delTickersFromWatchlist(wlDelTickers: string) {
         handleClose()
-        const response = await fetch(
-            delTickersFromWL(wlDelTickers, props.wl_id, props.user_id),
-            {}
-        ).then((response) => {
+        const response = await fetch(delTickersFromWL(wlDelTickers, props.wl_id, props.user_id), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
             })
@@ -36,37 +33,23 @@ const DeleteTickersButton = (props: DeleteTickersButtonProps) => {
             <Button variant="contained" onClick={handleOpen}>
                 Delete Tickers
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={modalStyle}>
                     <Box sx={{m: 1}}>
                         <Typography variant="h4" sx={{marginBottom: 1}}>
                             Delete Tickers
                         </Typography>
-                        <Typography fontSize="16px">
-                            Delete tickers from "{props.wl_name}"
-                        </Typography>
+                        <Typography fontSize="16px">Delete tickers from "{props.wl_name}"</Typography>
                     </Box>
                     <Box sx={{display: 'flex'}}>
-                        <Searchbar
-                            changeTickersInWL={setWatchlistDel}
-                            autoCompleteList={stockList}
-                        />
+                        <Searchbar changeTickersInWL={setWatchlistDel} autoCompleteList={stockList} />
                         <Button
                             variant="contained"
                             sx={{
                                 color: colors.green[400],
                                 m: 1,
                             }}
-                            onClick={() =>
-                                delTickersFromWatchlist(
-                                    watchlistDel.toString().toUpperCase()
-                                )
-                            }
+                            onClick={() => delTickersFromWatchlist(watchlistDel.toString().toUpperCase())}
                         >
                             Submit
                         </Button>

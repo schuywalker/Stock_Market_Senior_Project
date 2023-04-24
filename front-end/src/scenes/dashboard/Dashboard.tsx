@@ -8,6 +8,8 @@ import {getUserWL} from '../../config/WebcallAPI'
 import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import AddTickersButton from '../watchlist/WL_Action_Buttons/Add_Tickers_Button'
 import DeleteTickersButton from '../watchlist/WL_Action_Buttons/Delete_Tickers_Button'
+import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
+import DeleteWLButton from '../watchlist/WL_Action_Buttons/Delete_WL_Button'
 
 const Dashboard = () => {
     const theme = useTheme()
@@ -85,8 +87,10 @@ const Dashboard = () => {
                 <CreateWLButton user_id={cookies.get('user_id')} />
                 <AddTickersButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
                 <DeleteTickersButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
+                <RenameWLButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
+                <DeleteWLButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
             </Box>
-            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL} />
+            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL} controller={controller} />
         </Box>
     )
 }
