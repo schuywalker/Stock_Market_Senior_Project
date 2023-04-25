@@ -35,7 +35,7 @@ class deleteWatchlist(Resource):
 
 class renameWatchlist(Resource):
     def get(self):
-        data = WatchlistService.renameWatchlist(request.args.get('wl_id'), request.args.get('new_name'))
+        data = WatchlistService.renameWatchlist(request.args.get('user_id'), request.args.get('wl_id'), request.args.get('new_name'))
         return (data, 200)
 
 # WATCHLIST_TICKERS
