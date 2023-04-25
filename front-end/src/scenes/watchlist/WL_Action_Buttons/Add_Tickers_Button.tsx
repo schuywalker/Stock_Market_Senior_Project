@@ -19,10 +19,7 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
 
     async function addTickers(wlAddTickers: string) {
         handleClose()
-        const response = await fetch(
-            addTickersToWL(wlAddTickers, props.wl_id, props.user_id),
-            {}
-        ).then((response) => {
+        const response = await fetch(addTickersToWL(wlAddTickers, props.wl_id, props.user_id), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
             })
@@ -41,9 +38,7 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
                         <Typography variant="h4" sx={{marginBottom: 1}}>
                             Add Tickers
                         </Typography>
-                        <Typography fontSize="16px">
-                            Add tickers to "{props.wl_name}"
-                        </Typography>
+                        <Typography fontSize="16px">Add tickers to "{props.wl_name}"</Typography>
                     </Box>
                     <Box sx={{display: 'flex'}}>
                         <Searchbar changeTickersInWL={setWatchlistAdd} />
@@ -53,11 +48,7 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
                                 color: colors.green[400],
                                 m: 1,
                             }}
-                            onClick={() =>
-                                addTickers(
-                                    watchlistAdd.toString().toUpperCase()
-                                )
-                            }
+                            onClick={() => addTickers(watchlistAdd.toString().toUpperCase())}
                         >
                             Submit
                         </Button>
