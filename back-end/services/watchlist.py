@@ -60,12 +60,12 @@ class WatchlistService:
 
 
     @staticmethod
-    def renameWatchlist(wl_id, new_name):
+    def renameWatchlist(user_id, wl_id, new_name):
         dbc = db_controller()
         try:
             cnx, cursor = dbc.connect()
             updatedTime = datetime.datetime.now().timestamp()
-            cursor.execute("""UPDATE WATCHLISTS SET wl_name = %s, updated = %s WHERE wl_id = %s""", (new_name, updatedTime, wl_id,))
+            cursor.execute("""UPDATE WATCHLISTS SET wl_name = %s, updated = %s WHERE wl_id = %s AND user_id = %s""", (new_name, updatedTime, wl_id, user_id))
             cnx.commit()
             response = {"message": "Success"}, 200
         except Error as e:
