@@ -4,6 +4,7 @@ from config.database import db_controller
 import datetime
 from mysql.connector import Error
 from mysql.connector import errorcode
+from yahooquery import Ticker
 
 
 fh_calls = fh.finh_API_Requester()
@@ -200,42 +201,44 @@ class WatchlistService:
         except Error as e:
             response = {"message": "Error: "}, 500
             return response
-
-# TODO: change from default list
+    
     @staticmethod
     def populateWatchlist(user_id, wl_id):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
-        cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
-        responseFromDB = cursor.fetchall()
-        print(f'\n\npopulateWatchlist response is {responseFromDB} \n\n')
-        if (responseFromDB == []):
-            return []
-        # if (responseFromDB[0][0]=='None'):
-        #     return []
-        
-        #needs userID and watchlist name
-        #ticker = request.args.get('ticker')
-        ret = []
-        for ticker in responseFromDB:
-            smallBasicFinancials = fh_calls.getBasicFinancials(ticker)
-            dataQuote = fh_calls.getQuote(ticker)
-            # dataNews = fh_calls.getNews(ticker)
-            dataEarnings = fh_calls.getEarningsCalendar(ticker)
-            dataName = fh_calls.getSymbolInfo(ticker)
-            ret.append({
-                "ticker": ticker,
-                "name": dataName.get("result")[0].get("description"),
-                "price": dataQuote.get('c'),
-                "perChange": dataQuote.get('dp'),
-                "earnings": dataEarnings.get("earningsCalendar"),
-                # "threeArticles": dataNews[:3],
-                "marketCap": smallBasicFinancials.get("metric").get("marketCapitalization"),
-                "peRatio": smallBasicFinancials.get("metric").get("peExclExtraAnnual"),
-                "peRatioTTM": smallBasicFinancials.get("metric").get("peBasicExclExtraTTM"),
-                "dividendYield": smallBasicFinancials.get("metric").get("dividendYieldIndicatedAnnual"),
-            })
-        return ret
+        try:
+            cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
+            responseFromDB = cursor.fetchall()
+            if (responseFromDB == []):
+                return []
+            for i in range(len(responseFromDB)):
+                responseFromDB[i] = responseFromDB[i][0] # get rid of the tuple
+            # if (responseFromDB[0][0]=='None'):return []
+            
+            response = []
+            for ticker in responseFromDB:
+                ticker_dict = Ticker(ticker)
+                price = ticker_dict.price[ticker]
+                summary_detail = ticker_dict.summary_detail[ticker]
+                
+                response.append({
+                    "name": price['shortName'],
+                    "ticker": ticker,
+                    "price": price['regularMarketPrice'],
+                    "perChange": (price['regularMarketChangePercent']),
+                    "earnings": ticker_dict.calendar_events[ticker]['earnings']['earningsDate'],
+                    "marketCap": summary_detail['marketCap'],
+                    "forwardPE": summary_detail['forwardPE'],
+                    "dividendYield": summary_detail['trailingAnnualDividendYield'],
+                })
+            # cursor.close() # how to fix semaphores bug...?
+            # dbc.close()
+            return (response if not None else [])
+        except Error as e:
+            response = {"message": "error"}, 400
+        finally:
+            cursor.close()
+            dbc.close()
     
 
     @staticmethod

@@ -4,10 +4,8 @@ interface DisplayGroup {
     price: number
     perChange: number
     earnings: any
-    threeArticles?: string
     marketCap: number
-    peRatio: number
-    peRatioTTM: number
+    forwardPE: number
     dividendYield: number
 }
 

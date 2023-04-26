@@ -2,14 +2,13 @@ import {List, ListItem, ListItemButton, useTheme} from '@mui/material'
 import {Box} from '@mui/system'
 import {useEffect, useState} from 'react'
 import Cookies from 'universal-cookie'
-import Watchlist from '../watchlist/Watchlist'
-import Searchbar from '../../components/UI/Searchbar'
 import {getUserWL} from '../../config/WebcallAPI'
-import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import AddTickersButton from '../watchlist/WL_Action_Buttons/Add_Tickers_Button'
+import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import DeleteTickersButton from '../watchlist/WL_Action_Buttons/Delete_Tickers_Button'
-import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
 import DeleteWLButton from '../watchlist/WL_Action_Buttons/Delete_WL_Button'
+import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
+import Watchlist from '../watchlist/Watchlist'
 
 const Dashboard = () => {
     const theme = useTheme()
