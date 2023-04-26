@@ -127,7 +127,6 @@ const Watchlist = (props: WatchlistProps) => {
                                 price={_stock.price}
                                 perChange={_stock.perChange}
                                 earnings={_stock.earnings}
-                                threeArticles={_stock.threeArticles} // not on the object
                                 marketCap={_stock.marketCap}
                                 forwardPE={_stock.forwardPE}
                                 dividendYield={_stock.dividendYield}
