@@ -9,20 +9,20 @@ import FinancialsModalButton from '../../scenes/watchlist/FinancialsModalButton'
 import {ColorModeContext, tokens} from '../../theme'
 
 const Stock = (props: DisplayGroup) => {
-    const {name, ticker, price, perChange, earnings, threeArticles, marketCap, forwardPE, dividendYield} = props
+    const {name, ticker, price, perChange, earnings, marketCap, forwardPE, dividendYield} = props
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
     const colorMode = useContext(ColorModeContext)
 
-    const dailyChangeStatus: string = perChange > 0 ? colors.green[400] : perChange === 0 ? colors.grey[100] : colors.red[300]
+    const dailyChangeStatusColor: string = perChange > 0 ? colors.green[600] : perChange === 0 ? colors.primary[200] : colors.red[600]
 
     return (
         <>
             <Card
                 sx={{
                     m: '.5em',
-                    bgcolor: dailyChangeStatus,
-                    color: colors.primary[900],
+
+                    color: colors.primary[200], // if dark mode...
                 }}
             >
                 <CardContent
@@ -74,9 +74,10 @@ const Stock = (props: DisplayGroup) => {
                         <Typography
                             sx={{
                                 fontSize: theme.typography.h5,
+                                color: dailyChangeStatusColor,
                             }}
                         >
-                            {perChange === null ? 'Bad Data' : (perChange as number).toFixed(2) + ' %'}
+                            {perChange === null ? 'Bad Data' : (perChange * 100.0).toFixed(2) + ' %'}
                         </Typography>
                     </Box>
                     <Box
@@ -102,8 +103,7 @@ const Stock = (props: DisplayGroup) => {
                             <Box sx={{gridColumn: '1/3'}}>
                                 <Typography>market cap: </Typography>
                                 <Typography>forward P/E: </Typography>
-                                {/* <Typography>peRatioTTM: </Typography> */}
-                                <Typography>dividendYield: </Typography>
+                                <Typography>div. yield: </Typography>
                             </Box>
                             <Box
                                 sx={{
@@ -120,8 +120,7 @@ const Stock = (props: DisplayGroup) => {
                                           }) + ' (M)'}
                                 </Typography>
                                 <Typography>{!forwardPE ? 'N/A' : (forwardPE as number).toFixed(2)}</Typography>
-                                {/* <Typography>{!peRatioTTM ? 'N/A' : (peRatioTTM as number).toFixed(2)}</Typography> */}
-                                <Typography>{!dividendYield ? 'None' : (dividendYield as number).toFixed(2) + ' %'}</Typography>
+                                <Typography>{!dividendYield ? 'None' : ((dividendYield * 100) as number).toFixed(2) + ' %'}</Typography>
                             </Box>
                         </Box>
                     </Box>
