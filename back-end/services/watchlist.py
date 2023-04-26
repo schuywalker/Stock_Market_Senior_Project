@@ -4,6 +4,7 @@ from config.database import db_controller
 import datetime
 from mysql.connector import Error
 from mysql.connector import errorcode
+from yahooquery import Ticker
 
 
 fh_calls = fh.finh_API_Requester()
@@ -201,9 +202,8 @@ class WatchlistService:
             response = {"message": "Error: "}, 500
             return response
 
-# TODO: change from default list
     @staticmethod
-    def populateWatchlist(user_id, wl_id):
+    def populateWatchlistOld(user_id, wl_id):
         dbc = db_controller()
         cnx, cursor = dbc.connect()
         cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
@@ -234,6 +234,41 @@ class WatchlistService:
                 "peRatio": smallBasicFinancials.get("metric").get("peExclExtraAnnual"),
                 "peRatioTTM": smallBasicFinancials.get("metric").get("peBasicExclExtraTTM"),
                 "dividendYield": smallBasicFinancials.get("metric").get("dividendYieldIndicatedAnnual"),
+            })
+        return ret
+    
+    @staticmethod
+    def populateWatchlist(user_id, wl_id):
+        dbc = db_controller()
+        cnx, cursor = dbc.connect()
+        cursor.execute("""select ticker from WATCHLIST_TICKERS where user_id = %s AND wl_id = %s""", (user_id, wl_id))
+        responseFromDB = cursor.fetchall()
+        print(f'\n\npopulateWatchlist response is {responseFromDB} \n\n')
+        if (responseFromDB == []):
+            return []
+        for i in range(len(responseFromDB)):
+            responseFromDB[i] = responseFromDB[i][0] # get rid of the tuple
+            # print(responseFromDB[i])
+        # if (responseFromDB[0][0]=='None'):
+        #     return []
+        
+        ret = []
+        for ticker in responseFromDB:
+            ticker_dict = Ticker(ticker)
+            price = ticker_dict.price[ticker]
+            summary_detail = ticker_dict.summary_detail[ticker]
+            
+            ret.append({
+                "name": price['shortName'],
+                "ticker": ticker,
+                "price": price['regularMarketPrice'],
+                "perChange": (round(price['regularMarketChangePercent'],2)),
+                "earnings": ticker_dict.calendar_events[ticker]['earnings']['earningsDate'],
+                # "threeArticles": "articles",
+                "marketCap": summary_detail['marketCap'],
+                "peRatio": summary_detail['forwardPE'],
+                "peRatioTTM": 999,
+                "dividendYield": summary_detail['trailingAnnualDividendYield'],
             })
         return ret
     
