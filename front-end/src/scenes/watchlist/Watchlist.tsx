@@ -129,8 +129,7 @@ const Watchlist = (props: WatchlistProps) => {
                                 earnings={_stock.earnings}
                                 threeArticles={_stock.threeArticles} // not on the object
                                 marketCap={_stock.marketCap}
-                                peRatio={_stock.peRatio}
-                                peRatioTTM={_stock.peRatioTTM}
+                                forwardPE={_stock.forwardPE}
                                 dividendYield={_stock.dividendYield}
                             />
                         ))}
@@ -147,7 +146,6 @@ const Watchlist = (props: WatchlistProps) => {
                                             },
                                         }}
                                     >
-                                        {/* I think we can map the keys of stocks? that way we only have to style one TableCell */}
                                         <TableCell>Name</TableCell>
                                         <TableCell align="right">Ticker</TableCell>
                                         <TableCell align="right">Price</TableCell>
@@ -175,8 +173,7 @@ const Watchlist = (props: WatchlistProps) => {
                                             <TableCell align="right">{_stock['price']}</TableCell>
                                             <TableCell align="right">{_stock['perChange']}</TableCell>
                                             <TableCell align="right">{_stock['marketCap']}</TableCell>
-                                            <TableCell align="right">{_stock['peRatio']}</TableCell>
-                                            <TableCell align="right">{_stock['peRatioTTM']}</TableCell>
+                                            <TableCell align="right">{_stock['forwardPE']}</TableCell>
                                             <TableCell align="right">{_stock['dividendYield']}</TableCell>
                                         </TableRow>
                                     ))}

@@ -266,8 +266,7 @@ class WatchlistService:
                 "earnings": ticker_dict.calendar_events[ticker]['earnings']['earningsDate'],
                 # "threeArticles": "articles",
                 "marketCap": summary_detail['marketCap'],
-                "peRatio": summary_detail['forwardPE'],
-                "peRatioTTM": 999,
+                "forwardPE": summary_detail['forwardPE'],
                 "dividendYield": summary_detail['trailingAnnualDividendYield'],
             })
         return ret
