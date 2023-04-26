@@ -5,11 +5,11 @@ import Cookies from 'universal-cookie'
 import Watchlist from '../watchlist/Watchlist'
 import Searchbar from '../watchlist/stock/Searchbar'
 import {getUserWL} from '../../config/WebcallAPI'
-import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import AddTickersButton from '../watchlist/WL_Action_Buttons/Add_Tickers_Button'
+import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import DeleteTickersButton from '../watchlist/WL_Action_Buttons/Delete_Tickers_Button'
-import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
 import DeleteWLButton from '../watchlist/WL_Action_Buttons/Delete_WL_Button'
+import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
 
 const Dashboard = () => {
     const theme = useTheme()
