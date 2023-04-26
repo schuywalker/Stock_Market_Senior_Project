@@ -83,7 +83,7 @@ const Stock = (props: DisplayGroup) => {
                         sx={{
                             pt: 1,
                             '& .MuiTypography-root': {
-                                fontSize: theme.typography.h5,
+                                fontSize: theme.typography.h6,
                             },
                             display: 'grid',
                             gridAutoColumns: '1fr',
@@ -100,7 +100,7 @@ const Stock = (props: DisplayGroup) => {
                             }}
                         >
                             <Box sx={{gridColumn: '1/3'}}>
-                                <Typography>market cap (M): </Typography>
+                                <Typography>market cap: </Typography>
                                 <Typography>forward P/E: </Typography>
                                 {/* <Typography>peRatioTTM: </Typography> */}
                                 <Typography>dividendYield: </Typography>
@@ -115,9 +115,9 @@ const Stock = (props: DisplayGroup) => {
                                     $
                                     {!marketCap
                                         ? 'N/A'
-                                        : (marketCap as number).toLocaleString(undefined, {
-                                              maximumFractionDigits: 0,
-                                          })}
+                                        : (marketCap / 1000000.0).toLocaleString(undefined, {
+                                              maximumFractionDigits: 1,
+                                          }) + ' (M)'}
                                 </Typography>
                                 <Typography>{!forwardPE ? 'N/A' : (forwardPE as number).toFixed(2)}</Typography>
                                 {/* <Typography>{!peRatioTTM ? 'N/A' : (peRatioTTM as number).toFixed(2)}</Typography> */}
