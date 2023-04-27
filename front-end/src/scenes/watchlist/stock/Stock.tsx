@@ -75,9 +75,10 @@ const Stock = (props: DisplayGroup) => {
                             sx={{
                                 fontSize: theme.typography.h5,
                                 color: dailyChangeStatusColor,
+                                pl: '.5em',
                             }}
                         >
-                            {perChange === null ? 'Bad Data' : (perChange * 100.0).toFixed(2) + ' %'}
+                            {perChange === null ? 'Bad Data' : (perChange * 100.0).toFixed(2) + '%'}
                         </Typography>
                     </Box>
                     <Box
@@ -120,7 +121,7 @@ const Stock = (props: DisplayGroup) => {
                                           }) + ' (M)'}
                                 </Typography>
                                 <Typography>{!forwardPE ? 'N/A' : (forwardPE as number).toFixed(2)}</Typography>
-                                <Typography>{!dividendYield ? 'None' : ((dividendYield * 100) as number).toFixed(2) + ' %'}</Typography>
+                                <Typography>{!dividendYield ? 'None' : ((dividendYield * 100) as number).toFixed(2) + '%'}</Typography>
                             </Box>
                         </Box>
                     </Box>
