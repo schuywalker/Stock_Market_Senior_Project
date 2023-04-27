@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {addTickersToWL} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
-import Searchbar from '../../../components/UI/Searchbar'
+import Searchbar from '../stock/Searchbar'
 
 type AddTickersButtonProps = {
     user_id: string

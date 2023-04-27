@@ -4,9 +4,9 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import {useContext} from 'react'
-import DisplayGroup from '../../scenes/watchlist/DisplayGroup'
-import FinancialsModalButton from '../../scenes/watchlist/FinancialsModalButton'
-import {ColorModeContext, tokens} from '../../theme'
+import DisplayGroup from '../DisplayGroup'
+import FinancialsModalButton from '../FinancialsModalButton'
+import {ColorModeContext, tokens} from '../../../theme'
 
 const Stock = (props: DisplayGroup) => {
     const {name, ticker, price, perChange, earnings, threeArticles, marketCap, peRatio, peRatioTTM, dividendYield} = props
