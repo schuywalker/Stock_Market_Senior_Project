@@ -63,7 +63,7 @@ export function getWL(wl_id: number, user_id: string) {
 }
 
 export function renameWL(wl_id: number, user_id: string, wl_name: string) {
-    return `${backendBaseAddress}/alterWatchlistName?wl_id=${wl_id}&user_id=${user_id}&wl_name=${wl_name}`
+    return `${backendBaseAddress}/renameWatchlist?user_id=${user_id}&wl_id=${wl_id}&new_name=${wl_name}`
 }
 
 export function getWLAssets(user_id: string, wl_id: number) {
