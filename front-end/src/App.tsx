@@ -27,7 +27,7 @@ function App() {
             navigate('/')
             setUsername('')
         } else {
-            navigate('/dashboard')
+            navigate('/dashboard')//
             setUsername(cookies.get('user'))
         }
         setLoggedIn(value)
