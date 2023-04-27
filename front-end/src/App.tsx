@@ -12,6 +12,7 @@ import Dashboard from './scenes/dashboard/Dashboard'
 import ResponsiveAppBar from './scenes/global/AppBar'
 import ResponsiveSideBar from './scenes/global/sidebar'
 import {ColorModeContext, useMode} from './theme'
+import AssetScreener from './scenes/asset_screener/AssetScreener'
 
 const cookies = new Cookies()
 
@@ -76,7 +77,8 @@ function App() {
                                             )
                                         }
                                     />
-                                    <Route path="/sandbox" element={<Sandbox />} />
+                                    <Route path="/sandbox" element={loggedIn ? <Sandbox /> : <Navigate to="/" />} />
+                                    <Route path="/asset-screener" element={<AssetScreener />} />
                                     <Route path="*" element={<Navigate to="/" />} />
                                 </Routes>
                             </Box>
