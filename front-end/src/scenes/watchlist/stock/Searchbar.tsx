@@ -33,6 +33,7 @@ const Searchbar = (props: any) => {
                     id="tickerAutofill"
                     sx={{flex: 1, border: 0}}
                     freeSolo
+                    disableCloseOnSelect
                     options={/*tracked? tracked.map((option) => option.ticker) :*/ sp100.map((option) => option.ticker)}
                     onChange={(e, value) => {
                         setWatchlistAdditions(value)

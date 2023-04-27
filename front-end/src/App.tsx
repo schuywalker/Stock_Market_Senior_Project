@@ -35,7 +35,7 @@ function App() {
     }
     useEffect(() => {
         if (!initialLogin && loggedIn) {
-            navigate('/dashboard')
+            // if(!window.location.href.includes("/sandbox"))navigate('/dashboard')
             setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
