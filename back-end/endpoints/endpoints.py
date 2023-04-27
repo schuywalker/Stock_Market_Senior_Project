@@ -81,11 +81,9 @@ class CreateUser(Resource):
         else:
             return {"message": "Username already exists"},400
 
-class ReturnString(Resource):
-    def get(self):
-        data = "howdy Gamers"
-        return data, 200
 
+
+### WATCHLIST ENDPOINTS ###
 class populateWatchlist(Resource):
     def get(self):
         data = WatchlistService.populateWatchlist(request.args.get('user_id'), request.args.get('wl_id'))
@@ -105,8 +103,6 @@ class getEarningsCalendar(Resource):
     def get(self):
         ticker = request.args.get('ticker')
         data = fh_calls.getEarningsCalendar(ticker)
-        # print(type(data))
-        # print(data)
         return (jsonify(data.get("earningsCalendar")))
         # return (jsonify(((data.get("earningsCalendar"))[0]).get("date"))) # to grab specific value
 
