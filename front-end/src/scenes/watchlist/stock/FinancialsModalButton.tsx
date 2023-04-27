@@ -1,6 +1,6 @@
 import {Box, Button, Modal, Typography, useTheme} from '@mui/material'
 import {useEffect, useState} from 'react'
-import {tokens} from '../../theme'
+import {tokens} from '../../../theme'
 
 const FinancialsModalButton = (props: {ticker: string}) => {
     const theme = useTheme()

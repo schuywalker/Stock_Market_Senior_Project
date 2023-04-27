@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import {useContext} from 'react'
 import DisplayGroup from '../DisplayGroup'
-import FinancialsModalButton from '../FinancialsModalButton'
+import FinancialsModalButton from './FinancialsModalButton'
 import {ColorModeContext, tokens} from '../../../theme'
 
 const Stock = (props: DisplayGroup) => {
