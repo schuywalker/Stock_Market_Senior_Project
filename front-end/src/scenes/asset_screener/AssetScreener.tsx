@@ -10,7 +10,7 @@ const AssetScreener = () => {
     const colors = tokens(theme.palette.mode)
 
     const [financialInfoJson, setFinancialInfoJson] = useState<null | [string, unknown][]>(null)
-    const [currentTicker, setCurrentTicker] = useState<string | null>('')
+    const [currentTicker, setCurrentTicker] = useState<string | null>(null)
 
     useEffect(() => {}, [currentTicker])
 
@@ -91,9 +91,9 @@ categorize data (DO FIRST)
                     </Box>
                 </Box>
                 <Tabs value={currentTab} onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="secondary tabs example">
-                    <Tab value="one" label="Financials" />
-                    <Tab value="two" label="Item Two" />
-                    <Tab value="three" label="Item Three" />
+                    <Tab value="one" label="Financials" disabled={currentTicker == null} />
+                    <Tab value="two" label="Item Two" disabled={currentTicker == null} />
+                    <Tab value="three" label="Item Three" disabled={currentTicker == null} />
                 </Tabs>
                 <Box sx={{m: 2}}>
                     {financialInfoJson && currentTab == 'one' ? (
