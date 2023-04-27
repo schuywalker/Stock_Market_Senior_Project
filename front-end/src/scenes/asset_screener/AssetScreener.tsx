@@ -1,14 +1,8 @@
-import {Autocomplete, Box, Button, FormControlLabel, IconButton, Paper, Slide, Switch, TextField, Typography, useTheme} from '@mui/material'
-import React, {ReactNode, useContext, useEffect, useState} from 'react'
 import SearchIcon from '@mui/icons-material/Search'
-import sp100 from '../../assets/sp100'
-import {ColorModeContext, tokens} from '../../theme'
-import {JsonObjectExpression} from 'typescript'
+import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, Typography, useTheme} from '@mui/material'
+import {useEffect, useState} from 'react'
+import {tokens} from '../../theme'
 
-interface responseItem {
-    key: string
-    value: string
-}
 // https://stackoverflow.com/questions/22885995/how-do-i-initialize-a-typescript-object-with-a-json-object
 
 const AssetScreener = () => {
@@ -19,9 +13,6 @@ const AssetScreener = () => {
     const [currentTicker, setCurrentTicker] = useState<string | null>('')
 
     useEffect(() => {}, [currentTicker])
-    useEffect(() => {
-        console.log(financialInfoJson)
-    }, [financialInfoJson])
 
     const handleNewSearch = async (ticker: string | null | undefined) => {
         if (!ticker) {
@@ -29,7 +20,6 @@ const AssetScreener = () => {
             return
         }
         try {
-            console.log('currentTicker: ', currentTicker)
             const response = await fetch(`http://127.0.0.1:8080/basicFinancials?ticker=${ticker}`)
                 .then((response) => response.json())
                 .then((jsonResponse) => {
@@ -42,12 +32,26 @@ const AssetScreener = () => {
 
     /*
 Todo:
+size/ color of tabs
+formatting (override typography with props for % or $, rounding, etc?)
+
 autocomplete
 slide: expand and collapse when search button clicked
-Tabs for categories of data
+
 chart (separate branch)
-*backend* handle stocks that dont return because of exchange API error (e.g. lyft, BRK.A)
+
+
+*backend* 
+EXCHANGE NO NDAQ??? handle stocks that dont return because of exchange API error (e.g. snap, lyft)
+^^ one off - correct BRK.B to BRKB / BRK.A BRKA
+categorize data (DO FIRST)
 */
+
+    const [currentTab, setCurrentTab] = useState('one')
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setCurrentTab(newValue)
+    }
 
     return (
         <>
@@ -86,11 +90,13 @@ chart (separate branch)
                         </Paper>
                     </Box>
                 </Box>
-                <Typography sx={{fontSize: theme.typography.h5}}>{financialInfoJson ? (financialInfoJson[0] as ReactNode) : <></>}</Typography>
+                <Tabs value={currentTab} onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="secondary tabs example">
+                    <Tab value="one" label="Financials" />
+                    <Tab value="two" label="Item Two" />
+                    <Tab value="three" label="Item Three" />
+                </Tabs>
                 <Box sx={{m: 2}}>
-                    {financialInfoJson ? (
-                        // financialInfoJson[0][0]
-
+                    {financialInfoJson && currentTab == 'one' ? (
                         financialInfoJson.map((item: [string, unknown]) => {
                             return (
                                 <Box sx={{display: 'flex'}}>

@@ -75,6 +75,9 @@ const Watchlist = (props: WatchlistProps) => {
 
     const [gridView, setGridView] = useState<boolean>(true)
 
+    //TODO:
+    // dynamic number of columns based on screen size
+
     return (
         <>
             <Box sx={{mx: '3%'}}>

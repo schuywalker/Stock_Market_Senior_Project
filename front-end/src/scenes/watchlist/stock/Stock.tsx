@@ -16,6 +16,10 @@ const Stock = (props: DisplayGroup) => {
 
     const dailyChangeStatusColor: string = perChange > 0 ? colors.green[600] : perChange === 0 ? colors.primary[200] : colors.red[600]
 
+    //TODO:
+    // color of font match list (or vise versa)
+    // widen box
+
     return (
         <>
             <Card
