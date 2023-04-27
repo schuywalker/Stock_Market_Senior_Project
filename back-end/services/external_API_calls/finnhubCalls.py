@@ -48,3 +48,8 @@ class finh_API_Requester():
         #ideally this will be self updating to whatever the user wants to search for so i believe this will work just need to test
         analystCall = self.finnhub_client.recommendation_trends(ticker)
         return analystCall
+    
+    def getInsiderTrades(self):
+        result = []
+        result.append(self.finnhub_client.stock_insider_transactions(""))
+        return result

@@ -9,6 +9,7 @@ import base64
 from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
+from services.insiderTrades import InsiderTradesService
 
 fh_calls = fh.finh_API_Requester()
 
@@ -151,3 +152,8 @@ class checkPassword(Resource):
 class alterPassword(Resource):
     def post(self):
         return UserService.alterPassword(request.args['user'],request.args['password'])
+    
+#INSIDER TRADES
+class test(Resource):
+    def get(self):
+        return InsiderTradesService.testMethod()

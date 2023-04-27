@@ -69,3 +69,8 @@ export function renameWL(wl_id: number, user_id: string, wl_name: string) {
 export function getWLAssets(user_id: string, wl_id: number) {
     return `${backendBaseAddress}/populateWatchlist?user_id=${user_id}&wl_id=${wl_id}`
 }
+
+//////////// INSIDER TRADES CALLS ////////////
+export function testMethod(){
+    return backendBaseAddress+"/testInsider"
+}

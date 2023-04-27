@@ -43,6 +43,9 @@ api.add_resource(alterUsername, '/alterUsername')
 api.add_resource(checkPassword, '/verifyPassword')
 api.add_resource(alterPassword, '/alterPassword')
 
+#INSIDER TRADES
+api.add_resource(test,"/testInsider")
+
 
 
 if __name__ == '__main__':

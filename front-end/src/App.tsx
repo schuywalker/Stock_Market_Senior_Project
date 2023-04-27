@@ -16,7 +16,7 @@ import {ColorModeContext, useMode} from './theme'
 const cookies = new Cookies()
 
 function App() {
-    const {theme, colorMode} = useMode()//
+    const {theme, colorMode} = useMode()
     const [initialLogin, setInitialLogin] = useState(false)
     const [loggedIn, setLoggedIn] = useState(cookies.get('user') ? true : false) //Need to check if cookie is valid and user/password is correct
     const [username, setUsername] = useState('')
@@ -34,7 +34,6 @@ function App() {
     }
     useEffect(() => {
         if (!initialLogin && loggedIn) {
-            navigate('/dashboard')
             setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
