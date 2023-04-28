@@ -12,8 +12,6 @@ const AssetScreener = () => {
     const [financialInfoJson, setFinancialInfoJson] = useState<null | [string, unknown][]>(null)
     const [currentTicker, setCurrentTicker] = useState<string | null>(null)
 
-    useEffect(() => {}, [currentTicker])
-
     const handleNewSearch = async (ticker: string | null | undefined) => {
         if (!ticker) {
             console.log('null ticker')
@@ -32,6 +30,8 @@ const AssetScreener = () => {
 
     /*
 Todo:
+same stock search bug
+revise modal on stock.
 size/ color of tabs
 formatting (override typography with props for % or $, rounding, etc?)
 
@@ -68,7 +68,7 @@ categorize data (DO FIRST)
                                 bgcolor: colors.primary[400],
                             }}
                         >
-                            <IconButton type="button" sx={{p: '10px'}} aria-label="search">
+                            <IconButton type="button" sx={{p: '10px', fontSize: 20}} aria-label="search">
                                 <SearchIcon />
                             </IconButton>
 
@@ -91,9 +91,11 @@ categorize data (DO FIRST)
                     </Box>
                 </Box>
                 <Tabs value={currentTab} onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="secondary tabs example">
-                    <Tab value="one" label="Financials" disabled={currentTicker == null} />
-                    <Tab value="two" label="Item Two" disabled={currentTicker == null} />
-                    <Tab value="three" label="Item Three" disabled={currentTicker == null} />
+                    <Tab value="one" label="chartData" disabled={currentTicker == null} />
+                    <Tab value="two" label="basicInfo" disabled={currentTicker == null} />
+                    <Tab value="three" label="valuation" disabled={currentTicker == null} />
+                    <Tab value="three" label="priceMetrics" disabled={currentTicker == null} />
+                    <Tab value="three" label="financials" disabled={currentTicker == null} />
                 </Tabs>
                 <Box sx={{m: 2}}>
                     {financialInfoJson && currentTab == 'one' ? (
