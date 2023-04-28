@@ -2,6 +2,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, Typography, useTheme} from '@mui/material'
 import {useEffect, useState} from 'react'
 import {tokens} from '../../theme'
+import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
 
 // https://stackoverflow.com/questions/22885995/how-do-i-initialize-a-typescript-object-with-a-json-object
 
@@ -11,6 +12,13 @@ const AssetScreener = () => {
 
     const [financialInfoJson, setFinancialInfoJson] = useState<null | [string, unknown][]>(null)
     const [currentTicker, setCurrentTicker] = useState<string | null>(null)
+    const [chartData, setChartData] = useState('')
+    const [basicInfo, setBasicInfo] = useState<null | [string, any][]>(null)
+    const [valuation, setValuation] = useState<null | [string, any][]>(null)
+    const [priceMetrics, setPriceMetrics] = useState<null | [string, any][]>(null)
+    const [financials, setFinancials] = useState<null | [string, any][]>(null)
+
+    let obj: AssetScreenerCategories
 
     const handleNewSearch = async (ticker: string | null | undefined) => {
         if (!ticker) {
@@ -18,10 +26,16 @@ const AssetScreener = () => {
             return
         }
         try {
-            const response = await fetch(`http://127.0.0.1:8080/basicFinancials?ticker=${ticker}`)
+            //use webcall API
+            const response = await fetch(`http://127.0.0.1:8080/assetScreener?ticker=${ticker}`)
                 .then((response) => response.json())
                 .then((jsonResponse) => {
-                    setFinancialInfoJson(Object.entries(jsonResponse))
+                    obj = jsonResponse
+                    // setChartData(Object.entries(obj.chartData))
+                    setBasicInfo(Object.entries(obj.basicInfo))
+                    setValuation(Object.entries(obj.valuation))
+                    setPriceMetrics(Object.entries(obj.priceMetrics))
+                    setFinancials(Object.entries(obj.financials))
                 })
         } catch (err) {
             console.log(err)
@@ -94,12 +108,12 @@ categorize data (DO FIRST)
                     <Tab value="one" label="chartData" disabled={currentTicker == null} />
                     <Tab value="two" label="basicInfo" disabled={currentTicker == null} />
                     <Tab value="three" label="valuation" disabled={currentTicker == null} />
-                    <Tab value="three" label="priceMetrics" disabled={currentTicker == null} />
-                    <Tab value="three" label="financials" disabled={currentTicker == null} />
+                    <Tab value="four" label="priceMetrics" disabled={currentTicker == null} />
+                    <Tab value="five" label="financials" disabled={currentTicker == null} />
                 </Tabs>
-                <Box sx={{m: 2}}>
-                    {financialInfoJson && currentTab == 'one' ? (
-                        financialInfoJson.map((item: [string, unknown]) => {
+                {/* <Box sx={{m: 2}}>
+                    {chartData && currentTab == 'one' ? (
+                        chartData.map((item: [string, unknown]) => {
                             return (
                                 <Box sx={{display: 'flex'}}>
                                     <Box sx={{flexGrow: 1}}>
@@ -107,6 +121,78 @@ categorize data (DO FIRST)
                                     </Box>
                                     <Box>
                                         <Typography sx={{fontSize: theme.typography.h5}}>{item[1] as number}</Typography>
+                                    </Box>
+                                </Box>
+                            )
+                        })
+                    ) : (
+                        <></>
+                    )}
+                </Box> */}
+                <Box sx={{m: 2}}>
+                    {basicInfo && currentTab == 'two' ? (
+                        basicInfo.map((item: [string, unknown]) => {
+                            return (
+                                <Box sx={{display: 'flex'}}>
+                                    <Box sx={{flexGrow: 1}}>
+                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
+                                    </Box>
+                                </Box>
+                            )
+                        })
+                    ) : (
+                        <></>
+                    )}
+                </Box>
+                <Box sx={{m: 2}}>
+                    {valuation && currentTab == 'three' ? (
+                        valuation.map((item: [string, unknown]) => {
+                            return (
+                                <Box sx={{display: 'flex'}}>
+                                    <Box sx={{flexGrow: 1}}>
+                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
+                                    </Box>
+                                </Box>
+                            )
+                        })
+                    ) : (
+                        <></>
+                    )}
+                </Box>
+                <Box sx={{m: 2}}>
+                    {priceMetrics && currentTab == 'four' ? (
+                        priceMetrics.map((item: [string, unknown]) => {
+                            return (
+                                <Box sx={{display: 'flex'}}>
+                                    <Box sx={{flexGrow: 1}}>
+                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
+                                    </Box>
+                                </Box>
+                            )
+                        })
+                    ) : (
+                        <></>
+                    )}
+                </Box>
+                <Box sx={{m: 2}}>
+                    {financials && currentTab == 'five' ? (
+                        financials.map((item: [string, unknown]) => {
+                            return (
+                                <Box sx={{display: 'flex'}}>
+                                    <Box sx={{flexGrow: 1}}>
+                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
+                                    </Box>
+                                    <Box>
+                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
                                     </Box>
                                 </Box>
                             )
