@@ -34,7 +34,7 @@ function App() {
     }
     useEffect(() => {
         if (!initialLogin && loggedIn) {
-            navigate('/dashboard')
+            //navigate('/dashboard')
             setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
