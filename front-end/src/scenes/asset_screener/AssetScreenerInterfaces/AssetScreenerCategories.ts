@@ -1,6 +1,6 @@
 import BasicInfoCategories from './BasicInfo'
 import ChartDataCategories from './ChartData'
-import FinancialsCategories from './Financials'
+import {FinancialsCategories, Financials} from './Financials'
 import PriceMetricsCategories from './PriceMetrics'
 import ValuationCategories from './Valuation'
 
@@ -9,7 +9,8 @@ interface AssetScreenerCategories {
     basicInfo: BasicInfoCategories
     valuation: ValuationCategories
     priceMetrics: PriceMetricsCategories
-    financials: FinancialsCategories
+    financialsCategories: FinancialsCategories
+    financials: Financials
 }
 
 export default AssetScreenerCategories

@@ -17,6 +17,10 @@ const AssetScreener = () => {
     const [valuation, setValuation] = useState<null | [string, any][]>(null)
     const [priceMetrics, setPriceMetrics] = useState<null | [string, any][]>(null)
     const [financials, setFinancials] = useState<null | [string, any][]>(null)
+    const [incomeStatement, setIncomeStatement] = useState<null | [string, any][]>(null)
+    const [balanceSheet, setBalanceSheet] = useState<null | [string, any][]>(null)
+    const [cashFlow, setCashFlow] = useState<null | [string, any][]>(null)
+    const [financialsCategories, setFinancialsCategories] = useState<null | [string, any][][]>(null)
 
     let obj: AssetScreenerCategories
 
@@ -35,7 +39,11 @@ const AssetScreener = () => {
                     setBasicInfo(Object.entries(obj.basicInfo))
                     setValuation(Object.entries(obj.valuation))
                     setPriceMetrics(Object.entries(obj.priceMetrics))
-                    setFinancials(Object.entries(obj.financials))
+                    // setFinancials(Object.entries(obj.financials))
+                    setBalanceSheet(Object.entries(obj.financials.balance_sheet))
+                    setIncomeStatement(Object.entries(obj.financials.income_statement))
+                    setCashFlow(Object.entries(obj.financials.cash_flow))
+                    // setFinancialsCategories(Object.entries(obj.financials))
                 })
         } catch (err) {
             console.log(err)
@@ -109,7 +117,7 @@ categorize data (DO FIRST)
                     <Tab value="two" label="basicInfo" disabled={currentTicker == null} />
                     <Tab value="three" label="valuation" disabled={currentTicker == null} />
                     <Tab value="four" label="priceMetrics" disabled={currentTicker == null} />
-                    <Tab value="five" label="financials" disabled={currentTicker == null} />
+                    <Tab value="five" label="financials" disabled={currentTicker == null} onClick={() => console.log(financialsCategories)} />
                 </Tabs>
                 {/* <Box sx={{m: 2}}>
                     {chartData && currentTab == 'one' ? (
@@ -184,8 +192,8 @@ categorize data (DO FIRST)
                     )}
                 </Box>
                 <Box sx={{m: 2}}>
-                    {financials && currentTab == 'five' ? (
-                        financials.map((item: [string, unknown]) => {
+                    {incomeStatement && currentTab == 'five' ? (
+                        incomeStatement.map((item: [string, unknown][]) => {
                             return (
                                 <Box sx={{display: 'flex'}}>
                                     <Box sx={{flexGrow: 1}}>
