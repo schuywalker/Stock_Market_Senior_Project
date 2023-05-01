@@ -27,8 +27,11 @@ import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renam
 
 type WatchlistProps = {
     wl_name: string
+    set_wl_name: any
     wl_id: number
-    wlUpdated: any
+    wlUpdated: boolean
+    wlDeleted: boolean
+    setWLDeleted: any
     controller: AbortController
 }
 
@@ -44,11 +47,17 @@ const Watchlist = (props: WatchlistProps) => {
     let fetchAssetsInProgress = false
 
     useEffect(() => {
-        if (fetchAssetsInProgress === true) {
-            props.controller.abort()
+        if(props.wlDeleted){
+            setStocks([])
+            props.set_wl_name("Select a Watchlist")
+            props.setWLDeleted(false)
+        } else {
+            if (fetchAssetsInProgress === true) {
+                props.controller.abort()
+            }
+            fetchWatchlistAssets()
         }
-        fetchWatchlistAssets()
-    }, [props.wl_id])
+    }, [props.wl_id, props.wlUpdated])
 
     // potentially add atmoicity to fetchAssetsInProgress? still have problems with latency of differently sized watchlists
     async function fetchWatchlistAssets() {

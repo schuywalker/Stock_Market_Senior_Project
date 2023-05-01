@@ -5,6 +5,8 @@ import modalStyle from '../WatchlistStyles'
 
 type CreateWLButtonProps = {
     user_id: string
+    wlUpdatedFunction: any
+    wlUpdated: boolean
 }
 
 const CreateWLButton = (props: CreateWLButtonProps) => {
@@ -14,11 +16,12 @@ const CreateWLButton = (props: CreateWLButtonProps) => {
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
 
-    async function createWatchlist(wlUpdated: any) {
+    async function createWatchlist() {
         handleClose()
         const response = await fetch(createWL(props.user_id, newWLName), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
+                props.wlUpdatedFunction(!props.wlUpdated)
             })
         })
     }
@@ -35,7 +38,7 @@ const CreateWLButton = (props: CreateWLButtonProps) => {
                         Create New Watchlist
                     </Typography>
                     <TextField id="outlined-basic" label="New Watchlist Name" variant="outlined" onChange={(e) => setNewWLName(e.target.value)} />
-                    <Button sx={{backgroundColor: 'white', margin: 1}} onClick={() => createWatchlist(true)}>
+                    <Button sx={{backgroundColor: 'white', margin: 1}} onClick={() => createWatchlist()}>
                         Submit
                     </Button>
                 </Box>

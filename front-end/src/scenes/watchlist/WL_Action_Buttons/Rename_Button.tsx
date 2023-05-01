@@ -7,6 +7,9 @@ type RenameWLProps = {
     user_id: string
     wl_id: number
     wl_name: string
+    wlUpdatedFunction: any
+    wlUpdated: boolean
+    newName: any
 }
 
 const RenameWLButton = (props: RenameWLProps) => {
@@ -21,6 +24,8 @@ const RenameWLButton = (props: RenameWLProps) => {
         const response = await fetch(renameWL(props.wl_id, props.user_id, newName), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
+                props.wlUpdatedFunction(!props.wlUpdated)
+                props.newName(newName)
             })
         })
     }
