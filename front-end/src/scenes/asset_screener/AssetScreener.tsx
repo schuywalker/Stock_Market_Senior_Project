@@ -8,6 +8,7 @@ import BasicInfo from './tabContents/BasicInfo'
 import PriceMetrics from './tabContents/PriceMetrics'
 import Valuation from './tabContents/Valuation'
 import Financials from './tabContents/Financials'
+import {assetScreener} from '../../config/WebcallAPI'
 
 // https://stackoverflow.com/questions/22885995/how-do-i-initialize-a-typescript-object-with-a-json-object
 
@@ -35,7 +36,7 @@ const AssetScreener = () => {
         }
         try {
             //use webcall API
-            const response = await fetch(`http://127.0.0.1:8080/assetScreener?ticker=${ticker}`)
+            const response = await fetch(assetScreener(ticker))
                 .then((response) => response.json())
                 .then((jsonResponse) => {
                     obj = jsonResponse
@@ -55,7 +56,7 @@ const AssetScreener = () => {
     /*
 Todo:
 takes ticker as prop
-same stock search bug
+same stock search bug - cant recreate now??
 revise modal on stock.
 size/ color of tabs
 formatting (override typography with props for % or $, rounding, etc?)

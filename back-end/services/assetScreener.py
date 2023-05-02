@@ -22,7 +22,7 @@ class AssetScreenerService:
         ret = {
             "chartData": "yo",
             "basicInfo": {
-                "market cap": serviceUtils.formatResponse(basicFinancials.get("metric").get("marketCapitalization"), '$'),
+                "market cap (millions)": serviceUtils.formatResponse(basicFinancials.get("metric").get("marketCapitalization"), '$'),
                 "dividend yield": serviceUtils.formatResponse(basicFinancials.get("metric").get("dividendYieldIndicatedAnnual")),
                 "dividend growth rate 5Y": serviceUtils.formatResponse(basicFinancials.get("metric").get("dividendGrowthRate5Y")),
             },
