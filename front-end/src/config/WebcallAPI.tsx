@@ -71,6 +71,6 @@ export function getWLAssets(user_id: string, wl_id: number) {
 }
 
 //////////// INSIDER TRADES CALLS ////////////
-export function testMethod(){
-    return backendBaseAddress+"/testInsider"
+export function testMethod(pageNumber?:number){
+    return backendBaseAddress+"/testInsider"+(pageNumber?"?page="+pageNumber:"")
 }

@@ -2,13 +2,13 @@ import { Box } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 
-export default function LoadingBox(props: {height:number,width:number}){
+export default function LoadingBox(props: {height:number,width:number|string}){
     const [animationFrame, setAnimationFrame] = useState(1)
     const [time, setTime] = useState(Date.now());
     const[reverseAnimation,setReverseAnimation] = useState(false);
 
     useEffect(() => {
-        const interval = setInterval(() => setTime(Date.now()), 135);
+        const interval = setInterval(() => setTime(Date.now()), 115);
             return () => {
                 clearInterval(interval);
             };

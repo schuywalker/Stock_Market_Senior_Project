@@ -152,4 +152,9 @@ class alterPassword(Resource):
 #INSIDER TRADES
 class test(Resource):
     def get(self):
-        return InsiderTradesService.testMethod()
+        if(len(request.args) > 0):
+            page = int(request.args['page'])
+            print(page)
+            return InsiderTradesService.testMethod(page)
+        else:
+            return InsiderTradesService.testMethod()
