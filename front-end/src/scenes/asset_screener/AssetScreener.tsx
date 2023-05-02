@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search'
 import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, Typography, useTheme} from '@mui/material'
-import {useEffect, useState} from 'react'
+import {ReactNode, useEffect, useState} from 'react'
 import {tokens} from '../../theme'
 import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
 
@@ -192,19 +192,73 @@ categorize data (DO FIRST)
                     )}
                 </Box>
                 <Box sx={{m: 2}}>
+                    <Typography
+                        sx={{
+                            fontSize: theme.typography.h4,
+                            mb: 1,
+                        }}
+                    >
+                        Income Statement
+                    </Typography>
                     {incomeStatement && currentTab == 'five' ? (
-                        incomeStatement.map((item: [string, unknown][]) => {
-                            return (
-                                <Box sx={{display: 'flex'}}>
-                                    <Box sx={{flexGrow: 1}}>
-                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
-                                    </Box>
+                        incomeStatement.map((item: [string, number][], i) => (
+                            <Box sx={{display: 'flex'}} key={i}>
+                                <Box sx={{flexGrow: 1}}>
+                                    <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
                                 </Box>
-                            )
-                        })
+                                <Box>
+                                    <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as ReactNode) : 'N/A'}</Typography>
+                                </Box>
+                            </Box>
+                        ))
+                    ) : (
+                        <></>
+                    )}
+                </Box>
+                <Box sx={{m: 2}}>
+                    <Typography
+                        sx={{
+                            fontSize: theme.typography.h4,
+                            my: 1,
+                        }}
+                    >
+                        Balance Sheet
+                    </Typography>
+                    {balanceSheet && currentTab == 'five' ? (
+                        balanceSheet.map((item: [string, number][], i) => (
+                            <Box sx={{display: 'flex'}} key={i}>
+                                <Box sx={{flexGrow: 1}}>
+                                    <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as ReactNode) : 'N/A'}</Typography>
+                                </Box>
+                            </Box>
+                        ))
+                    ) : (
+                        <></>
+                    )}
+                </Box>
+                <Box sx={{m: 2}}>
+                    <Typography
+                        sx={{
+                            fontSize: theme.typography.h4,
+                            my: 1,
+                        }}
+                    >
+                        Cash Flow
+                    </Typography>
+                    {cashFlow && currentTab == 'five' ? (
+                        cashFlow.map((item: [string, number][], i) => (
+                            <Box sx={{display: 'flex'}} key={i}>
+                                <Box sx={{flexGrow: 1}}>
+                                    <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
+                                </Box>
+                                <Box>
+                                    <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as ReactNode) : 'N/A'}</Typography>
+                                </Box>
+                            </Box>
+                        ))
                     ) : (
                         <></>
                     )}
