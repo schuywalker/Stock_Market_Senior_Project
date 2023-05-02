@@ -1,4 +1,4 @@
-import {useTheme} from '@mui/material'
+import {Button, useTheme} from '@mui/material'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -7,6 +7,7 @@ import {useContext} from 'react'
 import DisplayGroup from '../DisplayGroup'
 import FinancialsModalButton from './FinancialsModalButton'
 import {ColorModeContext, tokens} from '../../../theme'
+import StockCardModal from './stockCardModal'
 
 const Stock = (props: DisplayGroup) => {
     const {name, ticker, price, perChange, earnings, marketCap, forwardPE, dividendYield} = props
@@ -129,8 +130,9 @@ const Stock = (props: DisplayGroup) => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{mt: 1, display: 'grid', gridAutoColumns: '1fr'}}>
+                    <Box sx={{mt: 1, display: 'grid', gridTemplateColumns: 'repeat(2,1fr)'}}>
                         {/* action buttons */}
+                        <StockCardModal ticker={ticker} />
                         <FinancialsModalButton ticker={ticker} />
                     </Box>
                 </CardContent>

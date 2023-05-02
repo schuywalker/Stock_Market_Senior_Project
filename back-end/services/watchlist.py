@@ -220,16 +220,19 @@ class WatchlistService:
                 ticker_dict = Ticker(ticker)
                 price = ticker_dict.price[ticker]
                 summary_detail = ticker_dict.summary_detail[ticker]
+
+                
+                # print(summary_detail, "\n\n")
                 
                 response.append({
                     "name": price['shortName'],
                     "ticker": ticker,
-                    "price": price['regularMarketPrice'],
-                    "perChange": (price['regularMarketChangePercent']),
+                    "price": price['regularMarketPrice'] if ('regularMarketPrice' in price) else None,
+                    "perChange": (price['regularMarketChangePercent'] if ('regularMarketChangePercent' in price) else None),
                     "earnings": ticker_dict.calendar_events[ticker]['earnings']['earningsDate'],
-                    "marketCap": summary_detail['marketCap'],
-                    "forwardPE": summary_detail['forwardPE'],
-                    "dividendYield": summary_detail['trailingAnnualDividendYield'],
+                    "marketCap": summary_detail['marketCap'] if ('marketCap' in summary_detail) else None,
+                    "forwardPE": summary_detail['forwardPE'] if ('forwardPE' in summary_detail) else None,
+                    "dividendYield": summary_detail['trailingAnnualDividendYield'] if ('trailingAnnualDividendYield' in summary_detail) else "bad data",
                 })
             # cursor.close() # how to fix semaphores bug...?
             # dbc.close()
