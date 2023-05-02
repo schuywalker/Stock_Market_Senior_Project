@@ -4,19 +4,20 @@ import {ReactNode, useEffect, useState} from 'react'
 import {tokens} from '../../theme'
 import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
 
+import BasicInfo from './BasicInfo'
+import PriceMetrics from './tabContents/PriceMetrics'
+
 // https://stackoverflow.com/questions/22885995/how-do-i-initialize-a-typescript-object-with-a-json-object
 
 const AssetScreener = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
-    const [financialInfoJson, setFinancialInfoJson] = useState<null | [string, unknown][]>(null)
     const [currentTicker, setCurrentTicker] = useState<string | null>(null)
     const [chartData, setChartData] = useState('')
     const [basicInfo, setBasicInfo] = useState<null | [string, any][]>(null)
     const [valuation, setValuation] = useState<null | [string, any][]>(null)
     const [priceMetrics, setPriceMetrics] = useState<null | [string, any][]>(null)
-    const [financials, setFinancials] = useState<null | [string, any][]>(null)
     const [incomeStatement, setIncomeStatement] = useState<null | [string, any][]>(null)
     const [balanceSheet, setBalanceSheet] = useState<null | [string, any][]>(null)
     const [cashFlow, setCashFlow] = useState<null | [string, any][]>(null)
@@ -39,11 +40,9 @@ const AssetScreener = () => {
                     setBasicInfo(Object.entries(obj.basicInfo))
                     setValuation(Object.entries(obj.valuation))
                     setPriceMetrics(Object.entries(obj.priceMetrics))
-                    // setFinancials(Object.entries(obj.financials))
                     setBalanceSheet(Object.entries(obj.financials.balance_sheet))
                     setIncomeStatement(Object.entries(obj.financials.income_statement))
                     setCashFlow(Object.entries(obj.financials.cash_flow))
-                    // setFinancialsCategories(Object.entries(obj.financials))
                 })
         } catch (err) {
             console.log(err)
@@ -52,6 +51,7 @@ const AssetScreener = () => {
 
     /*
 Todo:
+takes ticker as prop
 same stock search bug
 revise modal on stock.
 size/ color of tabs
@@ -119,42 +119,7 @@ categorize data (DO FIRST)
                     <Tab value="four" label="priceMetrics" disabled={currentTicker == null} />
                     <Tab value="five" label="financials" disabled={currentTicker == null} onClick={() => console.log(financialsCategories)} />
                 </Tabs>
-                {/* <Box sx={{m: 2}}>
-                    {chartData && currentTab == 'one' ? (
-                        chartData.map((item: [string, unknown]) => {
-                            return (
-                                <Box sx={{display: 'flex'}}>
-                                    <Box sx={{flexGrow: 1}}>
-                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] as number}</Typography>
-                                    </Box>
-                                </Box>
-                            )
-                        })
-                    ) : (
-                        <></>
-                    )}
-                </Box> */}
-                <Box sx={{m: 2}}>
-                    {basicInfo && currentTab == 'two' ? (
-                        basicInfo.map((item: [string, unknown]) => {
-                            return (
-                                <Box sx={{display: 'flex'}}>
-                                    <Box sx={{flexGrow: 1}}>
-                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
-                                    </Box>
-                                </Box>
-                            )
-                        })
-                    ) : (
-                        <></>
-                    )}
-                </Box>
+                <Box sx={{m: 2}}>{basicInfo && currentTab == 'two' ? <BasicInfo contents={basicInfo} /> : <></>}</Box>
                 <Box sx={{m: 2}}>
                     {valuation && currentTab == 'three' ? (
                         valuation.map((item: [string, unknown]) => {
@@ -173,36 +138,20 @@ categorize data (DO FIRST)
                         <></>
                     )}
                 </Box>
+
+                <Box sx={{m: 2}}>{priceMetrics && currentTab == 'four' ? <PriceMetrics contents={priceMetrics} /> : <></>}</Box>
                 <Box sx={{m: 2}}>
-                    {priceMetrics && currentTab == 'four' ? (
-                        priceMetrics.map((item: [string, unknown]) => {
-                            return (
-                                <Box sx={{display: 'flex'}}>
-                                    <Box sx={{flexGrow: 1}}>
-                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
-                                    </Box>
-                                </Box>
-                            )
-                        })
-                    ) : (
-                        <></>
-                    )}
-                </Box>
-                <Box sx={{m: 2}}>
-                    <Typography
-                        sx={{
-                            fontSize: theme.typography.h4,
-                            mb: 1,
-                        }}
-                    >
-                        Income Statement
-                    </Typography>
                     {incomeStatement && currentTab == 'five' ? (
                         incomeStatement.map((item: [string, number][], i) => (
                             <Box sx={{display: 'flex'}} key={i}>
+                                <Typography
+                                    sx={{
+                                        fontSize: theme.typography.h4,
+                                        mb: 1,
+                                    }}
+                                >
+                                    Income Statement
+                                </Typography>
                                 <Box sx={{flexGrow: 1}}>
                                     <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
                                 </Box>
@@ -216,17 +165,17 @@ categorize data (DO FIRST)
                     )}
                 </Box>
                 <Box sx={{m: 2}}>
-                    <Typography
-                        sx={{
-                            fontSize: theme.typography.h4,
-                            my: 1,
-                        }}
-                    >
-                        Balance Sheet
-                    </Typography>
                     {balanceSheet && currentTab == 'five' ? (
                         balanceSheet.map((item: [string, number][], i) => (
                             <Box sx={{display: 'flex'}} key={i}>
+                                <Typography
+                                    sx={{
+                                        fontSize: theme.typography.h4,
+                                        my: 1,
+                                    }}
+                                >
+                                    Balance Sheet
+                                </Typography>
                                 <Box sx={{flexGrow: 1}}>
                                     <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
                                 </Box>
@@ -240,17 +189,17 @@ categorize data (DO FIRST)
                     )}
                 </Box>
                 <Box sx={{m: 2}}>
-                    <Typography
-                        sx={{
-                            fontSize: theme.typography.h4,
-                            my: 1,
-                        }}
-                    >
-                        Cash Flow
-                    </Typography>
                     {cashFlow && currentTab == 'five' ? (
                         cashFlow.map((item: [string, number][], i) => (
                             <Box sx={{display: 'flex'}} key={i}>
+                                <Typography
+                                    sx={{
+                                        fontSize: theme.typography.h4,
+                                        my: 1,
+                                    }}
+                                >
+                                    Cash Flow
+                                </Typography>
                                 <Box sx={{flexGrow: 1}}>
                                     <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
                                 </Box>
