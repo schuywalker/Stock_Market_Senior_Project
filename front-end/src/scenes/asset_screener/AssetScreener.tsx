@@ -4,8 +4,10 @@ import {ReactNode, useEffect, useState} from 'react'
 import {tokens} from '../../theme'
 import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
 
-import BasicInfo from './BasicInfo'
+import BasicInfo from './tabContents/BasicInfo'
 import PriceMetrics from './tabContents/PriceMetrics'
+import Valuation from './tabContents/Valuation'
+import Financials from './tabContents/Financials'
 
 // https://stackoverflow.com/questions/22885995/how-do-i-initialize-a-typescript-object-with-a-json-object
 
@@ -14,6 +16,8 @@ const AssetScreener = () => {
     const colors = tokens(theme.palette.mode)
 
     const [currentTicker, setCurrentTicker] = useState<string | null>(null)
+
+    // TABS (chart doesnt necessarily need to be in Tabs - design decision)
     const [chartData, setChartData] = useState('')
     const [basicInfo, setBasicInfo] = useState<null | [string, any][]>(null)
     const [valuation, setValuation] = useState<null | [string, any][]>(null)
@@ -21,7 +25,6 @@ const AssetScreener = () => {
     const [incomeStatement, setIncomeStatement] = useState<null | [string, any][]>(null)
     const [balanceSheet, setBalanceSheet] = useState<null | [string, any][]>(null)
     const [cashFlow, setCashFlow] = useState<null | [string, any][]>(null)
-    const [financialsCategories, setFinancialsCategories] = useState<null | [string, any][][]>(null)
 
     let obj: AssetScreenerCategories
 
@@ -113,101 +116,18 @@ categorize data (DO FIRST)
                     </Box>
                 </Box>
                 <Tabs value={currentTab} onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="secondary tabs example">
-                    <Tab value="one" label="chartData" disabled={currentTicker == null} />
-                    <Tab value="two" label="basicInfo" disabled={currentTicker == null} />
+                    <Tab value="one" label="chart" disabled={currentTicker == null} />
+                    <Tab value="two" label="basic info" disabled={currentTicker == null} />
                     <Tab value="three" label="valuation" disabled={currentTicker == null} />
-                    <Tab value="four" label="priceMetrics" disabled={currentTicker == null} />
-                    <Tab value="five" label="financials" disabled={currentTicker == null} onClick={() => console.log(financialsCategories)} />
+                    <Tab value="four" label="price metrics" disabled={currentTicker == null} />
+                    <Tab value="five" label="financials" disabled={currentTicker == null} />
                 </Tabs>
                 <Box sx={{m: 2}}>{basicInfo && currentTab == 'two' ? <BasicInfo contents={basicInfo} /> : <></>}</Box>
-                <Box sx={{m: 2}}>
-                    {valuation && currentTab == 'three' ? (
-                        valuation.map((item: [string, unknown]) => {
-                            return (
-                                <Box sx={{display: 'flex'}}>
-                                    <Box sx={{flexGrow: 1}}>
-                                        <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0]}</Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as number) : 'N/A'}</Typography>
-                                    </Box>
-                                </Box>
-                            )
-                        })
-                    ) : (
-                        <></>
-                    )}
-                </Box>
-
+                <Box sx={{m: 2}}>{valuation && currentTab == 'three' ? <Valuation contents={valuation} /> : <></>}</Box>
                 <Box sx={{m: 2}}>{priceMetrics && currentTab == 'four' ? <PriceMetrics contents={priceMetrics} /> : <></>}</Box>
                 <Box sx={{m: 2}}>
-                    {incomeStatement && currentTab == 'five' ? (
-                        incomeStatement.map((item: [string, number][], i) => (
-                            <Box sx={{display: 'flex'}} key={i}>
-                                <Typography
-                                    sx={{
-                                        fontSize: theme.typography.h4,
-                                        mb: 1,
-                                    }}
-                                >
-                                    Income Statement
-                                </Typography>
-                                <Box sx={{flexGrow: 1}}>
-                                    <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
-                                </Box>
-                                <Box>
-                                    <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as ReactNode) : 'N/A'}</Typography>
-                                </Box>
-                            </Box>
-                        ))
-                    ) : (
-                        <></>
-                    )}
-                </Box>
-                <Box sx={{m: 2}}>
-                    {balanceSheet && currentTab == 'five' ? (
-                        balanceSheet.map((item: [string, number][], i) => (
-                            <Box sx={{display: 'flex'}} key={i}>
-                                <Typography
-                                    sx={{
-                                        fontSize: theme.typography.h4,
-                                        my: 1,
-                                    }}
-                                >
-                                    Balance Sheet
-                                </Typography>
-                                <Box sx={{flexGrow: 1}}>
-                                    <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
-                                </Box>
-                                <Box>
-                                    <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as ReactNode) : 'N/A'}</Typography>
-                                </Box>
-                            </Box>
-                        ))
-                    ) : (
-                        <></>
-                    )}
-                </Box>
-                <Box sx={{m: 2}}>
-                    {cashFlow && currentTab == 'five' ? (
-                        cashFlow.map((item: [string, number][], i) => (
-                            <Box sx={{display: 'flex'}} key={i}>
-                                <Typography
-                                    sx={{
-                                        fontSize: theme.typography.h4,
-                                        my: 1,
-                                    }}
-                                >
-                                    Cash Flow
-                                </Typography>
-                                <Box sx={{flexGrow: 1}}>
-                                    <Typography sx={{fontSize: theme.typography.h5, mr: 3}}>{item[0] as ReactNode}</Typography>
-                                </Box>
-                                <Box>
-                                    <Typography sx={{fontSize: theme.typography.h5}}>{item[1] ? (item[1] as ReactNode) : 'N/A'}</Typography>
-                                </Box>
-                            </Box>
-                        ))
+                    {incomeStatement && balanceSheet && cashFlow && currentTab == 'five' ? (
+                        <Financials balanceSheet={balanceSheet} incomeStatement={incomeStatement} cashFlow={cashFlow} />
                     ) : (
                         <></>
                     )}

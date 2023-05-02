@@ -2,14 +2,14 @@ import {Box, Typography, useTheme} from '@mui/material'
 import {tokens} from '../../../theme'
 import responseFormat from '../AssetScreenerInterfaces/responseFormat'
 
-const PriceMetrics = (priceMetrics?: responseFormat) => {
+const Valuation = (valuation?: responseFormat) => {
     const theme = useTheme()
 
     return (
         <>
             <Box sx={{m: 2}}>
-                {priceMetrics &&
-                    priceMetrics.contents.map((item: [string, unknown], i) => {
+                {valuation &&
+                    valuation.contents.map((item: [string, unknown], i) => {
                         return (
                             <Box sx={{display: 'flex'}} key={i}>
                                 <Box sx={{flexGrow: 1}}>
@@ -26,4 +26,4 @@ const PriceMetrics = (priceMetrics?: responseFormat) => {
     )
 }
 
-export default PriceMetrics
+export default Valuation
