@@ -47,9 +47,8 @@ const Watchlist = (props: WatchlistProps) => {
     let fetchAssetsInProgress = false
 
     useEffect(() => {
-        if(props.wlDeleted){
+        if (props.wlDeleted) {
             setStocks([])
-            props.set_wl_name("Select a Watchlist")
             props.setWLDeleted(false)
         } else {
             if (fetchAssetsInProgress === true) {
