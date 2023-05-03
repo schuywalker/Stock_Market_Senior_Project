@@ -3,7 +3,7 @@ import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, Typography, useThe
 import {ReactNode, useEffect, useState} from 'react'
 import {tokens} from '../../theme'
 import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
-
+import ChartInfo from './tabContents/ChartInfo'
 import BasicInfo from './tabContents/BasicInfo'
 import PriceMetrics from './tabContents/PriceMetrics'
 import Valuation from './tabContents/Valuation'
@@ -19,7 +19,7 @@ const AssetScreener = () => {
     const [currentTicker, setCurrentTicker] = useState<string | null>(null)
 
     // TABS (chart doesnt necessarily need to be in Tabs - design decision)
-    const [chartData, setChartData] = useState('')
+    const [chartData, setChartData] = useState<null | [string, any][]>(null)
     const [basicInfo, setBasicInfo] = useState<null | [string, any][]>(null)
     const [valuation, setValuation] = useState<null | [string, any][]>(null)
     const [priceMetrics, setPriceMetrics] = useState<null | [string, any][]>(null)
@@ -40,7 +40,7 @@ const AssetScreener = () => {
                 .then((response) => response.json())
                 .then((jsonResponse) => {
                     obj = jsonResponse
-                    // setChartData(Object.entries(obj.chartData))
+                    setChartData(Object.entries(obj.chartData))
                     setBasicInfo(Object.entries(obj.basicInfo))
                     setValuation(Object.entries(obj.valuation))
                     setPriceMetrics(Object.entries(obj.priceMetrics))
@@ -50,6 +50,12 @@ const AssetScreener = () => {
                 })
         } catch (err) {
             console.log(err)
+        }
+    }
+
+    const handleEnterKey = (event: {key: string}) => {
+        if (event.key === 'Enter') {
+            handleNewSearch(currentTicker)
         }
     }
 
@@ -103,6 +109,7 @@ categorize data (DO FIRST)
                                 label="search ticker"
                                 type="search"
                                 variant="standard"
+                                onKeyDown={handleEnterKey}
                                 sx={{flexGrow: 1, m: 0.5}}
                                 inputProps={{style: {fontSize: theme.typography.h5.fontSize}}}
                                 InputLabelProps={{
@@ -123,6 +130,7 @@ categorize data (DO FIRST)
                     <Tab value="four" label="price metrics" disabled={currentTicker == null} />
                     <Tab value="five" label="financials" disabled={currentTicker == null} />
                 </Tabs>
+                <Box sx={{m: 2}}>{chartData && currentTab == 'one' ? <ChartInfo /> : <></>}</Box>
                 <Box sx={{m: 2}}>{basicInfo && currentTab == 'two' ? <BasicInfo contents={basicInfo} /> : <></>}</Box>
                 <Box sx={{m: 2}}>{valuation && currentTab == 'three' ? <Valuation contents={valuation} /> : <></>}</Box>
                 <Box sx={{m: 2}}>{priceMetrics && currentTab == 'four' ? <PriceMetrics contents={priceMetrics} /> : <></>}</Box>
