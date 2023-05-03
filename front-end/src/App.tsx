@@ -78,7 +78,8 @@ function App() {
                                         }
                                     />
                                     <Route path="/sandbox" element={loggedIn ? <Sandbox /> : <Navigate to="/" />} />
-                                    <Route path="/asset-screener" element={<AssetScreener />} />
+                                    <Route path="/asset-screener/:ticker" element={<AssetScreener />} />
+                                    <Route path="/asset-screener/" element={<AssetScreener />} />
                                     <Route path="*" element={<Navigate to="/" />} />
                                 </Routes>
                             </Box>

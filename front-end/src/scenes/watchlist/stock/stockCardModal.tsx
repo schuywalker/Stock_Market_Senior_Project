@@ -15,8 +15,6 @@ const StockCardModal = (props: {ticker: string}) => {
         border: '2px solid #000',
         boxShadow: 24,
         p: 1,
-
-        // display: 'flex',
     }
 
     const [financialInfo, setFinancialInfo] = useState('')
@@ -33,7 +31,6 @@ const StockCardModal = (props: {ticker: string}) => {
     const getDetailedFinancialInfo = async () => {
         try {
             const response = await fetch(`http://127.0.0.1:8080/basicFinancials?ticker=${props.ticker}`).then((response) => response.json())
-            // console.log(response);
             setFinancialInfo(JSON.stringify(response, null, 4) as unknown as string)
         } catch (err) {
             console.log(err)

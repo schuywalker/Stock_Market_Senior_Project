@@ -3,10 +3,10 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
-import {useContext} from 'react'
-import DisplayGroup from '../DisplayGroup'
-import FinancialsModalButton from './FinancialsModalButton'
+import React, {useContext} from 'react'
+import {Link} from 'react-router-dom'
 import {ColorModeContext, tokens} from '../../../theme'
+import DisplayGroup from '../DisplayGroup'
 import StockCardModal from './stockCardModal'
 
 const Stock = (props: DisplayGroup) => {
@@ -16,6 +16,10 @@ const Stock = (props: DisplayGroup) => {
     const colorMode = useContext(ColorModeContext)
 
     const dailyChangeStatusColor: string = perChange > 0 ? colors.green[600] : perChange === 0 ? colors.primary[200] : colors.red[600]
+
+    const AssetScreenerLinkBehavior = React.forwardRef<any, Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>>((props, ref) => (
+        <Link ref={ref} to="/asset-screener" state={{ticker: ticker}} />
+    ))
 
     //TODO:
     // color of font match list (or vise versa)
@@ -131,9 +135,10 @@ const Stock = (props: DisplayGroup) => {
                         </Box>
                     </Box>
                     <Box sx={{mt: 1, display: 'grid', gridTemplateColumns: 'repeat(2,1fr)'}}>
-                        {/* action buttons */}
                         <StockCardModal ticker={ticker} />
-                        <FinancialsModalButton ticker={ticker} />
+                        <Button component={Link} to={`/asset-screener/${ticker}`} sx={{bgcolor: colors.grey[400], m: 0.5}}>
+                            More Info
+                        </Button>
                     </Box>
                 </CardContent>
             </Card>

@@ -1,22 +1,30 @@
 import SearchIcon from '@mui/icons-material/Search'
-import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, Typography, useTheme} from '@mui/material'
-import {ReactNode, useEffect, useState} from 'react'
+import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, useTheme} from '@mui/material'
+import {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {assetScreener} from '../../config/WebcallAPI'
 import {tokens} from '../../theme'
 import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
-import ChartInfo from './tabContents/ChartInfo'
 import BasicInfo from './tabContents/BasicInfo'
+import ChartInfo from './tabContents/ChartInfo'
+import Financials from './tabContents/Financials'
 import PriceMetrics from './tabContents/PriceMetrics'
 import Valuation from './tabContents/Valuation'
-import Financials from './tabContents/Financials'
-import {assetScreener} from '../../config/WebcallAPI'
-
-// https://stackoverflow.com/questions/22885995/how-do-i-initialize-a-typescript-object-with-a-json-object
 
 const AssetScreener = () => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
-    const [currentTicker, setCurrentTicker] = useState<string | null>(null)
+    const {ticker} = useParams()
+    const navigate = useNavigate()
+    const [currentTicker, setCurrentTicker] = useState(ticker)
+
+    useEffect(() => {
+        if (ticker) {
+            setCurrentTicker(ticker)
+            handleNewSearch(ticker)
+        }
+    }, [])
 
     // TABS (chart doesnt necessarily need to be in Tabs - design decision)
     const [chartData, setChartData] = useState<null | [string, any][]>(null)
@@ -34,6 +42,7 @@ const AssetScreener = () => {
             console.log('null ticker')
             return
         }
+        navigate({pathname: '/asset-screener', search: `${currentTicker}`})
         try {
             //use webcall API
             const response = await fetch(assetScreener(ticker))
@@ -61,14 +70,16 @@ const AssetScreener = () => {
 
     /*
 Todo:
-takes ticker as prop
+takes ticker as prop - DOOOOONNNNNNNEEEE!!!!!!!!!!!!!!!!!!
 same stock search bug - cant recreate now??
-revise modal on stock.
-size/ color of tabs
-formatting (override typography with props for % or $, rounding, etc?)
+revise modal on stock. - DONEish
 
-autocomplete
+UP FOR GRABS:
 slide: expand and collapse when search button clicked
+enter key to search - DOOOOONNNNNNNEEEE!!!!!!!!!!!!!!!!!!
+size/ color of tabs
+autocomplete
+
 
 chart (separate branch)
 
@@ -76,7 +87,6 @@ chart (separate branch)
 *backend* 
 EXCHANGE NO NDAQ??? handle stocks that dont return because of exchange API error (e.g. snap, lyft)
 ^^ one off - correct BRK.B to BRKB / BRK.A BRKA
-categorize data (DO FIRST)
 */
 
     const [currentTab, setCurrentTab] = useState('one')
