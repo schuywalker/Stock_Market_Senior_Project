@@ -89,7 +89,7 @@ export default function InsiderTradeTable (){
             <Box sx={{display:'flex',flexDirection:'column'}}>
                 <Typography sx={{fontSize:25, alignItems:'center', marginLeft:2, padding:2, paddingBottom:3}}>Recent Insider Trades</Typography>
                 <TableContainer component={Paper}>
-                <Table sx={{width:'90vw'}} aria-label="simple table">
+                <Table sx={{width:'88vw'}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Filing Date</TableCell>
