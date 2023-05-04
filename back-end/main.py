@@ -43,7 +43,7 @@ api.add_resource(checkPassword, '/verifyPassword')
 api.add_resource(alterPassword, '/alterPassword')
 
 #INSIDER TRADES
-api.add_resource(test,"/testInsider")
+api.add_resource(getInsiderTrades,"/getInsiderTrades")
 
 
 

@@ -12,6 +12,7 @@ import Dashboard from './scenes/dashboard/Dashboard'
 import ResponsiveAppBar from './scenes/global/AppBar'
 import ResponsiveSideBar from './scenes/global/sidebar'
 import {ColorModeContext, useMode} from './theme'
+import InsiderTradesDashboard from './scenes/insider/InsiderTradesDashboard'
 
 const cookies = new Cookies()
 
@@ -75,6 +76,7 @@ function App() {
                                             )
                                         }
                                     />
+                                    <Route path="/insider-trades" element={loggedIn ? <InsiderTradesDashboard /> : <Navigate to="/" />} />
                                     <Route path="/sandbox" element={<Sandbox />} />
                                     <Route path="*" element={<Navigate to="/" />} />
                                 </Routes>

@@ -71,6 +71,16 @@ export function getWLAssets(user_id: string, wl_id: number) {
 }
 
 //////////// INSIDER TRADES CALLS ////////////
-export function testMethod(pageNumber?:number){
-    return backendBaseAddress+"/testInsider"+(pageNumber?"?page="+pageNumber:"")
+export function getInsiderTrades(pageNumber:number,ticker?:string){
+    let parameters = ""
+    if(ticker && pageNumber){
+        parameters = "?ticker="+ticker+"&pageNumber="+pageNumber
+    }
+    else if(ticker){
+        parameters = "?ticker="+ticker
+    }
+    else if(pageNumber){
+        parameters = "?pageNumber="+pageNumber
+    }
+    return backendBaseAddress+"/getInsiderTrades"+parameters
 }

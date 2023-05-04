@@ -49,7 +49,7 @@ class finh_API_Requester():
         analystCall = self.finnhub_client.recommendation_trends(ticker)
         return analystCall
     
-    def getInsiderTrades(self):
+    def getInsiderTrades(self,ticker):
         result = []
-        result.append(self.finnhub_client.stock_insider_transactions(""))
+        result.append(self.finnhub_client.stock_insider_transactions(ticker))
         return result

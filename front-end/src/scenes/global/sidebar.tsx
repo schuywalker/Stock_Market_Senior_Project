@@ -152,6 +152,13 @@ const ProSidebar = (props: any) => {
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
+                                <Item
+                                    title="Insider Trades"
+                                    link={<Link to="/insider-trades"/>}
+                                    icon={<PhoneIcon sx={{fontSize: 20}} />}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                />
 
                                 <Typography variant="h6" color={colors.grey[400]} sx={{fontsize: 50, m: 1.5}}>
                                     {isCollapsed ? 'Acct' : 'Account'}

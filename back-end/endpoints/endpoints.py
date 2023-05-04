@@ -150,11 +150,11 @@ class alterPassword(Resource):
         return UserService.alterPassword(request.args['user'],request.args['password'])
     
 #INSIDER TRADES
-class test(Resource):
+class getInsiderTrades(Resource):
     def get(self):
-        if(len(request.args) > 0):
-            page = int(request.args['page'])
-            print(page)
-            return InsiderTradesService.testMethod(page)
+        page = int(request.args['pageNumber'])
+        if(len(request.args) > 1):
+            ticker = request.args['ticker']
+            return InsiderTradesService.getTrades(page,ticker)
         else:
-            return InsiderTradesService.testMethod()
+            return InsiderTradesService.getTrades(page)
