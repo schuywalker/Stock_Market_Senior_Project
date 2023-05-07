@@ -8,6 +8,8 @@ type AddTickersButtonProps = {
     user_id: string
     wl_id: number
     wl_name: string
+    wlUpdatedFunction: any
+    wlUpdated: boolean
 }
 
 const AddTickersButton = (props: AddTickersButtonProps) => {
@@ -22,6 +24,7 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
         const response = await fetch(addTickersToWL(wlAddTickers, props.wl_id, props.user_id), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
+                props.wlUpdatedFunction(!props.wlUpdated)
             })
         })
     }
