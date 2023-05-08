@@ -7,6 +7,9 @@ type DeleteWLButtonProps = {
     user_id: string
     wl_id: number
     wl_name: string
+    wlUpdatedFunction: any
+    wlUpdated: boolean
+    setWLDeleted: any
 }
 
 const DeleteWLButton = (props: DeleteWLButtonProps) => {
@@ -19,6 +22,8 @@ const DeleteWLButton = (props: DeleteWLButtonProps) => {
         const response = await fetch(deleteWL(props.wl_id, props.user_id), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
+                props.wlUpdatedFunction(!props.wlUpdated)
+                props.setWLDeleted(true)
             })
         })
     }

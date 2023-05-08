@@ -19,11 +19,11 @@ const Dashboard = () => {
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
-    const [wlUpdatedToggle, setWLUpdated] = useState(false)
+    const [newWLName, setNewWLName] = useState('')
 
-    const handleUpdateWL = () => {
-        setWLUpdated(!wlUpdatedToggle)
-    }
+    const [wlDeleted, setWLDeleted] = useState(false)
+
+    const [wlUpdatedToggle, setWLUpdated] = useState(false)
 
     const cookies = new Cookies()
 
@@ -39,8 +39,15 @@ const Dashboard = () => {
             }).then((response) => {
                 response.json().then((json) => {
                     setUserWatchlists(json[0])
+                    if (newWLName !== '') {
+                        set_wl_name(newWLName)
+                        setNewWLName('')
+                    }
                 })
             })
+            if (wlDeleted) {
+                set_wl_name('Select a Watchlist')
+            }
         } catch (err) {
             console.log(err)
         }
@@ -84,13 +91,47 @@ const Dashboard = () => {
                 })}
             </List>
             <Box sx={{margin: 2}}>
-                <CreateWLButton user_id={cookies.get('user_id')} />
-                <AddTickersButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
-                <DeleteTickersButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
-                <RenameWLButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
-                <DeleteWLButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
+                <CreateWLButton user_id={cookies.get('user_id')} wlUpdatedFunction={setWLUpdated} wlUpdated={wlUpdatedToggle} />
+                <AddTickersButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                />
+                <DeleteTickersButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                />
+                <RenameWLButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                    newName={setNewWLName}
+                />
+                <DeleteWLButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                    setWLDeleted={setWLDeleted}
+                />
             </Box>
-            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL} controller={controller} />
+            <Watchlist
+                wl_id={watchlistSelected}
+                wl_name={wl_name}
+                set_wl_name={set_wl_name}
+                wlUpdated={wlUpdatedToggle}
+                wlDeleted={wlDeleted}
+                setWLDeleted={setWLDeleted}
+                controller={controller}
+            />
         </Box>
     )
 }
