@@ -1,12 +1,13 @@
-import {useTheme} from '@mui/material'
+import {Button, useTheme} from '@mui/material'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
-import {useContext} from 'react'
-import DisplayGroup from '../../scenes/watchlist/DisplayGroup'
-import FinancialsModalButton from '../../scenes/watchlist/FinancialsModalButton'
-import {ColorModeContext, tokens} from '../../theme'
+import React, {useContext} from 'react'
+import {Link} from 'react-router-dom'
+import {ColorModeContext, tokens} from '../../../theme'
+import DisplayGroup from '../DisplayGroup'
+import StockCardModal from './stockCardModal'
 
 const Stock = (props: DisplayGroup) => {
     const {name, ticker, price, perChange, earnings, marketCap, forwardPE, dividendYield} = props
@@ -15,6 +16,14 @@ const Stock = (props: DisplayGroup) => {
     const colorMode = useContext(ColorModeContext)
 
     const dailyChangeStatusColor: string = perChange > 0 ? colors.green[600] : perChange === 0 ? colors.primary[200] : colors.red[600]
+
+    const AssetScreenerLinkBehavior = React.forwardRef<any, Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>>((props, ref) => (
+        <Link ref={ref} to="/asset-screener" state={{ticker: ticker}} />
+    ))
+
+    //TODO:
+    // color of font match list (or vise versa)
+    // widen box
 
     return (
         <>
@@ -75,9 +84,10 @@ const Stock = (props: DisplayGroup) => {
                             sx={{
                                 fontSize: theme.typography.h5,
                                 color: dailyChangeStatusColor,
+                                pl: '.5em',
                             }}
                         >
-                            {perChange === null ? 'Bad Data' : (perChange * 100.0).toFixed(2) + ' %'}
+                            {perChange === null ? 'Bad Data' : (perChange * 100.0).toFixed(2) + '%'}
                         </Typography>
                     </Box>
                     <Box
@@ -120,13 +130,15 @@ const Stock = (props: DisplayGroup) => {
                                           }) + ' (M)'}
                                 </Typography>
                                 <Typography>{!forwardPE ? 'N/A' : (forwardPE as number).toFixed(2)}</Typography>
-                                <Typography>{!dividendYield ? 'None' : ((dividendYield * 100) as number).toFixed(2) + ' %'}</Typography>
+                                <Typography>{!dividendYield ? 'None' : ((dividendYield * 100) as number).toFixed(2) + '%'}</Typography>
                             </Box>
                         </Box>
                     </Box>
-                    <Box sx={{mt: 1, display: 'grid', gridAutoColumns: '1fr'}}>
-                        {/* action buttons */}
-                        <FinancialsModalButton ticker={ticker} />
+                    <Box sx={{mt: 1, display: 'grid', gridTemplateColumns: 'repeat(2,1fr)'}}>
+                        <StockCardModal ticker={ticker} />
+                        <Button component={Link} to={`/asset-screener/${ticker}`} sx={{bgcolor: colors.grey[400], m: 0.5}}>
+                            More Info
+                        </Button>
                     </Box>
                 </CardContent>
             </Card>

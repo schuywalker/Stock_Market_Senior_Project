@@ -1,6 +1,6 @@
 import {Box, Button, Modal, Typography, useTheme} from '@mui/material'
 import {useEffect, useState} from 'react'
-import {tokens} from '../../theme'
+import {tokens} from '../../../theme'
 
 const FinancialsModalButton = (props: {ticker: string}) => {
     const theme = useTheme()
@@ -14,7 +14,8 @@ const FinancialsModalButton = (props: {ticker: string}) => {
         bgcolor: colors.primary[800],
         border: '2px solid #000',
         boxShadow: 24,
-        p: 1,
+        // p: 1,
+
         // display: 'flex',
     }
 
@@ -41,7 +42,7 @@ const FinancialsModalButton = (props: {ticker: string}) => {
 
     return (
         <>
-            <Button onClick={handleOpen} sx={{bgcolor: colors.grey[400]}}>
+            <Button onClick={handleOpen} sx={{bgcolor: colors.grey[400], m: 0.5}}>
                 More Info
             </Button>
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
