@@ -5,39 +5,42 @@ import {useState, useEffect} from 'react'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+const TestGraph = () => {
+    const [data, setData] = useState([])
+    const [date, setDate] = useState([])
+    const [open, setOpen] = useState([])
+    useEffect(() => {
+        async function fetchData() {
+            const response = fetch('http://localhost:8080/getStockDataAAPL')
+            const json = await (await response).json()
+            setData(json)
+            setDate(json.map((item: {date: string}) => item.date))
+            setOpen(json.map((item: {open: number}) => item.open))
+        }
+        fetchData()
+    }, [])
+    // want to get the data from the backend with keys date and open and have labels for the date and the data for the open.
+    const chartData = {
+        labels: date,
+        datasets: [
+            {
+                label: 'Open',
+                data: open,
+                fill: false,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgba(255, 99, 132, 0.2)',
+            },
+        ],
+    }
 
-const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Dataset 1',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-            label: 'Dataset 2',
-            data: [28, 48, 40, 19, 86, 27, 90],
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
-    ],
+    return (
+        <div>
+            <Line data={chartData} />
+        </div>
+    )
 }
 
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const,
-        },
-        title: {
-            display: true,
-            text: 'Chart.js Line Chart',
-        },
-    },
-}
-
-export function TestGraph() {
-    return <Line options={options} data={data} />
+export default TestGraph
+function entry(value: never, index: number, array: never[]): unknown {
+    throw new Error('Function not implemented.')
 }

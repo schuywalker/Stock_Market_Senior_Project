@@ -10,6 +10,7 @@ from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
 from services.assetScreener import *
+from services.graphicalData import *
 
 fh_calls = fh.finh_API_Requester()
 
@@ -153,3 +154,11 @@ class checkPassword(Resource):
 class alterPassword(Resource):
     def post(self):
         return UserService.alterPassword(request.args['user'],request.args['password'])
+
+class getCandlestickData(Resource):
+    def post(self):
+        return GraphService.getCandlestickData(request.args['ticker'])
+
+class getStockDataAAPL(Resource):
+    def post(self):
+        return GraphService.getStockDataAAPL()

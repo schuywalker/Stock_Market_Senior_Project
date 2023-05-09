@@ -2,7 +2,8 @@ import React from 'react'
 
 import {useTheme} from '@mui/material/styles'
 import {Box, Typography} from '@mui/material'
-import {TestGraph} from '../scenes/graphicalInfo/TestGraph'
+import TestGraph from '../scenes/graphicalInfo/TestGraph'
+
 const Sandbox = () => {
     return (
         <>
