@@ -2,12 +2,14 @@ import {useState} from 'react'
 import {delTickersFromWL} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
-import Searchbar from '../../../components/UI/Searchbar'
+import Searchbar from '../stock/Searchbar'
 
 type DeleteTickersButtonProps = {
     user_id: string
     wl_id: number
     wl_name: string
+    wlUpdatedFunction: any
+    wlUpdated: any
 }
 
 const DeleteTickersButton = (props: DeleteTickersButtonProps) => {
@@ -23,6 +25,7 @@ const DeleteTickersButton = (props: DeleteTickersButtonProps) => {
         const response = await fetch(delTickersFromWL(wlDelTickers, props.wl_id, props.user_id), {}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
+                props.wlUpdatedFunction(!props.wlUpdated)
             })
         })
     }

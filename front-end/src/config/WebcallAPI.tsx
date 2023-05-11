@@ -83,4 +83,7 @@ export function getInsiderTrades(pageNumber:number,ticker?:string){
         parameters = "?pageNumber="+pageNumber
     }
     return backendBaseAddress+"/getInsiderTrades"+parameters
+//////////// ASSET SCREENER CALLS ////////////
+export function assetScreener(ticker: string) {
+    return `${backendBaseAddress}/assetScreener?ticker=${ticker}`
 }

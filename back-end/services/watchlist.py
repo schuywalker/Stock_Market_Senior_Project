@@ -220,16 +220,19 @@ class WatchlistService:
                 ticker_dict = Ticker(ticker)
                 price = ticker_dict.price[ticker]
                 summary_detail = ticker_dict.summary_detail[ticker]
+
+                
+                # print(summary_detail, "\n\n")
                 
                 response.append({
                     "name": price['shortName'],
                     "ticker": ticker,
-                    "price": price['regularMarketPrice'],
-                    "perChange": (price['regularMarketChangePercent']),
+                    "price": price['regularMarketPrice'] if ('regularMarketPrice' in price) else None,
+                    "perChange": (price['regularMarketChangePercent'] if ('regularMarketChangePercent' in price) else None),
                     "earnings": ticker_dict.calendar_events[ticker]['earnings']['earningsDate'],
-                    "marketCap": summary_detail['marketCap'],
-                    "forwardPE": summary_detail['forwardPE'],
-                    "dividendYield": summary_detail['trailingAnnualDividendYield'],
+                    "marketCap": summary_detail['marketCap'] if ('marketCap' in summary_detail) else None,
+                    "forwardPE": summary_detail['forwardPE'] if ('forwardPE' in summary_detail) else None,
+                    "dividendYield": summary_detail['trailingAnnualDividendYield'] if ('trailingAnnualDividendYield' in summary_detail) else "bad data",
                 })
             # cursor.close() # how to fix semaphores bug...?
             # dbc.close()
@@ -246,11 +249,21 @@ class WatchlistService:
         basicFinancials = fh_calls.getBasicFinancials(ticker)
         if basicFinancials is None:
             raise(AttributeError("basicFinancials is None"))
+
         return {
             # TO DO: Categorize dict by commented sections
+
+            ###### Chart data
+
+
+            ###### BASIC INFO
+
+
             "marketCap": basicFinancials.get("metric").get("marketCapitalization"),
             "dividendYield": basicFinancials.get("metric").get("dividendYieldIndicatedAnnual"),
             "dividendGrowthRate5Y": basicFinancials.get("metric").get("dividendGrowthRate5Y"),
+
+            ######## Valuation or Ratios..
 
             # VALUATION
             "peRatio": basicFinancials.get("metric").get("peExclExtraAnnual"),
@@ -272,6 +285,7 @@ class WatchlistService:
 
             "quickRatioAnnual": basicFinancials.get("metric").get("quickRatioAnnual"),
 
+            #### PRICE METRICS
 
             # PRICE
             "beta": basicFinancials.get("metric").get("beta"),
@@ -287,6 +301,8 @@ class WatchlistService:
             "priceRelativeToS&P50026Week": basicFinancials.get("metric").get("priceRelativeToS&P50026Week"), 
             "priceRelativeToS&P5004Week": basicFinancials.get("metric").get("priceRelativeToS&P5004Week"), 
             "priceRelativeToS&P500Ytd": basicFinancials.get("metric").get("priceRelativeToS&P500Ytd"), 
+
+            ###### FINANCIALS
 
             # CASH FLOW
             "cashFlowPerShareAnnual": basicFinancials.get("metric").get("cashFlowPerShareAnnual"),
@@ -314,6 +330,7 @@ class WatchlistService:
             "roiTTM": basicFinancials.get("metric").get("roiTTM"),
 
             # BALANCE SHEET
+            
             "longTermDebt/equityAnnual": basicFinancials.get("metric").get("longTermDebt/equityAnnual"),  
             "totalDebt/totalEquityAnnual": basicFinancials.get("metric").get("totalDebt/totalEquityAnnual"),
             "totalDebt/totalEquityQuarterly": basicFinancials.get("metric").get("totalDebt/totalEquityQuarterly"),

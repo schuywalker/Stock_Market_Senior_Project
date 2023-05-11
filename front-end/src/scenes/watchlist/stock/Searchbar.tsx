@@ -1,15 +1,6 @@
-import {
-    Autocomplete,
-    Chip,
-    IconButton,
-    InputBase,
-    Paper,
-    Stack,
-    TextField,
-    useTheme,
-} from '@mui/material'
+import {Autocomplete, Chip, IconButton, InputBase, Paper, Stack, TextField, useTheme} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import sp100 from '../../assets/sp100'
+import sp100 from '../../../assets/sp100'
 import {useEffect, useState} from 'react'
 
 const Searchbar = (props: any) => {
@@ -42,11 +33,8 @@ const Searchbar = (props: any) => {
                     id="tickerAutofill"
                     sx={{flex: 1, border: 0}}
                     freeSolo
-                    options={
-                        /*tracked? tracked.map((option) => option.ticker) :*/ sp100.map(
-                            (option) => option.ticker
-                        )
-                    }
+                    disableCloseOnSelect
+                    options={/*tracked? tracked.map((option) => option.ticker) :*/ sp100.map((option) => option.ticker)}
                     onChange={(e, value) => {
                         setWatchlistAdditions(value)
                     }}

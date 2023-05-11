@@ -2,13 +2,14 @@ import {List, ListItem, ListItemButton, useTheme} from '@mui/material'
 import {Box} from '@mui/system'
 import {useEffect, useState} from 'react'
 import Cookies from 'universal-cookie'
+import Watchlist from '../watchlist/Watchlist'
+import Searchbar from '../watchlist/stock/Searchbar'
 import {getUserWL} from '../../config/WebcallAPI'
 import AddTickersButton from '../watchlist/WL_Action_Buttons/Add_Tickers_Button'
 import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import DeleteTickersButton from '../watchlist/WL_Action_Buttons/Delete_Tickers_Button'
 import DeleteWLButton from '../watchlist/WL_Action_Buttons/Delete_WL_Button'
 import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
-import Watchlist from '../watchlist/Watchlist'
 
 const Dashboard = () => {
     const theme = useTheme()
@@ -18,11 +19,11 @@ const Dashboard = () => {
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
 
-    const [wlUpdatedToggle, setWLUpdated] = useState(false)
+    const [newWLName, setNewWLName] = useState('')
 
-    const handleUpdateWL = () => {
-        setWLUpdated(!wlUpdatedToggle)
-    }
+    const [wlDeleted, setWLDeleted] = useState(false)
+
+    const [wlUpdatedToggle, setWLUpdated] = useState(false)
 
     const cookies = new Cookies()
 
@@ -38,8 +39,15 @@ const Dashboard = () => {
             }).then((response) => {
                 response.json().then((json) => {
                     setUserWatchlists(json[0])
+                    if (newWLName !== '') {
+                        set_wl_name(newWLName)
+                        setNewWLName('')
+                    }
                 })
             })
+            if (wlDeleted) {
+                set_wl_name('Select a Watchlist')
+            }
         } catch (err) {
             console.log(err)
         }
@@ -83,13 +91,47 @@ const Dashboard = () => {
                 })}
             </List>
             <Box sx={{margin: 2}}>
-                <CreateWLButton user_id={cookies.get('user_id')} />
-                <AddTickersButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
-                <DeleteTickersButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
-                <RenameWLButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
-                <DeleteWLButton user_id={cookies.get('user_id')} wl_id={watchlistSelected} wl_name={wl_name} />
+                <CreateWLButton user_id={cookies.get('user_id')} wlUpdatedFunction={setWLUpdated} wlUpdated={wlUpdatedToggle} />
+                <AddTickersButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                />
+                <DeleteTickersButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                />
+                <RenameWLButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                    newName={setNewWLName}
+                />
+                <DeleteWLButton
+                    user_id={cookies.get('user_id')}
+                    wl_id={watchlistSelected}
+                    wl_name={wl_name}
+                    wlUpdatedFunction={setWLUpdated}
+                    wlUpdated={wlUpdatedToggle}
+                    setWLDeleted={setWLDeleted}
+                />
             </Box>
-            <Watchlist wl_id={watchlistSelected} wl_name={wl_name} wlUpdated={handleUpdateWL} controller={controller} />
+            <Watchlist
+                wl_id={watchlistSelected}
+                wl_name={wl_name}
+                set_wl_name={set_wl_name}
+                wlUpdated={wlUpdatedToggle}
+                wlDeleted={wlDeleted}
+                setWLDeleted={setWLDeleted}
+                controller={controller}
+            />
         </Box>
     )
 }

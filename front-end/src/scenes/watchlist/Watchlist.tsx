@@ -9,12 +9,12 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import {useContext, useEffect, useState} from 'react'
-import Stock from '../../components/stock/Stock'
+import Stock from './stock/Stock'
 import {ColorModeContext, tokens} from '../../theme'
 import DisplayGroup from './DisplayGroup'
 import Cookies from 'universal-cookie'
 import modalStyle from './WatchlistStyles'
-import Searchbar from '../../components/UI/Searchbar'
+import Searchbar from './stock/Searchbar'
 import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renameWL} from '../../config/WebcallAPI'
 
 // TODO:
@@ -27,8 +27,11 @@ import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renam
 
 type WatchlistProps = {
     wl_name: string
+    set_wl_name: any
     wl_id: number
-    wlUpdated: any
+    wlUpdated: boolean
+    wlDeleted: boolean
+    setWLDeleted: any
     controller: AbortController
 }
 
@@ -44,11 +47,16 @@ const Watchlist = (props: WatchlistProps) => {
     let fetchAssetsInProgress = false
 
     useEffect(() => {
-        if (fetchAssetsInProgress === true) {
-            props.controller.abort()
+        if (props.wlDeleted) {
+            setStocks([])
+            props.setWLDeleted(false)
+        } else {
+            if (fetchAssetsInProgress === true) {
+                props.controller.abort()
+            }
+            fetchWatchlistAssets()
         }
-        fetchWatchlistAssets()
-    }, [props.wl_id])
+    }, [props.wl_id, props.wlUpdated])
 
     // potentially add atmoicity to fetchAssetsInProgress? still have problems with latency of differently sized watchlists
     async function fetchWatchlistAssets() {
@@ -74,6 +82,9 @@ const Watchlist = (props: WatchlistProps) => {
     }
 
     const [gridView, setGridView] = useState<boolean>(true)
+
+    //TODO:
+    // dynamic number of columns based on screen size
 
     return (
         <>

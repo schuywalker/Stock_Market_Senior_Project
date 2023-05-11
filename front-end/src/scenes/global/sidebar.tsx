@@ -16,6 +16,7 @@ import axios from 'axios'
 import {ShowChart} from '@mui/icons-material'
 import React from 'react'
 import ConfirmationModal from '../../components/ConfirmationModal'
+import AssetScreener from '../asset_screener/AssetScreener'
 
 type itemProps = {
     title: string
@@ -155,6 +156,8 @@ const ProSidebar = (props: any) => {
                                 <Item
                                     title="Insider Trades"
                                     link={<Link to="/insider-trades"/>}
+                                    title="Asset Screener"
+                                    link={<Link to="/asset-screener" onClick={() => setUserURL('/asset-screener')} />}
                                     icon={<PhoneIcon sx={{fontSize: 20}} />}
                                     selected={selected}
                                     setSelected={setSelected}

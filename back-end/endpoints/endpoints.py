@@ -10,12 +10,14 @@ from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
 from services.insiderTrades import InsiderTradesService
+from services.assetScreener import *
 
 fh_calls = fh.finh_API_Requester()
 
-class getQuote(Resource):
+### ASSET SCREENER ENDPOINTS ###
+class getAssetScreenerData(Resource):
     def get(self):
-        data = fh_calls.getQuote('AAPL')
+        data = AssetScreenerService.assetScreener(request.args.get('ticker'))
         return (data, 200)
 
 # WATCHLISTS
@@ -112,6 +114,10 @@ class getCandles(Resource):
         data = fh_calls.getCandles(ticker)
         return (data), 200
     
+
+
+
+### USER ENDPOINTS ###    
 class deleteUser(Resource):
     def post(self):
         data = UserService.deleteUser(request.args.get('user'))
