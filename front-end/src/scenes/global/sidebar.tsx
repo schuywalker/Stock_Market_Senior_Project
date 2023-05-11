@@ -154,8 +154,6 @@ const ProSidebar = (props: any) => {
                                     setSelected={setSelected}
                                 />
                                 <Item
-                                    title="Insider Trades"
-                                    link={<Link to="/insider-trades"/>}
                                     title="Asset Screener"
                                     link={<Link to="/asset-screener" onClick={() => setUserURL('/asset-screener')} />}
                                     icon={<PhoneIcon sx={{fontSize: 20}} />}

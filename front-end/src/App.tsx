@@ -12,7 +12,6 @@ import Dashboard from './scenes/dashboard/Dashboard'
 import ResponsiveAppBar from './scenes/global/AppBar'
 import ResponsiveSideBar from './scenes/global/sidebar'
 import {ColorModeContext, useMode} from './theme'
-import InsiderTradesDashboard from './scenes/insider/InsiderTradesDashboard'
 import AssetScreener from './scenes/asset_screener/AssetScreener'
 
 const cookies = new Cookies()
@@ -77,7 +76,6 @@ function App() {
                                             )
                                         }
                                     />
-                                    <Route path="/insider-trades" element={loggedIn ? <InsiderTradesDashboard /> : <Navigate to="/" />} />
                                     <Route path="/sandbox" element={loggedIn ? <Sandbox /> : <Navigate to="/" />} />
                                     <Route path="/asset-screener/:ticker" element={<AssetScreener />} />
                                     <Route path="/asset-screener/" element={<AssetScreener />} />

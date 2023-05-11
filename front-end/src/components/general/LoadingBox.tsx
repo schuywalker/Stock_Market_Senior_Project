@@ -2,6 +2,10 @@ import { Box } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 
+/*
+    Creates a grey pulsating loading box while a component is being prepared
+*/
+
 export default function LoadingBox(props: {height:number|string,width:number|string}){
     const [animationFrame, setAnimationFrame] = useState(1)
     const [time, setTime] = useState(Date.now());
@@ -17,8 +21,8 @@ export default function LoadingBox(props: {height:number|string,width:number|str
 
     useEffect(()=>{
         setAnimationFrame((reverseAnimation?animationFrame-1:animationFrame+1))
-        if(reverseAnimation && animationFrame == 2)setReverseAnimation(false)
-        else if(!reverseAnimation && animationFrame==9)setReverseAnimation(true)
+        if(reverseAnimation && animationFrame === 2)setReverseAnimation(false)
+        else if(!reverseAnimation && animationFrame===9)setReverseAnimation(true)
         
     },[time])
 

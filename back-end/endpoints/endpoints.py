@@ -159,8 +159,5 @@ class alterPassword(Resource):
 class getInsiderTrades(Resource):
     def get(self):
         page = int(request.args['pageNumber'])
-        if(len(request.args) > 1):
-            ticker = request.args['ticker']
-            return InsiderTradesService.getTrades(page,ticker)
-        else:
-            return InsiderTradesService.getTrades(page)
+        ticker = request.args['ticker']
+        return InsiderTradesService.getTrades(page,ticker)
