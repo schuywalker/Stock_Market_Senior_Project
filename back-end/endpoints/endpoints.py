@@ -9,6 +9,7 @@ import base64
 from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
+from services.insiderTrades import InsiderTradesService
 from services.assetScreener import *
 
 fh_calls = fh.finh_API_Requester()
@@ -153,3 +154,10 @@ class checkPassword(Resource):
 class alterPassword(Resource):
     def post(self):
         return UserService.alterPassword(request.args['user'],request.args['password'])
+    
+#INSIDER TRADES
+class getInsiderTrades(Resource):
+    def get(self):
+        page = int(request.args['pageNumber'])
+        ticker = request.args['ticker']
+        return InsiderTradesService.getTrades(page,ticker)

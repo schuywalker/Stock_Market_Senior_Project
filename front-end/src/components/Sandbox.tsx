@@ -1,15 +1,15 @@
 import React from 'react'
 
 import {useTheme} from '@mui/material/styles'
-import {Box, Typography} from '@mui/material'
-import {TestGraph} from '../scenes/graphicalInfo/TestGraph'
+import {Box, Button, Typography} from '@mui/material'
+import axios from 'axios'
+import InsiderTradeTable from './table/InsiderTradeTable'
+
 const Sandbox = () => {
     return (
         <>
-            <Box>
-                <Typography>Use this area to test, prototype, or show examples of your components</Typography>
+            <Box sx={{display:"flex"}}>
             </Box>
-            <TestGraph />
         </>
     )
 }

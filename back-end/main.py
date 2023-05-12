@@ -45,6 +45,9 @@ api.add_resource(deleteUser,'/deleteUser')
 api.add_resource(Login, '/userLogin')
 api.add_resource(alterPassword, '/alterPassword')
 
+#INSIDER TRADES
+api.add_resource(getInsiderTrades,"/getInsiderTrades")
+
 # ASSET SCREENER
 api.add_resource(getAssetScreenerData, '/assetScreener')
 
