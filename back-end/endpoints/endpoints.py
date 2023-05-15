@@ -157,8 +157,8 @@ class alterPassword(Resource):
         return UserService.alterPassword(request.args['user'],request.args['password'])
 
 class getCandlestickData(Resource):
-    def post(self):
-        return GraphService.getCandlestickData(request.args['ticker'])
+    def get(self):
+        return GraphService.getCandlestickData(request.args['ticker'], request.args['period'])
 
 class getStockDataAAPL(Resource):
     def post(self):
