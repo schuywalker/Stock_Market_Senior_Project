@@ -10,6 +10,7 @@ import ChartInfo from './tabContents/ChartInfo'
 import Financials from './tabContents/Financials'
 import PriceMetrics from './tabContents/PriceMetrics'
 import Valuation from './tabContents/Valuation'
+import InsiderTradeTable from '../../components/table/InsiderTradeTable'
 
 const AssetScreener = () => {
     const theme = useTheme()
@@ -34,6 +35,7 @@ const AssetScreener = () => {
     const [incomeStatement, setIncomeStatement] = useState<null | [string, any][]>(null)
     const [balanceSheet, setBalanceSheet] = useState<null | [string, any][]>(null)
     const [cashFlow, setCashFlow] = useState<null | [string, any][]>(null)
+    const [insiderTradesTicker, setInsiderTradesTicker] = useState("")
 
     let obj: AssetScreenerCategories
 
@@ -56,6 +58,7 @@ const AssetScreener = () => {
                     setBalanceSheet(Object.entries(obj.financials.balance_sheet))
                     setIncomeStatement(Object.entries(obj.financials.income_statement))
                     setCashFlow(Object.entries(obj.financials.cash_flow))
+                    setInsiderTradesTicker(ticker)
                 })
         } catch (err) {
             console.log(err)
@@ -139,6 +142,7 @@ EXCHANGE NO NDAQ??? handle stocks that dont return because of exchange API error
                     <Tab value="three" label="valuation" disabled={currentTicker == null} />
                     <Tab value="four" label="price metrics" disabled={currentTicker == null} />
                     <Tab value="five" label="financials" disabled={currentTicker == null} />
+                    <Tab value="six" label="insider trades" disabled={currentTicker == null} />
                 </Tabs>
                 <Box sx={{m: 2}}>{chartData && currentTab == 'one' ? <ChartInfo /> : <></>}</Box>
                 <Box sx={{m: 2}}>{basicInfo && currentTab == 'two' ? <BasicInfo contents={basicInfo} /> : <></>}</Box>
@@ -151,6 +155,7 @@ EXCHANGE NO NDAQ??? handle stocks that dont return because of exchange API error
                         <></>
                     )}
                 </Box>
+                <Box sx={{m: 2}}>{insiderTradesTicker && currentTab == 'six' ? <InsiderTradeTable ticker = {insiderTradesTicker}/> : <></>}</Box>
             </Box>
         </>
     )

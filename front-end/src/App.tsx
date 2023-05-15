@@ -28,14 +28,13 @@ function App() {
             navigate('/')
             setUsername('')
         } else {
-            navigate('/dashboard')
+            navigate('/dashboard')//
             setUsername(cookies.get('user'))
         }
         setLoggedIn(value)
     }
     useEffect(() => {
         if (!initialLogin && loggedIn) {
-            // if(!window.location.href.includes("/sandbox"))navigate('/dashboard')
             setUsername(cookies.get('user'))
         }
         setInitialLogin(true)
@@ -61,7 +60,7 @@ function App() {
                                 </ProSidebarProvider>
 
                                 <Routes>
-                                    <Route path="/" element={<LandingPage />} />
+                                    <Route path="/" element={loggedIn?<Navigate to="/dashboard"/>:<LandingPage />} />
                                     <Route path="/dashboard" element={loggedIn ? <Dashboard /> : <Navigate to="/" />} />
                                     <Route path="/analyst-calls" element={loggedIn ? <AnalystCalls /> : <Navigate to="/" />} />
                                     <Route

@@ -9,6 +9,7 @@ import base64
 from services.watchlist import *
 from services.analystCalls import *
 from services.user import *
+from services.insiderTrades import InsiderTradesService
 from services.assetScreener import *
 from services.graphicalData import *
 
@@ -162,3 +163,10 @@ class getCandlestickData(Resource):
 class getStockDataAAPL(Resource):
     def post(self):
         return GraphService.getStockDataAAPL()
+    
+#INSIDER TRADES
+class getInsiderTrades(Resource):
+    def get(self):
+        page = int(request.args['pageNumber'])
+        ticker = request.args['ticker']
+        return InsiderTradesService.getTrades(page,ticker)
