@@ -71,11 +71,16 @@ export function getWLAssets(user_id: string, wl_id: number) {
 }
 
 //////////// INSIDER TRADES CALLS ////////////
-export function getInsiderTrades(pageNumber:number,ticker:string){
-    let parameters = "?ticker="+ticker+"&pageNumber="+pageNumber
-    return backendBaseAddress+"/getInsiderTrades"+parameters
+export function getInsiderTrades(pageNumber: number, ticker: string) {
+    let parameters = '?ticker=' + ticker + '&pageNumber=' + pageNumber
+    return backendBaseAddress + '/getInsiderTrades' + parameters
 }
 //////////// ASSET SCREENER CALLS ////////////
 export function assetScreener(ticker: string) {
     return `${backendBaseAddress}/assetScreener?ticker=${ticker}`
+}
+
+//////////// CHART CALLS ////////////
+export function getChart(ticker: string, period: string) {
+    return `${backendBaseAddress}/getCandleStickData?ticker=${ticker}&period=${period}`
 }

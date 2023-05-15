@@ -28,6 +28,7 @@ const AssetScreener = () => {
     }, [])
 
     // TABS (chart doesnt necessarily need to be in Tabs - design decision)
+    const [chartTicker, setChartTicker] = useState<string>('')
     const [chartData, setChartData] = useState<null | [string, any][]>(null)
     const [basicInfo, setBasicInfo] = useState<null | [string, any][]>(null)
     const [valuation, setValuation] = useState<null | [string, any][]>(null)
@@ -35,18 +36,18 @@ const AssetScreener = () => {
     const [incomeStatement, setIncomeStatement] = useState<null | [string, any][]>(null)
     const [balanceSheet, setBalanceSheet] = useState<null | [string, any][]>(null)
     const [cashFlow, setCashFlow] = useState<null | [string, any][]>(null)
-    const [insiderTradesTicker, setInsiderTradesTicker] = useState("")
+    const [insiderTradesTicker, setInsiderTradesTicker] = useState('')
 
     let obj: AssetScreenerCategories
 
     const handleNewSearch = async (ticker: string | null | undefined) => {
         if (!ticker) {
-            console.log('null ticker')
             return
         }
         navigate({pathname: '/asset-screener', search: `${currentTicker}`})
         try {
             //use webcall API
+            setChartTicker(ticker)
             const response = await fetch(assetScreener(ticker))
                 .then((response) => response.json())
                 .then((jsonResponse) => {
@@ -73,13 +74,11 @@ const AssetScreener = () => {
 
     /*
 Todo:
-takes ticker as prop - DOOOOONNNNNNNEEEE!!!!!!!!!!!!!!!!!!
 same stock search bug - cant recreate now??
 revise modal on stock. - DONEish
 
 UP FOR GRABS:
 slide: expand and collapse when search button clicked
-enter key to search - DOOOOONNNNNNNEEEE!!!!!!!!!!!!!!!!!!
 size/ color of tabs
 autocomplete
 
@@ -137,25 +136,25 @@ EXCHANGE NO NDAQ??? handle stocks that dont return because of exchange API error
                     </Box>
                 </Box>
                 <Tabs value={currentTab} onChange={handleChange} textColor="secondary" indicatorColor="secondary" aria-label="secondary tabs example">
-                    <Tab value="one" label="chart" disabled={currentTicker == null} />
-                    <Tab value="two" label="basic info" disabled={currentTicker == null} />
-                    <Tab value="three" label="valuation" disabled={currentTicker == null} />
-                    <Tab value="four" label="price metrics" disabled={currentTicker == null} />
-                    <Tab value="five" label="financials" disabled={currentTicker == null} />
-                    <Tab value="six" label="insider trades" disabled={currentTicker == null} />
+                    <Tab value="one" label="chart" disabled={currentTicker === null} />
+                    <Tab value="two" label="basic info" disabled={currentTicker === null} />
+                    <Tab value="three" label="valuation" disabled={currentTicker === null} />
+                    <Tab value="four" label="price metrics" disabled={currentTicker === null} />
+                    <Tab value="five" label="financials" disabled={currentTicker === null} />
+                    <Tab value="six" label="insider trades" disabled={currentTicker === null} />
                 </Tabs>
-                <Box sx={{m: 2}}>{chartData && currentTab == 'one' ? <ChartInfo /> : <></>}</Box>
-                <Box sx={{m: 2}}>{basicInfo && currentTab == 'two' ? <BasicInfo contents={basicInfo} /> : <></>}</Box>
-                <Box sx={{m: 2}}>{valuation && currentTab == 'three' ? <Valuation contents={valuation} /> : <></>}</Box>
-                <Box sx={{m: 2}}>{priceMetrics && currentTab == 'four' ? <PriceMetrics contents={priceMetrics} /> : <></>}</Box>
+                <Box sx={{m: 2}}>{chartData && currentTab === 'one' ? <ChartInfo ticker={chartTicker} /> : <></>}</Box>
+                <Box sx={{m: 2}}>{basicInfo && currentTab === 'two' ? <BasicInfo contents={basicInfo} /> : <></>}</Box>
+                <Box sx={{m: 2}}>{valuation && currentTab === 'three' ? <Valuation contents={valuation} /> : <></>}</Box>
+                <Box sx={{m: 2}}>{priceMetrics && currentTab === 'four' ? <PriceMetrics contents={priceMetrics} /> : <></>}</Box>
                 <Box sx={{m: 2}}>
-                    {incomeStatement && balanceSheet && cashFlow && currentTab == 'five' ? (
+                    {incomeStatement && balanceSheet && cashFlow && currentTab === 'five' ? (
                         <Financials balanceSheet={balanceSheet} incomeStatement={incomeStatement} cashFlow={cashFlow} />
                     ) : (
                         <></>
                     )}
                 </Box>
-                <Box sx={{m: 2}}>{insiderTradesTicker && currentTab == 'six' ? <InsiderTradeTable ticker = {insiderTradesTicker}/> : <></>}</Box>
+                <Box sx={{m: 2}}>{insiderTradesTicker && currentTab === 'six' ? <InsiderTradeTable ticker={insiderTradesTicker} /> : <></>}</Box>
             </Box>
         </>
     )
