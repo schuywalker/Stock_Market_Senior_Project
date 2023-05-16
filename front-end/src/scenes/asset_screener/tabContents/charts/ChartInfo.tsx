@@ -5,7 +5,6 @@ import ReactApexChart from 'react-apexcharts'
 import {OHLC} from './OHLC'
 import {ApexCustomFormat} from './ApexCustomFormat'
 import {ApexOptions} from 'apexcharts'
-import {mapSeries} from './chart_utils'
 // import {mapCategories} from './chart_utils'
 
 // https://yahooquery.dpguthrie.com/guide/ticker/historical/
@@ -21,7 +20,7 @@ interface Props {
 function ChartInfo(props: Props) {
     const [prices, setPrices] = useState<OHLC[]>()
     const [OHLCformatted, setOHLCformatted] = useState<{}>()
-
+    
     let chartExample = {
         series: [
             {
@@ -144,7 +143,7 @@ function ChartInfo(props: Props) {
             if (!props.ticker) {
                 return
             }
-            const response = await fetch(getChart(props.ticker, '1y'))
+            const response = await fetch(getChart(props.ticker, '1mo'))
             const resJson: OHLC[] = await response.json()
             setPrices(resJson)
         }
@@ -156,36 +155,48 @@ function ChartInfo(props: Props) {
 
     const [apexBarChart, setApexBarChart] = useState<ApexCustomFormat>()
     // const [apexBarChart, setApexBarChart] = useState<ReactApexChart | undefined | {series:{},options:{}}>(undefined)
-
+    
     useEffect(() => {
         if (!prices) {
             console.log('null prices')
             return
-        }
+        } 
         let handleBarChartUpdate = {
-            series: mapSeries(prices),
+            series:[{
+                data: prices.map((price) => {
+                    return {
+                        x: new Date(price.date),
+                        y: [price.open, price.high, price.low, price.close],
+                    }
+                }
+                )
+            }
+            ]
+                
+            ,
             options: {
                 chart: {
                     type: 'candlestick',
                     // height: 700,
                 },
                 title: {
-                    text: `${props.ticker?.toUpperCase} <Period / Interval>`,
+                    text: `${props.ticker?.toUpperCase()} <Period / Interval>`,
                     align: 'left',
                 },
                 xaxis: {
-                    type: 'string',
-                    min: new Date(prices[0].date),
-                    max: new Date(prices[prices.length - 1].date),
+                    type: 'datetime',
+                    
                 },
+                
                 yaxis: {
-                    // tooltip: {
-                    //     enabled: false,
-                    // },
+                   tooltip: {
+                       enabled: false,
+                   },
                 },
             },
         }
         setApexBarChart(handleBarChartUpdate)
+        console.log(apexBarChart)
     }, [prices])
 
     return (
@@ -200,6 +211,7 @@ function ChartInfo(props: Props) {
                 {apexBarChart ? (
                     <div id="chart">
                         <ReactApexChart options={apexBarChart} series={apexBarChart.series} type="candlestick" height={1000} />
+                        
                     </div>
                 ) : (
                     <></>

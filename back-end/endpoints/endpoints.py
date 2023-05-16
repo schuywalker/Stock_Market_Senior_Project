@@ -160,7 +160,7 @@ class getCandlestickData(Resource):
     def get(self, period=None, interval=None):
         """period = period or request.args['period']
         interval = interval or request.args['interval']"""
-        return GraphService.getCandlestickData(request.args['ticker'], '1y', interval=None)
+        return GraphService.getCandlestickData(request.args['ticker'], '1mo', interval=None)
 
 class getStockDataAAPL(Resource):
     def post(self):
