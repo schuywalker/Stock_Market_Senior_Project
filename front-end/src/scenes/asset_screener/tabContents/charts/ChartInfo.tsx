@@ -208,9 +208,6 @@ function ChartInfo(props: Props) {
     return (
         <>
             <div>
-                <Button sx={{bgcolor: 'white'}} onClick={() => console.log(prices ? prices : 'undef')}>
-                    Show state of prices
-                </Button>
                <Typography variant="h3" sx={{color: 'white', textAlign: 'center'}}>
                      {props.ticker?.toUpperCase() + ' Candlestick Chart'}
                </Typography>
