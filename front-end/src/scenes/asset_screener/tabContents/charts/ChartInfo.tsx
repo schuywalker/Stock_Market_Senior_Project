@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import {getChart} from '../../../../config/WebcallAPI'
-import {Button} from '@mui/material'
+import {Button, Typography} from '@mui/material'
 import ReactApexChart from 'react-apexcharts'
 import {OHLC} from './OHLC'
 import {ApexCustomFormat} from './ApexCustomFormat'
 import {ApexOptions} from 'apexcharts'
+import { textAlign } from '@mui/system'
 // import {mapCategories} from './chart_utils'
 
 // https://yahooquery.dpguthrie.com/guide/ticker/historical/
@@ -20,7 +21,7 @@ interface Props {
 function ChartInfo(props: Props) {
     const [prices, setPrices] = useState<OHLC[]>()
     const [OHLCformatted, setOHLCformatted] = useState<{}>()
-    
+    /*
     let chartExample = {
         series: [
             {
@@ -135,7 +136,7 @@ function ChartInfo(props: Props) {
             },
         },
     }
-
+*/
     useEffect(() => {
         // console.log(props)
 
@@ -181,7 +182,8 @@ function ChartInfo(props: Props) {
                 },
                 title: {
                     text: `${props.ticker?.toUpperCase()} <Period / Interval>`,
-                    align: 'left',
+                    align: 'center',
+                    color: 'white',
                 },
                 xaxis: {
                     type: 'datetime',
@@ -205,9 +207,9 @@ function ChartInfo(props: Props) {
                 <Button sx={{bgcolor: 'white'}} onClick={() => console.log(prices ? prices : 'undef')}>
                     Show state of prices
                 </Button>
-                <div id="chart">
-                    <ReactApexChart options={chartExample} series={chartExample.series} type="candlestick" height={350} />
-                </div>
+               <Typography variant="h3" sx={{color: 'white', textAlign: 'center'}}>
+                     {props.ticker?.toUpperCase() + ' Candlestick Chart'}
+               </Typography>
                 {apexBarChart ? (
                     <div id="chart">
                         <ReactApexChart options={apexBarChart} series={apexBarChart.series} type="candlestick" height={1000} />
