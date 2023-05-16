@@ -10,6 +10,7 @@ const Sandbox = () => {
     return (
         <>
             <Box sx={{display: 'flex'}}></Box>
+            <TestGraph />
         </>
     )
 }

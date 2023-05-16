@@ -13,10 +13,24 @@ from yahooquery import Ticker
 class GraphService:
 
     @staticmethod
-    def getCandlestickData(ticker, period='1y'):
-        assert(period in ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'])
+    def getCandlestickData(ticker, period, interval):
+        print("sup baby")
+        assert(not(period == None and interval == None))
+        assert(ticker != None)
         ticker = Ticker(ticker)
-        response = ticker.history(period=period)
+        
+        if(period != None and interval != None):
+            assert(period in ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'])
+            assert(interval in ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo'])
+            response = ticker.history(period=period, interval=interval)
+        elif(period != None):
+            assert(period in ['1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max'])
+            response = ticker.history(period=period)
+
+        elif(interval != None):
+            assert(interval in ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo'])
+            response = ticker.history(interval=interval)
+        
         response_dict = response.to_dict(orient='records')
         
         start_date  = datetime.datetime.today() - datetime.timedelta(days=len(response_dict))
