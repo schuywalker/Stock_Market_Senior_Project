@@ -1,26 +1,44 @@
 import React, {useEffect, useState} from 'react'
-import {getChart} from '../../../config/WebcallAPI'
+import {getChart} from '../../../../config/WebcallAPI'
 import {Button} from '@mui/material'
 import ReactApexChart from 'react-apexcharts'
+import {OHLC} from './OHLC'
+import {ApexCustomFormat} from './ApexCustomFormat'
+import {ApexOptions} from 'apexcharts'
+import {mapSeries} from './chart_utils'
+// import {mapCategories} from './chart_utils'
 
 // https://yahooquery.dpguthrie.com/guide/ticker/historical/
 // https://apexcharts.com/react-chart-demos/candlestick-charts/basic/
+
+// https://apexcharts.com/docs/react-charts/
+// open high low close
+
+// interface Props {
+//     ticker?: string
+// }
+
+// interface OHLC {
+//     date: string
+//     open: number
+//     high: number
+//     low: number
+//     close: number
+//     volume: number
+// }
+
+// interface OHLCformat {
+//     series: ApexAxisChartSeries | ApexNonAxisChartSeries
+//     options: {}
+// }
 
 interface Props {
     ticker?: string
 }
 
-interface OHLC {
-    date: string
-    open: number
-    high: number
-    low: number
-    close: number
-    volume: number
-}
-
 function ChartInfo(props: Props) {
     const [prices, setPrices] = useState<OHLC[]>()
+    const [OHLCformatted, setOHLCformatted] = useState<{}>()
 
     let chartExample = {
         series: [
@@ -138,11 +156,10 @@ function ChartInfo(props: Props) {
     }
 
     useEffect(() => {
-        console.log(props)
+        // console.log(props)
 
         const fetchData = async () => {
             if (!props.ticker) {
-                console.log('null ticker')
                 return
             }
             const response = await fetch(getChart(props.ticker, '1y'))
@@ -151,19 +168,61 @@ function ChartInfo(props: Props) {
         }
 
         fetchData().catch((err) => console.log(err))
-    }, [props])
+    }, [props.ticker])
+
+    // seriesData, setSeriesData, then messs with combo settings from API demo. Problem is probably in our date format.
+
+    const [apexBarChart, setApexBarChart] = useState<ApexCustomFormat>()
+    // const [apexBarChart, setApexBarChart] = useState<ReactApexChart | undefined | {series:{},options:{}}>(undefined)
+
+    useEffect(() => {
+        if (!prices) {
+            console.log('null prices')
+            return
+        }
+        let handleBarChartUpdate = {
+            series: mapSeries(prices),
+            options: {
+                chart: {
+                    type: 'candlestick',
+                    // height: 700,
+                },
+                title: {
+                    text: `${props.ticker?.toUpperCase} <Period / Interval>`,
+                    align: 'left',
+                },
+                xaxis: {
+                    type: 'string',
+                    min: new Date(prices[0].date),
+                    max: new Date(prices[prices.length - 1].date),
+                    // max: new Date(prices[prices.length - 1].date).getTime(),
+                },
+                yaxis: {
+                    // tooltip: {
+                    //     enabled: false,
+                    // },
+                },
+            },
+        }
+        setApexBarChart(handleBarChartUpdate)
+    }, [prices])
 
     return (
         <>
             <div>
-                <div>chart Info</div>
                 <Button sx={{bgcolor: 'white'}} onClick={() => console.log(prices ? prices : 'undef')}>
                     Show state of prices
                 </Button>
-                <div>{prices ? prices[0].close : 'undef'}</div>
                 <div id="chart">
                     <ReactApexChart options={chartExample} series={chartExample.series} type="candlestick" height={350} />
                 </div>
+                {apexBarChart ? (
+                    <div id="chart">
+                        <ReactApexChart options={apexBarChart} series={apexBarChart.series} type="candlestick" height={1000} />
+                    </div>
+                ) : (
+                    <></>
+                )}
             </div>
         </>
     )
