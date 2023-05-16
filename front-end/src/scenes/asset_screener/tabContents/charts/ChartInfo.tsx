@@ -14,24 +14,6 @@ import {mapSeries} from './chart_utils'
 // https://apexcharts.com/docs/react-charts/
 // open high low close
 
-// interface Props {
-//     ticker?: string
-// }
-
-// interface OHLC {
-//     date: string
-//     open: number
-//     high: number
-//     low: number
-//     close: number
-//     volume: number
-// }
-
-// interface OHLCformat {
-//     series: ApexAxisChartSeries | ApexNonAxisChartSeries
-//     options: {}
-// }
-
 interface Props {
     ticker?: string
 }
@@ -195,7 +177,6 @@ function ChartInfo(props: Props) {
                     type: 'string',
                     min: new Date(prices[0].date),
                     max: new Date(prices[prices.length - 1].date),
-                    // max: new Date(prices[prices.length - 1].date).getTime(),
                 },
                 yaxis: {
                     // tooltip: {
