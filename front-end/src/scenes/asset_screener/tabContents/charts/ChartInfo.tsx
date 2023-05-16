@@ -143,7 +143,7 @@ function ChartInfo(props: Props) {
             if (!props.ticker) {
                 return
             }
-            const response = await fetch(getChart(props.ticker, '1mo'))
+            const response = await fetch(getChart(props.ticker, '1y'))
             const resJson: OHLC[] = await response.json()
             setPrices(resJson)
         }
@@ -165,7 +165,7 @@ function ChartInfo(props: Props) {
             series:[{
                 data: prices.map((price) => {
                     return {
-                        x: new Date(price.date),
+                        x: new Date(price.date).toLocaleDateString(),
                         y: [price.open, price.high, price.low, price.close],
                     }
                 }
@@ -185,7 +185,11 @@ function ChartInfo(props: Props) {
                 },
                 xaxis: {
                     type: 'datetime',
-                    
+                    labels: {
+                        formatter: function(val: Date){
+                            return val.toLocaleString()
+                        }
+                    }
                 },
                 
                 yaxis: {
