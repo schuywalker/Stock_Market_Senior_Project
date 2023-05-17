@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {addTickersToWL} from '../../../config/WebcallAPI'
+import {addTickersToWL, getControllerSignal} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
 import Searchbar from '../stock/Searchbar'
@@ -21,11 +21,14 @@ const AddTickersButton = (props: AddTickersButtonProps) => {
 
     async function addTickers(wlAddTickers: string) {
         handleClose()
-        const response = await fetch(addTickersToWL(wlAddTickers, props.wl_id, props.user_id), {}).then((response) => {
+        const signal = getControllerSignal()
+        const response = await fetch(addTickersToWL(wlAddTickers, props.wl_id, props.user_id), {signal}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
                 props.wlUpdatedFunction(!props.wlUpdated)
             })
+        }).catch((err)=>{
+            
         })
     }
 

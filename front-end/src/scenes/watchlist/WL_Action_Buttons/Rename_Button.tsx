@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {renameWL} from '../../../config/WebcallAPI'
+import {getControllerSignal, renameWL} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, TextField, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
 
@@ -21,12 +21,15 @@ const RenameWLButton = (props: RenameWLProps) => {
 
     async function renameWatchlist() {
         handleClose()
-        const response = await fetch(renameWL(props.wl_id, props.user_id, newName), {}).then((response) => {
+        const signal = getControllerSignal()
+        const response = await fetch(renameWL(props.wl_id, props.user_id, newName), {signal}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
                 props.wlUpdatedFunction(!props.wlUpdated)
                 props.newName(newName)
             })
+        }).catch((err)=>{
+            
         })
     }
 

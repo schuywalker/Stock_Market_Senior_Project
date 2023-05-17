@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react'
 import Cookies from 'universal-cookie'
 import Watchlist from '../watchlist/Watchlist'
 import Searchbar from '../watchlist/stock/Searchbar'
-import {getUserWL} from '../../config/WebcallAPI'
+import {abortRequest, getControllerSignal, getUserWL} from '../../config/WebcallAPI'
 import AddTickersButton from '../watchlist/WL_Action_Buttons/Add_Tickers_Button'
 import CreateWLButton from '../watchlist/WL_Action_Buttons/Create_Button'
 import DeleteTickersButton from '../watchlist/WL_Action_Buttons/Delete_Tickers_Button'
@@ -13,8 +13,6 @@ import RenameWLButton from '../watchlist/WL_Action_Buttons/Rename_Button'
 
 const Dashboard = () => {
     const theme = useTheme()
-
-    const controller = new AbortController()
 
     const [userWatchlists, setUserWatchlists] = useState([])
     const [wl_name, set_wl_name] = useState('Select a Watchlist')
@@ -27,12 +25,16 @@ const Dashboard = () => {
 
     const cookies = new Cookies()
 
+    useEffect(()=>{
+        abortRequest()
+    },[])
+
     useEffect(() => {
         fetchUserWatchlists()
     }, [wlUpdatedToggle])
 
     async function fetchUserWatchlists() {
-        const signal = controller.signal
+        const signal = getControllerSignal()
         try {
             const response = await fetch(getUserWL(cookies.get('user_id')), {
                 signal,
@@ -130,7 +132,6 @@ const Dashboard = () => {
                 wlUpdated={wlUpdatedToggle}
                 wlDeleted={wlDeleted}
                 setWLDeleted={setWLDeleted}
-                controller={controller}
             />
         </Box>
     )

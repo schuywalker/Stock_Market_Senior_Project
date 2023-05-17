@@ -15,7 +15,7 @@ import DisplayGroup from './DisplayGroup'
 import Cookies from 'universal-cookie'
 import modalStyle from './WatchlistStyles'
 import Searchbar from './stock/Searchbar'
-import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renameWL} from '../../config/WebcallAPI'
+import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renameWL,getControllerSignal, abortRequest} from '../../config/WebcallAPI'
 
 // TODO:
 // more info button (noGutter?)
@@ -32,10 +32,9 @@ type WatchlistProps = {
     wlUpdated: boolean
     wlDeleted: boolean
     setWLDeleted: any
-    controller: AbortController
 }
 
-// const Watchlist = (props:WatchlistProps) => {
+// Test fetching different watchlists and having the request cancel
 const Watchlist = (props: WatchlistProps) => {
     const cookies = new Cookies()
     const theme = useTheme()
@@ -43,6 +42,7 @@ const Watchlist = (props: WatchlistProps) => {
     const colorMode = useContext(ColorModeContext)
 
     const [stocks, setStocks] = useState<DisplayGroup[]>([])
+    const [fetchingAssets, setFetchingAssets] = useState(false)
 
     let fetchAssetsInProgress = false
 
@@ -51,8 +51,9 @@ const Watchlist = (props: WatchlistProps) => {
             setStocks([])
             props.setWLDeleted(false)
         } else {
-            if (fetchAssetsInProgress === true) {
-                props.controller.abort()
+            
+            if (fetchingAssets) {
+                abortRequest()
             }
             fetchWatchlistAssets()
         }
@@ -65,8 +66,9 @@ const Watchlist = (props: WatchlistProps) => {
             return
         }
         try {
-            fetchAssetsInProgress = true
-            const response = await fetch(getWLAssets(cookies.get('user_id'), props.wl_id), {}).then((response) => {
+            setFetchingAssets(true)
+            const signal = getControllerSignal()
+            const response = await fetch(getWLAssets(cookies.get('user_id'), props.wl_id), {signal}).then((response) => {
                 response.json().then((json) => {
                     if (json.length > 0) {
                         setStocks(json)
@@ -77,7 +79,7 @@ const Watchlist = (props: WatchlistProps) => {
         } catch (err) {
             console.log(err)
         } finally {
-            fetchAssetsInProgress = false
+            setFetchingAssets(false)
         }
     }
 

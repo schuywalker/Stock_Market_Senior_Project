@@ -1,4 +1,31 @@
 const backendBaseAddress = 'http://127.0.0.1:8080'
+var controller = new AbortController();
+
+//////////// CONTROLLER CALLS ////////////
+
+/*
+    abortRequest should be called when a new component first mounts, before
+    it makes any fetch requests. We do not want to pass our controller directly,
+    it needs to operate in a singleton state so that we can pass references of it
+    around as needed to our components.
+
+    All fetch/axios requests that can be interrupted need to get the controller signal 
+    EX:
+        const signal = getControllerSignal()
+        await fetch(getUserWL(cookies.get('user_id')), {signal})
+
+                OR
+
+        axios.get(getUserData(cookies.get('user')),{signal:getControllerSignal()})
+*/
+
+export function getControllerSignal(){
+    return controller.signal
+}
+export function abortRequest(){
+    controller.abort();
+    controller = new AbortController();
+}
 
 //////////// LOGIN CALLS ////////////
 

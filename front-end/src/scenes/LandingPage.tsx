@@ -1,8 +1,11 @@
-import {Box, Button, Modal, TextField, Typography, styled} from '@mui/material'
-import * as React from 'react'
+import {useEffect} from 'react'
 import background from '../img/backgroundimage.png'
+import { abortRequest } from '../config/WebcallAPI'
 
 export default function LandingPage() {
+    useEffect(()=>{
+        abortRequest()
+    },[])
     return (
         <div>
             <img src={background} alt="background" />

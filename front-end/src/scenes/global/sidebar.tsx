@@ -11,12 +11,8 @@ import IsoIcon from '@mui/icons-material/Iso'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import PhoneIcon from '@mui/icons-material/Phone'
-import Cookies from 'universal-cookie'
-import axios from 'axios'
 import {ShowChart} from '@mui/icons-material'
 import React from 'react'
-import ConfirmationModal from '../../components/ConfirmationModal'
-import AssetScreener from '../asset_screener/AssetScreener'
 
 type itemProps = {
     title: string

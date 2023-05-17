@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {createWL} from '../../../config/WebcallAPI'
+import {createWL, getControllerSignal} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, TextField, Typography} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
 
@@ -18,11 +18,14 @@ const CreateWLButton = (props: CreateWLButtonProps) => {
 
     async function createWatchlist() {
         handleClose()
-        const response = await fetch(createWL(props.user_id, newWLName), {}).then((response) => {
+        const signal = getControllerSignal()
+        const response = await fetch(createWL(props.user_id, newWLName), {signal}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
                 props.wlUpdatedFunction(!props.wlUpdated)
             })
+        }).catch((err)=>{
+            
         })
     }
 
