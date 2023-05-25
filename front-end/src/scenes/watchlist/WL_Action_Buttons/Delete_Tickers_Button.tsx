@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {delTickersFromWL} from '../../../config/WebcallAPI'
+import {delTickersFromWL, getControllerSignal} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
 import Searchbar from '../stock/Searchbar'
@@ -22,11 +22,14 @@ const DeleteTickersButton = (props: DeleteTickersButtonProps) => {
 
     async function delTickersFromWatchlist(wlDelTickers: string) {
         handleClose()
-        const response = await fetch(delTickersFromWL(wlDelTickers, props.wl_id, props.user_id), {}).then((response) => {
+        const signal = getControllerSignal()
+        const response = await fetch(delTickersFromWL(wlDelTickers, props.wl_id, props.user_id), {signal}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
                 props.wlUpdatedFunction(!props.wlUpdated)
             })
+        }).catch((err)=>{
+            
         })
     }
 

@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {deleteWL} from '../../../config/WebcallAPI'
+import {deleteWL, getControllerSignal} from '../../../config/WebcallAPI'
 import {Box, Button, Modal, Typography, colors} from '@mui/material'
 import modalStyle from '../WatchlistStyles'
 
@@ -19,12 +19,15 @@ const DeleteWLButton = (props: DeleteWLButtonProps) => {
 
     async function delWatchlist() {
         handleClose()
-        const response = await fetch(deleteWL(props.wl_id, props.user_id), {}).then((response) => {
+        const signal = getControllerSignal()
+        const response = await fetch(deleteWL(props.wl_id, props.user_id), {signal}).then((response) => {
             response.json().then((json) => {
                 console.log(json)
                 props.wlUpdatedFunction(!props.wlUpdated)
                 props.setWLDeleted(true)
             })
+        }).catch((err)=>{
+            
         })
     }
 
