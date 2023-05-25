@@ -15,7 +15,7 @@ const Dashboard = () => {
     const theme = useTheme()
 
     const [userWatchlists, setUserWatchlists] = useState([])
-    const [wl_name, set_wl_name] = useState('Select a Watchlist')
+    const [wl_name, set_wl_name] = useState('')
 
     const [newWLName, setNewWLName] = useState('')
 
@@ -48,7 +48,7 @@ const Dashboard = () => {
                 })
             })
             if (wlDeleted) {
-                set_wl_name('Select a Watchlist')
+                set_wl_name('')
             }
         } catch (err) {
             console.log(err)
