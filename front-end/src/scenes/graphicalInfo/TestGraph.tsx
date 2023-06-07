@@ -1,8 +1,7 @@
-import React from 'react'
-import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend} from 'chart.js'
-import {Line} from 'react-chartjs-2'
-import {useState, useEffect} from 'react'
 import axios from 'axios'
+import {CategoryScale, Chart as ChartJS, Legend, LineElement, LinearScale, PointElement, Title, Tooltip} from 'chart.js'
+import {useEffect, useState} from 'react'
+import {Line} from 'react-chartjs-2'
 
 interface financialsInterface {
     data: [string, any][] | null | undefined

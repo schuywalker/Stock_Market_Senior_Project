@@ -1,5 +1,5 @@
 import {ThemeProvider} from '@emotion/react'
-import {Box, Button, FormGroup, Modal, Stack, TextField, Typography, useTheme} from '@mui/material'
+import {Box, FormGroup, Stack, Typography, useTheme} from '@mui/material'
 import Paper from '@mui/material/Paper'
 import Switch from '@mui/material/Switch'
 import Table from '@mui/material/Table'
@@ -9,13 +9,11 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import {useContext, useEffect, useState} from 'react'
-import Stock from './stock/Stock'
+import Cookies from 'universal-cookie'
+import {abortRequest, getControllerSignal, getWLAssets} from '../../config/WebcallAPI'
 import {ColorModeContext, tokens} from '../../theme'
 import DisplayGroup from './DisplayGroup'
-import Cookies from 'universal-cookie'
-import modalStyle from './WatchlistStyles'
-import Searchbar from './stock/Searchbar'
-import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renameWL,getControllerSignal, abortRequest} from '../../config/WebcallAPI'
+import Stock from './stock/Stock'
 
 // TODO:
 // more info button (noGutter?)
@@ -51,7 +49,6 @@ const Watchlist = (props: WatchlistProps) => {
             setStocks([])
             props.setWLDeleted(false)
         } else {
-            
             if (fetchingAssets) {
                 abortRequest()
             }
@@ -87,7 +84,7 @@ const Watchlist = (props: WatchlistProps) => {
 
     //TODO:
     // dynamic number of columns based on screen size
-    if(!fetchingAssets && props.wl_name !==''){
+    if (!fetchingAssets && props.wl_name !== '') {
         return (
             <>
                 <Box sx={{mx: '3%'}}>
@@ -121,7 +118,7 @@ const Watchlist = (props: WatchlistProps) => {
                             </Stack>
                         </FormGroup>
                     </Box>
-    
+
                     {gridView ? (
                         <Box
                             sx={{
@@ -197,11 +194,10 @@ const Watchlist = (props: WatchlistProps) => {
                 </Box>
             </>
         )
-    }
-    else{
+    } else {
         return (
             <>
-            <Box sx={{mx: '3%'}}>
+                <Box sx={{mx: '3%'}}>
                     <Box display="flex" sx={{my: 2}}>
                         <Typography
                             sx={{
@@ -213,11 +209,10 @@ const Watchlist = (props: WatchlistProps) => {
                             {props.wl_name}
                         </Typography>
                     </Box>
-            </Box>
+                </Box>
             </>
         )
     }
-    
 }
 
 export default Watchlist
