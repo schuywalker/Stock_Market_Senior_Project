@@ -14,7 +14,6 @@ class GraphService:
 
     @staticmethod
     def getCandlestickData(ticker, period, interval):
-        print("sup baby")
         assert(not(period == None and interval == None))
         assert(ticker != None)
         ticker = Ticker(ticker)
@@ -47,7 +46,7 @@ class GraphService:
         return filtered_response_dict, 200
     
     @staticmethod
-    def getStockDataAAPL():
+    def getStockDataAAPL(): 
         ticker = Ticker('aapl')
         response = ticker.history(period='1y')
         response_dict = response.to_dict(orient='records')
