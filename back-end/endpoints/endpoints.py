@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import app, jsonify, request
 from flask_restful import Resource, reqparse
 import services.external_API_calls.finnhubCalls as fh
 from services.external_API_calls.finnhubCalls import *
@@ -11,6 +11,7 @@ from services.analystCalls import *
 from services.user import *
 from services.insiderTrades import InsiderTradesService
 from services.assetScreener import *
+from services.graphicalData import *
 
 fh_calls = fh.finh_API_Requester()
 
@@ -154,6 +155,16 @@ class checkPassword(Resource):
 class alterPassword(Resource):
     def post(self):
         return UserService.alterPassword(request.args['user'],request.args['password'])
+
+class getCandlestickData(Resource):
+    def get(self, period=None, interval=None):
+        """period = period or request.args['period']
+        interval = interval or request.args['interval']"""
+        return GraphService.getCandlestickData(request.args['ticker'], '1mo', interval=None)
+
+class getStockDataAAPL(Resource):
+    def post(self):
+        return GraphService.getStockDataAAPL()
     
 #INSIDER TRADES
 class getInsiderTrades(Resource):

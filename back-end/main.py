@@ -51,6 +51,9 @@ api.add_resource(getInsiderTrades,"/getInsiderTrades")
 # ASSET SCREENER
 api.add_resource(getAssetScreenerData, '/assetScreener')
 
+#graphical data
+api.add_resource(getCandlestickData, '/getCandleStickData')
+api.add_resource(getStockDataAAPL, '/getStockDataAAPL')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
