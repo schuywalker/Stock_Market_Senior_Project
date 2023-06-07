@@ -1,22 +1,13 @@
-import {ReactNode, useState} from 'react'
-import {Sidebar, Menu, MenuItem} from 'react-pro-sidebar'
-import {Box, IconButton, Typography, useTheme} from '@mui/material'
-import {Link} from 'react-router-dom'
-import {tokens} from '../../theme'
-import VisibilityIcon from '@mui/icons-material/Visibility'
+import {ShowChart} from '@mui/icons-material'
+import HomeIcon from '@mui/icons-material/Home'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
-import ClearIcon from '@mui/icons-material/Clear'
-import CreateIcon from '@mui/icons-material/Create'
-import IsoIcon from '@mui/icons-material/Iso'
-import DeleteIcon from '@mui/icons-material/Delete'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
 import PhoneIcon from '@mui/icons-material/Phone'
-import Cookies from 'universal-cookie'
-import axios from 'axios'
-import {ShowChart} from '@mui/icons-material'
-import React from 'react'
-import ConfirmationModal from '../../components/ConfirmationModal'
-import AssetScreener from '../asset_screener/AssetScreener'
+import {Box, IconButton, Typography, useTheme} from '@mui/material'
+import React, {ReactNode, useState} from 'react'
+import {Menu, MenuItem, Sidebar} from 'react-pro-sidebar'
+import {Link} from 'react-router-dom'
+import {tokens} from '../../theme'
 
 type itemProps = {
     title: string
@@ -139,7 +130,7 @@ const ProSidebar = (props: any) => {
                                 <Item
                                     title="Dashboard"
                                     link={<Link to="/Dashboard" />}
-                                    icon={<ShowChart sx={{fontSize: 20}} />}
+                                    icon={<HomeIcon sx={{fontSize: 20}} />}
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
@@ -156,7 +147,7 @@ const ProSidebar = (props: any) => {
                                 <Item
                                     title="Asset Screener"
                                     link={<Link to="/asset-screener" onClick={() => setUserURL('/asset-screener')} />}
-                                    icon={<PhoneIcon sx={{fontSize: 20}} />}
+                                    icon={<ShowChart sx={{fontSize: 20}} />}
                                     selected={selected}
                                     setSelected={setSelected}
                                 />
