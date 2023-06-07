@@ -2,7 +2,7 @@ import {Box, Button, Link, Modal, TextField, Typography, styled} from '@mui/mate
 import axios from 'axios'
 import * as React from 'react'
 import Cookies from 'universal-cookie'
-import {alterPassword, alterUserEmail, alterUserFirstName, alterUserLastName, alterUsername, getUserData, isCorrectPassword} from '../config/WebcallAPI'
+import {alterPassword, alterUserEmail, alterUserFirstName, alterUserLastName, alterUsername, getUserData, isCorrectPassword,abortRequest, getControllerSignal} from '../config/WebcallAPI'
 import ConfirmationModal from './ConfirmationModal'
 
 const cookies = new Cookies()
@@ -201,11 +201,11 @@ const ModalPasswordField: React.FunctionComponent<ModalPasswordFieldProps> = ({o
                                 setShowNewError(false)
                                 parameters['originalPassword'] = originalPassword
                                 await axios
-                                    .get(checkOldPasswordFunction(parameters))
+                                    .get(checkOldPasswordFunction(parameters),{signal:getControllerSignal()})
                                     .then(async () => {
                                         parameters['newPassword'] = newPassword
                                         await axios
-                                            .post(endpointFunction(parameters))
+                                            .post(endpointFunction(parameters),{signal:getControllerSignal()})
                                             .then((response) => {
                                                 setOldErrorText('')
                                                 setNewErrorText('')
@@ -310,7 +310,7 @@ const ModalField: React.FunctionComponent<ModalFieldProps> = ({
                             if (validationFunction(newValue)) {
                                 parameters['newValue'] = newValue
                                 await axios
-                                    .post(endpointFunction(parameters))
+                                    .post(endpointFunction(parameters),{signal:getControllerSignal()})
                                     .then((response) => {
                                         setShowError(false)
                                         setErrorText('')
@@ -448,7 +448,8 @@ export default function AccountManagement(props: any) {
     const setLoggedInFunction = props.loggedInFunction
 
     React.useEffect(() => {
-        axios.get(getUserData(cookies.get('user'))).then((response) => {
+        abortRequest()
+        axios.get(getUserData(cookies.get('user')),{signal:getControllerSignal()}).then((response) => {
             let data = response.data[0][0]
 
             let first_name = data[0]
@@ -461,6 +462,10 @@ export default function AccountManagement(props: any) {
             setLastName(last_name)
             setEmail(e)
             setRendered(true)
+        }).catch((err)=>{
+            if(err.message !=='canceled'){
+                console.log(err)
+            }
         })
     }, []) //Only called on component mount since the dependencies are empty
 

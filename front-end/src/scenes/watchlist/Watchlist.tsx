@@ -15,7 +15,7 @@ import DisplayGroup from './DisplayGroup'
 import Cookies from 'universal-cookie'
 import modalStyle from './WatchlistStyles'
 import Searchbar from './stock/Searchbar'
-import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renameWL} from '../../config/WebcallAPI'
+import {addTickersToWL, createWL, delTickersFromWL, deleteWL, getWLAssets, renameWL,getControllerSignal, abortRequest} from '../../config/WebcallAPI'
 
 // TODO:
 // more info button (noGutter?)
@@ -32,10 +32,9 @@ type WatchlistProps = {
     wlUpdated: boolean
     wlDeleted: boolean
     setWLDeleted: any
-    controller: AbortController
 }
 
-// const Watchlist = (props:WatchlistProps) => {
+// Test fetching different watchlists and having the request cancel
 const Watchlist = (props: WatchlistProps) => {
     const cookies = new Cookies()
     const theme = useTheme()
@@ -43,6 +42,7 @@ const Watchlist = (props: WatchlistProps) => {
     const colorMode = useContext(ColorModeContext)
 
     const [stocks, setStocks] = useState<DisplayGroup[]>([])
+    const [fetchingAssets, setFetchingAssets] = useState(false)
 
     let fetchAssetsInProgress = false
 
@@ -51,8 +51,9 @@ const Watchlist = (props: WatchlistProps) => {
             setStocks([])
             props.setWLDeleted(false)
         } else {
-            if (fetchAssetsInProgress === true) {
-                props.controller.abort()
+            
+            if (fetchingAssets) {
+                abortRequest()
             }
             fetchWatchlistAssets()
         }
@@ -65,8 +66,9 @@ const Watchlist = (props: WatchlistProps) => {
             return
         }
         try {
-            fetchAssetsInProgress = true
-            const response = await fetch(getWLAssets(cookies.get('user_id'), props.wl_id), {}).then((response) => {
+            setFetchingAssets(true)
+            const signal = getControllerSignal()
+            const response = await fetch(getWLAssets(cookies.get('user_id'), props.wl_id), {signal}).then((response) => {
                 response.json().then((json) => {
                     if (json.length > 0) {
                         setStocks(json)
@@ -77,7 +79,7 @@ const Watchlist = (props: WatchlistProps) => {
         } catch (err) {
             console.log(err)
         } finally {
-            fetchAssetsInProgress = false
+            setFetchingAssets(false)
         }
     }
 
@@ -85,116 +87,137 @@ const Watchlist = (props: WatchlistProps) => {
 
     //TODO:
     // dynamic number of columns based on screen size
-
-    return (
-        <>
-            <Box sx={{mx: '3%'}}>
-                <Box display="flex" sx={{my: 2}}>
-                    <Typography
-                        sx={{
-                            flexGrow: 1,
-                            fontSize: theme.typography.h2,
-                            color: colors.green[500],
-                        }}
-                    >
-                        {props.wl_name}
-                    </Typography>
-                    <FormGroup>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <Typography
-                                sx={{
-                                    fontSize: theme.typography.h5,
-                                }}
-                            >
-                                Table View
-                            </Typography>
-                            <Switch defaultChecked color="secondary" onClick={() => setGridView(!gridView)} />
-                            <Typography
-                                sx={{
-                                    fontSize: theme.typography.h5,
-                                }}
-                            >
-                                Grid View
-                            </Typography>
-                        </Stack>
-                    </FormGroup>
-                </Box>
-
-                {gridView ? (
-                    <Box
-                        sx={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(4, 1fr)',
-                            flexWrap: 'wrap',
-                            m: 1,
-                            justifyContent: 'flex-start',
-                        }}
-                    >
-                        {stocks.map((_stock: any, i: number) => (
-                            <Stock
-                                key={i}
-                                name={_stock.name}
-                                ticker={_stock.ticker}
-                                price={_stock.price}
-                                perChange={_stock.perChange}
-                                earnings={_stock.earnings}
-                                marketCap={_stock.marketCap}
-                                forwardPE={_stock.forwardPE}
-                                dividendYield={_stock.dividendYield}
-                            />
-                        ))}
+    if(!fetchingAssets && props.wl_name !==''){
+        return (
+            <>
+                <Box sx={{mx: '3%'}}>
+                    <Box display="flex" sx={{my: 2}}>
+                        <Typography
+                            sx={{
+                                flexGrow: 1,
+                                fontSize: theme.typography.h2,
+                                color: colors.green[500],
+                            }}
+                        >
+                            {props.wl_name}
+                        </Typography>
+                        <FormGroup>
+                            <Stack direction="row" spacing={1} alignItems="center">
+                                <Typography
+                                    sx={{
+                                        fontSize: theme.typography.h5,
+                                    }}
+                                >
+                                    Table View
+                                </Typography>
+                                <Switch defaultChecked color="secondary" onClick={() => setGridView(!gridView)} />
+                                <Typography
+                                    sx={{
+                                        fontSize: theme.typography.h5,
+                                    }}
+                                >
+                                    Grid View
+                                </Typography>
+                            </Stack>
+                        </FormGroup>
                     </Box>
-                ) : (
-                    <ThemeProvider theme={theme}>
-                        <TableContainer component={Paper}>
-                            <Table aria-label="collapsible table">
-                                <TableHead>
-                                    <TableRow
-                                        sx={{
-                                            '&:last-child td, &:last-child th': {
-                                                fontSize: theme.typography.h4,
-                                            },
-                                        }}
-                                    >
-                                        <TableCell>Name</TableCell>
-                                        <TableCell align="right">Ticker</TableCell>
-                                        <TableCell align="right">Price</TableCell>
-                                        <TableCell align="right">Daily Change</TableCell>
-                                        <TableCell align="right">Market Cap</TableCell>
-                                        <TableCell align="right">peRatio</TableCell>
-                                        <TableCell align="right">peRatioTTM</TableCell>
-                                        <TableCell align="right">Dividend Yield</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {stocks.map((_stock) => (
+    
+                    {gridView ? (
+                        <Box
+                            sx={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(4, 1fr)',
+                                flexWrap: 'wrap',
+                                m: 1,
+                                justifyContent: 'flex-start',
+                            }}
+                        >
+                            {stocks.map((_stock: any, i: number) => (
+                                <Stock
+                                    key={i}
+                                    name={_stock.name}
+                                    ticker={_stock.ticker}
+                                    price={_stock.price}
+                                    perChange={_stock.perChange}
+                                    earnings={_stock.earnings}
+                                    marketCap={_stock.marketCap}
+                                    forwardPE={_stock.forwardPE}
+                                    dividendYield={_stock.dividendYield}
+                                />
+                            ))}
+                        </Box>
+                    ) : (
+                        <ThemeProvider theme={theme}>
+                            <TableContainer component={Paper}>
+                                <Table aria-label="collapsible table">
+                                    <TableHead>
                                         <TableRow
-                                            key={_stock['ticker']}
                                             sx={{
-                                                '& > *': {
-                                                    borderBottom: 'unset',
+                                                '&:last-child td, &:last-child th': {
+                                                    fontSize: theme.typography.h4,
                                                 },
                                             }}
                                         >
-                                            <TableCell component="th" scope="row">
-                                                {_stock['name']}
-                                            </TableCell>
-                                            <TableCell align="right">{_stock['ticker']}</TableCell>
-                                            <TableCell align="right">{_stock['price']}</TableCell>
-                                            <TableCell align="right">{_stock['perChange']}</TableCell>
-                                            <TableCell align="right">{_stock['marketCap']}</TableCell>
-                                            <TableCell align="right">{_stock['forwardPE']}</TableCell>
-                                            <TableCell align="right">{_stock['dividendYield']}</TableCell>
+                                            <TableCell>Name</TableCell>
+                                            <TableCell align="right">Ticker</TableCell>
+                                            <TableCell align="right">Price</TableCell>
+                                            <TableCell align="right">Daily Change</TableCell>
+                                            <TableCell align="right">Market Cap</TableCell>
+                                            <TableCell align="right">peRatio</TableCell>
+                                            <TableCell align="right">peRatioTTM</TableCell>
+                                            <TableCell align="right">Dividend Yield</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </ThemeProvider>
-                )}
+                                    </TableHead>
+                                    <TableBody>
+                                        {stocks.map((_stock) => (
+                                            <TableRow
+                                                key={_stock['ticker']}
+                                                sx={{
+                                                    '& > *': {
+                                                        borderBottom: 'unset',
+                                                    },
+                                                }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {_stock['name']}
+                                                </TableCell>
+                                                <TableCell align="right">{_stock['ticker']}</TableCell>
+                                                <TableCell align="right">{_stock['price']}</TableCell>
+                                                <TableCell align="right">{_stock['perChange']}</TableCell>
+                                                <TableCell align="right">{_stock['marketCap']}</TableCell>
+                                                <TableCell align="right">{_stock['forwardPE']}</TableCell>
+                                                <TableCell align="right">{_stock['dividendYield']}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </ThemeProvider>
+                    )}
+                </Box>
+            </>
+        )
+    }
+    else{
+        return (
+            <>
+            <Box sx={{mx: '3%'}}>
+                    <Box display="flex" sx={{my: 2}}>
+                        <Typography
+                            sx={{
+                                flexGrow: 1,
+                                fontSize: theme.typography.h2,
+                                color: colors.green[500],
+                            }}
+                        >
+                            {props.wl_name}
+                        </Typography>
+                    </Box>
             </Box>
-        </>
-    )
+            </>
+        )
+    }
+    
 }
 
 export default Watchlist

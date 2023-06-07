@@ -2,7 +2,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import {Box, Button, IconButton, Paper, Tab, Tabs, TextField, useTheme} from '@mui/material'
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import {assetScreener} from '../../config/WebcallAPI'
+import {abortRequest, assetScreener, getControllerSignal} from '../../config/WebcallAPI'
 import {tokens} from '../../theme'
 import AssetScreenerCategories from './AssetScreenerInterfaces/AssetScreenerCategories'
 import BasicInfo from './tabContents/BasicInfo'
@@ -21,6 +21,7 @@ const AssetScreener = () => {
     const [currentTicker, setCurrentTicker] = useState(ticker)
 
     useEffect(() => {
+        abortRequest()
         if (ticker) {
             setCurrentTicker(ticker)
             handleNewSearch(ticker)
@@ -47,8 +48,9 @@ const AssetScreener = () => {
         navigate({pathname: '/asset-screener', search: `${currentTicker}`})
         try {
             //use webcall API
+            const signal = getControllerSignal()
             setChartTicker(ticker)
-            const response = await fetch(assetScreener(ticker))
+            const response = await fetch(assetScreener(ticker), {signal})
                 .then((response) => response.json())
                 .then((jsonResponse) => {
                     obj = jsonResponse

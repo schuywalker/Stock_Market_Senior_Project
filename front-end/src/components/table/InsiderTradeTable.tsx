@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getInsiderTrades } from "../../config/WebcallAPI"
+import { getControllerSignal, getInsiderTrades } from "../../config/WebcallAPI"
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled } from "@mui/material"
 import { useEffect, useState } from "react"
 import LoadingBox from "../general/LoadingBox"
@@ -79,16 +79,26 @@ export default function InsiderTradeTable (props: {ticker:string}){
     const[dataToggle,setDataToggle] = useState(false)
     const[numPages, setNumPages] = useState(1)
     const[currentPage,setCurrentPage]=useState(1)
+    let key = 1;
+
+    const generateUniqueKey = ()=>{
+        let val = key
+        key += 1
+        return val
+    }
 
     useEffect(()=>{
-        axios.get(getInsiderTrades(currentPage,props.ticker)).then((response)=>{
+        axios.get(getInsiderTrades(currentPage,props.ticker),{signal:getControllerSignal()}).then((response)=>{
             setData(response.data[0]['data'])
-            console.log(response)
             if(response.data[0]['num_pages'] !== numPages)setNumPages(response.data[0]['num_pages'])
             setDataReady(true)
         }).catch((error)=>{
-            setDataReady(false)
-            setDataToggle(!dataToggle)
+            if(error.message !== 'canceled'){
+                setDataReady(false)
+                setDataToggle(!dataToggle)
+            }
+            else console.log(error)
+            
         })
         
     },[dataToggle,currentPage,props.ticker])
@@ -113,7 +123,7 @@ export default function InsiderTradeTable (props: {ticker:string}){
                     </TableHead>
                     <TableBody>
                     {data.map((row)=>(
-                        <TableRow>
+                        <TableRow key={generateUniqueKey()}>
                             <TableCell>{row['filingDate']}</TableCell>
                             <TableCell align="center">{row['transactionDate']}</TableCell>
                             <TableCell align="center">{row['symbol']}</TableCell>
@@ -121,7 +131,6 @@ export default function InsiderTradeTable (props: {ticker:string}){
                             <TableCell align="center">{new Intl.NumberFormat().format((row['change']as number))}</TableCell>
                             <TableCell align="center">{row['name']}</TableCell>
                         </TableRow>
-                            
                         ))}
                     </TableBody>
                 </Table>

@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
+import { getControllerSignal } from '../../config/WebcallAPI'
 
 function createData(symbol: string, buy: number, hold: number, period: string, sell: number, strongBuy: number, strongSell: number) {
     return {symbol, buy, hold, period, sell, strongBuy, strongSell}
@@ -14,7 +15,8 @@ function createData(symbol: string, buy: number, hold: number, period: string, s
 export default function AnalystCallTable() {
     const [analystCalls, setAnalystCalls] = useState([])
     useEffect(() => {
-        fetch('http://127.0.0.1:8080/analystCallsDefaultList')
+        const signal = getControllerSignal()
+        fetch('http://127.0.0.1:8080/analystCallsDefaultList',{signal})
             .then((response) => response.json())
             .then((data) => {
                 setAnalystCalls(data)
