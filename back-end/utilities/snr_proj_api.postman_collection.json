@@ -1,0 +1,590 @@
+{
+	"info": {
+		"_postman_id": "b0d3a452-0cd0-4df0-a3c3-f735aa0b2816",
+		"name": "snr_proj_api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17478621"
+	},
+	"item": [
+		{
+			"name": "quote",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/quote?ticker=AAPL",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"quote"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "AAPL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCandlestickData",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/getCandleStickData?ticker=MSFT&period=1y",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"getCandleStickData"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "MSFT"
+						},
+						{
+							"key": "period",
+							"value": "1y"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "populateWatchlist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/populateWatchlist?user_id=56&wl_id=57",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"populateWatchlist"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "56"
+						},
+						{
+							"key": "wl_id",
+							"value": "57"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "earningsDate (testing only, not final)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/earningsDate?ticker=AAPL",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"earningsDate"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "AAPL"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "basicFinancials",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/basicFinancials?ticker=LYFT",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"basicFinancials"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "LYFT"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "analyst calls",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/analystCalls?ticker=CVX",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"analystCalls"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "CVX"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "analyst calls default list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/analystCallsDefaultList?ticker=CVX",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"analystCallsDefaultList"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "CVX"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "populateWatchlist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/populateWatchlist?user_id=56&wl_id=59",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"populateWatchlist"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "56"
+						},
+						{
+							"key": "wl_id",
+							"value": "59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWatchlistTickers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/getWatchlistTickers?wl_id=59",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"getWatchlistTickers"
+					],
+					"query": [
+						{
+							"key": "wl_id",
+							"value": "59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserWatchlists",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/getUserWatchlists?user_id=56&&includeDeleted=False",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"getUserWatchlists"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "56"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "includeDeleted",
+							"value": "False"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createWatchlist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/createWatchlist?user_id=56&wl_name=asdf",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"createWatchlist"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "56"
+						},
+						{
+							"key": "wl_name",
+							"value": "asdf"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteWatchlist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/deleteWatchlist?wl_id=84",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"deleteWatchlist"
+					],
+					"query": [
+						{
+							"key": "wl_id",
+							"value": "84"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addTickers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/addTickersToWatchlist?wl_id=60&&user_id=56&&returnWL=True&&tickers=PYPL,META,BP,BRKB,HOLX,AMD",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"addTickersToWatchlist"
+					],
+					"query": [
+						{
+							"key": "wl_id",
+							"value": "60"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "user_id",
+							"value": "56"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "returnWL",
+							"value": "True"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "tickers",
+							"value": "PYPL,META,BP,BRKB,HOLX,AMD"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTickersFromWatchlist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/deleteTickersFromWatchlist?wl_ID=26&&user_ID=27&&tickers=META",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"deleteTickersFromWatchlist"
+					],
+					"query": [
+						{
+							"key": "wl_ID",
+							"value": "26"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "user_ID",
+							"value": "27"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "tickers",
+							"value": "META"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "renameWatchlist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/renameWatchlist?wl_ID=26&&new_name=SchuyTest410",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"renameWatchlist"
+					],
+					"query": [
+						{
+							"key": "wl_ID",
+							"value": "26"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "new_name",
+							"value": "SchuyTest410"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userLogin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/userLogin?username=root&password=root",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"userLogin"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "root"
+						},
+						{
+							"key": "password",
+							"value": "root"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserData",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/getUserData?user=schuyler",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"getUserData"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "schuyler"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "assetScreener",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/assetScreener?ticker=LYFT",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"assetScreener"
+					],
+					"query": [
+						{
+							"key": "ticker",
+							"value": "LYFT"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
